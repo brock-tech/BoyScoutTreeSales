@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="603.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" prefHeight="12.0" prefWidth="593.0">
+         <children>
+            <Text fill="#0be039" strokeType="OUTSIDE" strokeWidth="0.0" text="Boy Scout Chrismas Tree Sales System">
+               <font>
+                  <Font name="SansSerif Bold" size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <GridPane alignment="CENTER" prefHeight="284.0" prefWidth="593.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="155.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="105.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="132.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Close Shift" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" prefWidth="100.0" text="OpenShift" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="Sell Tree" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Add Scout" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Remove Scout" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Add Tree" GridPane.columnIndex="2" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Update Scout" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Update Tree" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Remove Tree" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="195.0" text="Add Tree Type" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="195.0" text="Update Tree Type" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="31.0" prefWidth="543.0" GridPane.columnSpan="4" GridPane.rowIndex="5">
+               <children>
+                  <Button mnemonicParsing="false" text="Done" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+         </padding>
+      </GridPane>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
+   </padding>
+</VBox>
