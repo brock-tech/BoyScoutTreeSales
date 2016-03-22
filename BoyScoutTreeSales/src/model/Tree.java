@@ -9,14 +9,18 @@
 //********************************************************************
 package model;
 
+import exception.InvalidPrimaryKeyException;
+
 /**
  * 
  */
 public class Tree extends EntityBase {
     private static final String myTableName = "Tree";
 
-    public Tree(String barcode) {
+    public Tree(String barcode) throws InvalidPrimaryKeyException {
         super(myTableName);
+        
+        
     }
 
     @Override
@@ -34,5 +38,9 @@ public class Tree extends EntityBase {
         
     }
     
+    public boolean isAvailable() {
+        String status = persistentState.getProperty("treeStatus");
+        return status.equals("Available");
+    }
     
 }

@@ -45,7 +45,7 @@ public class BoyScoutTreeSales extends Application {
             myCoordinator = new TreeLotCoordinator();
         }
         catch (Exception exc) {
-            System.err.println("TreeLotCoordinator- could not create TeeLotCoorinator");
+            System.err.println("Startup Error- could not create TreeLotCoorinator");
             new Event(Event.getLeafLevelClassName(this),
             "TreeLotCoordinator.<init>",
             "Unable to create TreeLotCoordinator object",

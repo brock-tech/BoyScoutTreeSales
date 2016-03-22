@@ -170,7 +170,7 @@ public class Scout extends EntityBase {
     }
     
     public Vector<String> getTableListView() {
-        Vector v = new Vector<String>();
+        Vector<String> v = new Vector<>();
         
         return v;
     }

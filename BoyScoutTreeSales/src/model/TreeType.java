@@ -9,6 +9,8 @@
 //********************************************************************
 package model;
 
+import java.util.Properties;
+
 /**
  *
  */
@@ -16,6 +18,10 @@ public class TreeType extends EntityBase {
     private static final String myTableName = "TreeType";
 
     public TreeType(String typeId) {
+        super(myTableName);
+    }
+
+    TreeType(Properties nextTypeData) {
         super(myTableName);
     }
 
@@ -32,7 +38,5 @@ public class TreeType extends EntityBase {
     @Override
     protected void initializeSchema(String tableName) {
         
-    }
-    
-    
+    }    
 }
