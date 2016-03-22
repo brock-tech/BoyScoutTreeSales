@@ -10,8 +10,6 @@
 package userinterface;
 
 import impresario.IModel;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,14 +18,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -73,7 +65,7 @@ public class TreeLotCoordinatorView extends BaseView {
             }
         };
         
-        Text subTitle = new Text(myResources.getProperty("subTitle"));
+        Text subTitle = new Text(myResources.getProperty("welcomeMessage"));
         subTitle.setTextAlignment(TextAlignment.CENTER);
         grid.add(subTitle, 0, 0);
         

@@ -53,7 +53,9 @@ public abstract class BaseView extends View {
         try {
             loadResources("userinterface.i18n." + classname);
         }
-        catch (Exception exc) { /* Do nothing */ }
+        catch (Exception exc) {
+            /* Resource file not found; Do nothing */ 
+        }
         
         VBox container = new VBox(10);
         container.setPrefWidth(DEFAULT_WIDTH);
@@ -98,12 +100,8 @@ public abstract class BaseView extends View {
         titleContainer.setAlignment(Pos.CENTER);
         
         Text titleText = new Text(myResources.getProperty("titleText"));
-        titleText.setFont(Font.font(
-                myResources.getProperty("titleFont"),
-                FontWeight.findByName(myResources.getProperty("titleFontWeight")),
-                Double.parseDouble(myResources.getProperty("titleFontSize")))
-        );
-        titleText.setFill(Color.web(myResources.getProperty("titleFill")));
+        titleText.setFont(Font.font("SansSerif", FontWeight.BOLD, 20.0));
+        titleText.setFill(Color.web("GREEN"));
         titleText.setTextAlignment(TextAlignment.CENTER);
         
         titleContainer.getChildren().add(titleText);
@@ -111,7 +109,7 @@ public abstract class BaseView extends View {
     }
     
     /**
-     * 
+     * Creates the form content
      * @return Screen content
      */
     //----------------------------------------------------------
@@ -122,32 +120,20 @@ public abstract class BaseView extends View {
      */
     //----------------------------------------------------------
     protected Node createFooter() {
-        VBox footer = new VBox(10);
-        footer.setAlignment(Pos.BOTTOM_LEFT);
+        HBox footer = new HBox(10);
+        footer.setAlignment(Pos.BASELINE_LEFT);
         footer.setPrefWidth(DEFAULT_WIDTH);
         
         statusLog = new MessageView("");
         footer.getChildren().add(statusLog);
         
         Text copyrightText = new Text(myResources.getProperty("copyrightText"));
-        copyrightText.setFont(Font.font(
-                myResources.getProperty("copyrightFont"),
-                FontWeight.findByName(myResources.getProperty("copyrightFontWeight")),
-                Double.parseDouble(myResources.getProperty("copyrightFontSize")))
-        );
-        copyrightText.setFill(Color.web(myResources.getProperty("titleFill")));
+        copyrightText.setFont(Font.font("SansSerif", FontWeight.NORMAL, 12.0));
+        copyrightText.setFill(Color.web("GRAY"));
         copyrightText.setTextAlignment(TextAlignment.LEFT);
         footer.getChildren().add(copyrightText);
-        
+                
         return footer;
-    }
-    
-    //----------------------------------------------------------
-    @Override
-    public void updateState(String key, Object value) {
-        if (key.equals("TransactionError")) {
-            displayErrorMessage((String)value);
-        }
     }
     
     /**

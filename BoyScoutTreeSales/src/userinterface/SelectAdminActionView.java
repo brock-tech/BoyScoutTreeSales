@@ -28,7 +28,12 @@ public class SelectAdminActionView extends BaseView {
 
     @Override
     protected Node createContent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
+    }
+
+    @Override
+    public void updateState(String key, Object value) {
+        
     }
     
 }
