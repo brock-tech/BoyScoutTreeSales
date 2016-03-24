@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -38,8 +39,6 @@ public class TreeLotCoordinatorView extends BaseView {
     public TreeLotCoordinatorView(IModel model) {
         super(model, "TreeLotCoordinatorView");
         
-        
-        
         myModel.subscribe("TransactionError", this);
         myModel.subscribe("SessionStatus", this);
         
@@ -51,13 +50,6 @@ public class TreeLotCoordinatorView extends BaseView {
     //----------------------------------------------------------
     @Override
     protected Node createContent() {
-        GridPane grid = new GridPane();
-        grid.setPrefWidth(DEFAULT_WIDTH);
-        grid.setAlignment(Pos.CENTER);
-        grid.setVgap(10);
-        grid.setHgap(10);
-        grid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
-        
         EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -65,37 +57,34 @@ public class TreeLotCoordinatorView extends BaseView {
             }
         };
         
-        Text subTitle = new Text(myResources.getProperty("welcomeMessage"));
-        subTitle.setTextAlignment(TextAlignment.CENTER);
-        grid.add(subTitle, 0, 0);
+        VBox formContent = new VBox(10);
+        formContent.setPrefWidth(DEFAULT_WIDTH);
+        formContent.setAlignment(Pos.CENTER);
+        
+        Text welcomeText = new Text(myResources.getProperty("welcomeMessage"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        formContent.getChildren().add(welcomeText);
         
         sellTreeButton = new Button(myResources.getProperty("sellTreeButtonText"));
         sellTreeButton.setPrefSize(200.0, 30.0);
         sellTreeButton.setOnAction(buttonHandler);
-        grid.add(sellTreeButton, 0, 1);
-        GridPane.setHalignment(sellTreeButton, HPos.CENTER);
+        formContent.getChildren().add(sellTreeButton);
         
         shiftButton = new Button();
         shiftButton.setPrefSize(200.0, 30.0);
         shiftButton.setOnAction(buttonHandler);
-        grid.add(shiftButton, 0, 2);
-        GridPane.setHalignment(shiftButton, HPos.CENTER);
+        formContent.getChildren().add(shiftButton);
         
         manageButton = new Button(myResources.getProperty("manageButtonText"));
         manageButton.setPrefSize(200.0, 30.0);
         manageButton.setOnAction(buttonHandler);
-        grid.add(manageButton, 0, 3);
-        GridPane.setHalignment(manageButton, HPos.CENTER);
+        formContent.getChildren().add(manageButton);
         
-        
-        HBox btnContainer = new HBox(10);
-        btnContainer.setAlignment(Pos.CENTER_RIGHT);
         exitButton = new Button(myResources.getProperty("exitButtonText"));
         exitButton.setOnAction(buttonHandler);
-        btnContainer.getChildren().add(exitButton);
-        grid.add(btnContainer, 0, 5);
+        formContent.getChildren().add(exitButton);
         
-        return grid;
+        return formContent;
     }
     
     /**

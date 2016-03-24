@@ -7,18 +7,12 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
-package model;
+package userinterface;
 
 /**
  *
+ * @author mike
  */
-public class TransactionFactory {
-    public static Transaction createTransaction(String transName) {
-        switch (transName) {
-            case "AddScout":
-                return new AddScoutTransaction();
-            
-            default: return null;
-        }
-    }
+public interface IFormFillableStrategy {
+    
 }

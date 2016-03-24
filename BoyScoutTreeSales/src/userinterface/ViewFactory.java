@@ -10,6 +10,9 @@ public class ViewFactory {
         switch (viewName) {
             case "TreeLotCoordinatorView":
                 return new TreeLotCoordinatorView(model);
+                
+            case "SelectAdminActionView":
+                return new SelectAdminActionView(model);
 
             default:
                 return null;

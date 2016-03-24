@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.MainStageContainer;
+import userinterface.SystemLocale;
 import userinterface.View;
 import userinterface.ViewFactory;
 import userinterface.WindowPosition;
@@ -32,10 +33,10 @@ import userinterface.WindowPosition;
 public class TreeLotCoordinator implements IModel, IView {
 
     private Properties dependencies;
-    private ModelRegistry myRegistry;
+    private final ModelRegistry myRegistry;
 
     private Locale myLocale;
-    private ResourceBundle myMessages;
+    private final ResourceBundle myMessages;
 
     private final Hashtable<String, Scene> myViews;
     private final Stage myStage;
@@ -55,67 +56,68 @@ public class TreeLotCoordinator implements IModel, IView {
                     Event.ERROR
             );
         }
-
-        setDependencies();
         
-        loadLocale();
-        
-        myMessages = ResourceBundle.getBundle("model.i18n.TreeLotCoordinator", myLocale);
-
-        createAndShowView();
-    }
-
-    private void setDependencies() {
-        
-    }
-    
-    private void loadLocale() {
+        // Determine Locale
         try {
             PropertyFile config = new PropertyFile("config.ini");
-            String localeSpecification = config.getProperty("locale");
-            setLocale(localeSpecification);
+            String language = config.getProperty("language");
+            String country = config.getProperty("country");
+            SystemLocale.setLocale(language, country);
         }
         catch (Exception e) {
             System.out.println("BoyScoutTreeSales: Failed to determine locale. Using default (en_US).");
-            setLocale("eu_US");
+            
+            SystemLocale.setLocale("en", "US");
         }
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeLotCoordinator", myLocale);
+        
+        setDependencies();
+
+        createAndShowMyView();
+    }
+
+    private void setDependencies() {
+        dependencies = new Properties();
+        
+        myRegistry.setDependencies(dependencies);
     }
     
-    public void setLocale(String localeSpecifier) {
-        String[] specifierParts = localeSpecifier.split("_");
-        String language = specifierParts[0];
-        if (specifierParts.length == 1) {
-            myLocale = new Locale(language);
+    private void createAndShowMyView() {
+        Scene nextScene = (Scene) myViews.get("TreeLotCoordinatorView");
+
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("TreeLotCoordinatorView", this);
+            nextScene = new Scene(newView);
+            myViews.put("TreeLotCoordinatorView", nextScene);
         }
-        else {
-            String country = specifierParts[1];
-            myLocale = new Locale(language, country);
+        
+        switchToScene(nextScene);
+    }
+    
+    private void createAndShowAdminView() {
+        Scene nextScene = (Scene) myViews.get("SelectAdminActionView");
+
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("SelectAdminActionView", this);
+            nextScene = new Scene(newView);
+            myViews.put("SelectAdminActionView", nextScene);
         }
+        
+        switchToScene(nextScene);
     }
 
-    private void createAndShowView() {
-        Scene currentScene = (Scene) myViews.get("TreeLotCoordinatorView");
-
-        if (currentScene == null) {
-            View newView = ViewFactory.createView("TreeLotCoordinatorView", this);
-            currentScene = new Scene(newView);
-            myViews.put("TreeLotCoordinatorView", currentScene);
-        }
-
-        myStage.setScene(currentScene);
+    public void switchToScene(Scene nextScene) {
+        myStage.setScene(nextScene);
         myStage.sizeToScene();
 
         WindowPosition.placeCenter(myStage);
-    }
+    } 
 
     @Override
     public Object getState(String key) {
         if (key.equals("TransactionError")) {
             return transactionErrorMessage;
-        }
-        
-        if (key.equals("Locale")) {
-            return myLocale;
         }
         
         return "";
@@ -131,30 +133,59 @@ public class TreeLotCoordinator implements IModel, IView {
     @Override
     public void stateChangeRequest(String key, Object value) {
         switch (key) {
-            case "TransactionChoice":
-                runTransaction((String)value);
+            case "Administration":
+                createAndShowAdminView();
                 break;
+                
+            case "SellTree":
+            case "OpenShift":
+            case "CloseShift":
+            case "RegisterScout":
+            case "EditScout":
+            case "AddTree":
+            case "EditTree":
+            case "AddTreeType":
+            case "EditTreeType":
+                doTransaction(key);
+                break;
+                
+            case "SessionStatus": 
+                break;
+                
             case "TransactionError":
                 transactionErrorMessage = (String)value;
                 break;
-            case "Done":
-                createAndShowView();
+                
+            case "CancelTransaction":
+                createAndShowMyView();
                 break;
+                
             case "Exit":
                 System.exit(0);
-            default:
-                break;
+                
+            default: break;
         }
 
         myRegistry.updateSubscribers(key, this);
     }
     
     
-    public void runTransaction(String transType) {
-        Transaction trans = TransactionFactory.createTransaction(transType, this);
+    public void doTransaction(String transType) {
+        Transaction trans = TransactionFactory.createTransaction(transType);
         
-        trans.subscribe("CancelTransaction", this);
-        trans.stateChangeRequest("DoYourJob", "");
+        if (trans != null) {
+            trans.subscribe("CancelTransaction", this);
+            trans.stateChangeRequest("DoYourJob", "");
+        }
+        else {
+            new Event(
+                    Event.getLeafLevelClassName(this),
+                    "TreeLotCoordinator",
+                    "Could not instantiate delegate for '"+transType+"' transaction type." ,
+                    Event.ERROR
+            );
+            System.out.println("FATAL ERROR: '"+transType+"' is not a valid transaction!");
+        }
     }
 
     

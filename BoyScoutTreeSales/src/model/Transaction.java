@@ -20,15 +20,14 @@ import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.MainStageContainer;
+import userinterface.SystemLocale;
 import userinterface.WindowPosition;
 
 /**
  *
  */
 public abstract class Transaction implements IView, IModel {
-    
     // For Impresario
-    protected Properties dependencies;
     protected ModelRegistry myRegistry;
     
     protected Locale myLocale;
@@ -37,16 +36,15 @@ public abstract class Transaction implements IView, IModel {
     protected Stage myStage;
     protected Hashtable<String, Scene> myViews;
     
-    protected TreeLotCoordinator myCoordinator;
     protected String transactionErrorMessage;
     
-    public Transaction(TreeLotCoordinator tlc) {
+    public Transaction() {
         myStage = MainStageContainer.getInstance();
         myViews = new Hashtable<>();
-        myCoordinator = tlc;
+        
         myRegistry = new ModelRegistry("Transaction");
         
-        myLocale = (Locale)myCoordinator.getState("Locale");
+        myLocale = SystemLocale.getInstance();
         
         setDependencies();
         
@@ -83,9 +81,6 @@ public abstract class Transaction implements IView, IModel {
     public void updateState(String key, Object value) {
         stateChangeRequest(key, value);
     }
-
-    @Override
-    public abstract Object getState(String key);
     
     @Override
     public abstract void stateChangeRequest(String key, Object value);

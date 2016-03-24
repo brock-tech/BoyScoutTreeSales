@@ -12,7 +12,6 @@ package model;
 import java.util.Properties;
 import java.util.Vector;
 
-import database.*;
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
 import java.util.Enumeration;
@@ -28,18 +27,18 @@ public class Scout extends EntityBase {
     private String updateStatusMessage = "";
 
     /**
-     * @param scoutId
+     * @param troopId
      * @throws exception.InvalidPrimaryKeyException */
     //--------------------------------------------------------------------------
-    public Scout(String scoutId) throws InvalidPrimaryKeyException {
+    public Scout(String troopId) throws InvalidPrimaryKeyException {
         super(myTableName);
         
         setDependencies();
         
         String query = String.format(
-                "SELECT * FROM %s WHERE (scoutId = %s)",
+                "SELECT * FROM %s WHERE (TroopID = %s)",
                 myTableName,
-                scoutId);
+                troopId);
         
         Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
         
@@ -49,19 +48,18 @@ public class Scout extends EntityBase {
             // There should be exactly one book. Any more will be an error.
             if (size != 1) {
                 throw new InvalidPrimaryKeyException(
-                        String.format("Multiple Scouts matching id : %s found",
-                                scoutId)
+                        String.format("Multiple Scouts found with matching Troop ID : %s", troopId)
                 );
             }
             else {
                 // Copy all retrived data into persistent state.
-                Properties retrievedBookData = allDataRetrieved.elementAt(0);
+                Properties retrievedScoutData = allDataRetrieved.elementAt(0);
                 persistentState = new Properties();
 
-                Enumeration allKeys = retrievedBookData.propertyNames();
+                Enumeration allKeys = retrievedScoutData.propertyNames();
                 while (allKeys.hasMoreElements()) {
                     String nextKey = (String) allKeys.nextElement();
-                    String nextValue = retrievedBookData.getProperty(nextKey);
+                    String nextValue = retrievedScoutData.getProperty(nextKey);
 
                     if (nextValue != null) {
                         persistentState.setProperty(nextKey, nextValue);
@@ -71,7 +69,7 @@ public class Scout extends EntityBase {
         } 
         else {
             throw new InvalidPrimaryKeyException(
-                    String.format("No Scout matching Id : %s found", scoutId)
+                    String.format("No Scout found with Troop ID = %s ", troopId)
             );
         }
     }
@@ -126,25 +124,25 @@ public class Scout extends EntityBase {
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
         try {
-            if (persistentState.getProperty("scoutId") != null) {
+            if (persistentState.getProperty("ScoutID") != null) {
                 Properties whereClause = new Properties();
 
-                whereClause.setProperty("scoutId", persistentState.getProperty("scoutId"));
+                whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
             } 
             else {
                 Integer bookId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("bookId", bookId.toString());                
+                persistentState.setProperty("ScoutID", bookId.toString());                
             }
             
             updateStatusMessage = String.format(
                     "Data for new Scout : %s installed successfully in database!",
-                    persistentState.getProperty("scoutId")
+                    persistentState.getProperty("ScoutID")
             );
         } 
         catch (SQLException ex) {
-            updateStatusMessage = "Error in installing book data in database!";
+            updateStatusMessage = "Error in installing Scout data in database!";
         }
     }
 

@@ -13,13 +13,8 @@
 package model;
         
 // system imports
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.Vector;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -28,10 +23,8 @@ import database.Persistable;
 import impresario.ModelRegistry;
 import impresario.IModel;
 import impresario.IView;
-import impresario.ISlideShow;
 import event.Event;
 import userinterface.MainStageContainer;
-import userinterface.View;
 import userinterface.WindowPosition;
 
 

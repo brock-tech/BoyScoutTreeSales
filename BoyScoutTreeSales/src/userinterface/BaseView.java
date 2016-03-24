@@ -46,7 +46,7 @@ public abstract class BaseView extends View {
     protected BaseView(IModel model, String classname) {
         super(model, classname);
         
-        myLocale = (Locale)myModel.getState("Locale");
+        myLocale = SystemLocale.getInstance();
         myResources = new Properties();
         loadResources("userinterface.i18n.BaseView");
         
@@ -54,7 +54,7 @@ public abstract class BaseView extends View {
             loadResources("userinterface.i18n." + classname);
         }
         catch (Exception exc) {
-            /* Resource file not found; Do nothing */ 
+            /* Resource file not found or no additional resources needed */ 
         }
         
         VBox container = new VBox(10);

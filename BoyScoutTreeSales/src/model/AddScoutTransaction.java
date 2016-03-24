@@ -9,6 +9,7 @@
 //********************************************************************
 package model;
 
+import exception.InvalidPrimaryKeyException;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
@@ -19,16 +20,19 @@ import userinterface.ViewFactory;
  * @author mike
  */
 public class AddScoutTransaction extends Transaction {
+    String updateStatusMessage;
     
-    
-
-    public AddScoutTransaction(TreeLotCoordinator tlc) {
-        super(tlc);
+    public AddScoutTransaction() {
+        super();
     }
 
     @Override
     protected void setDependencies() {
-        subscribe("TransactionErrorMessage", this);
+        Properties dependencies = new Properties();
+        dependencies.put("Submit", "TransactionError");
+        dependencies.put("Done", "CancelTransaction");
+        
+        myRegistry.setDependencies(dependencies);
     }
 
     @Override
@@ -51,22 +55,46 @@ public class AddScoutTransaction extends Transaction {
 
     @Override
     public Object getState(String key) {
-        return null;
+        switch (key) {
+            case "TransactionError":
+                return transactionErrorMessage;
+            case "UpdateStatusMessage":
+                return updateStatusMessage;
+            default:
+                return null;
+        }
     }
 
     @Override
     public void stateChangeRequest(String key, Object value) {
-        if (key.equals("DoYourJob")) {
-            doYourJob();
+        switch (key) {
+            case "DoYourJob":
+                doYourJob();
+                break;
+            case "Submit":
+                processTransaction((Properties)value);
+                break;
         }
-        if (key.equals("AddScout")) {
-            addScout((Properties)value);
-        }
+        
+        myRegistry.updateSubscribers(key, this);
     }
     
-    private void addScout(Properties p) {
-        Scout scout = new Scout(p);
-        
-        scout.update();
+    private void processTransaction(Properties p) {
+        try {
+            String troopId = p.getProperty("TroopID");
+            
+            Scout oldScout = new Scout(troopId);
+            
+            updateStatusMessage = "Scout with Troop ID "+troopId+" already exists.";
+            transactionErrorMessage = updateStatusMessage;
+            
+        } catch (Exception exc) { 
+            
+            // Add new Scout
+            Scout scout = new Scout(p); 
+            scout.update();
+            updateStatusMessage = (String)scout.getState("UpdateStatusMessage");
+            transactionErrorMessage = updateStatusMessage;
+        }
     }
 }
