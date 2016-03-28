@@ -4,3 +4,11 @@
 [3/10/16 12:44 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
 [3/10/16 12:46 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
 [3/10/16 12:47 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'RegisterScout' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'AddTree' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTreeType' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'AddTreeType' transaction type.>
+[3/24/16 7:07 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
