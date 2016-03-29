@@ -15,6 +15,10 @@ import java.util.Vector;
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import javafx.scene.Scene;
+import userinterface.View;
+import userinterface.ViewFactory;
+import userinterface.WindowPosition;
 
 /**
  *
@@ -72,6 +76,8 @@ public class Scout extends EntityBase {
                     String.format("No Scout found with Troop ID = %s ", troopId)
             );
         }
+        
+        
     }
     
     /**
@@ -172,7 +178,22 @@ public class Scout extends EntityBase {
         
         return v;
     }
+    /*
+    public void createAndShowView() {
+        Scene nextScene = (Scene) myViews.get("ScoutView");
+        
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("ScoutView", this);
+            nextScene = new Scene(newView);
+            myViews.put("ScoutView", nextScene);
+        }
+        
+        myStage.setScene(nextScene);
+        myStage.sizeToScene();
 
+        WindowPosition.placeCenter(myStage);
+    }
+    */
     /**
      * @param tableName */
     //--------------------------------------------------------------------------

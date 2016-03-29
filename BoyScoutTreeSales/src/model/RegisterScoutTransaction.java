@@ -19,18 +19,18 @@ import userinterface.ViewFactory;
  *
  * @author mike
  */
-public class AddScoutTransaction extends Transaction {
+public class RegisterScoutTransaction extends Transaction {
     String updateStatusMessage;
     
-    public AddScoutTransaction() {
+    public RegisterScoutTransaction() {
         super();
     }
 
     @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
-        dependencies.put("Submit", "TransactionError");
-        dependencies.put("Done", "CancelTransaction");
+        dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
+        dependencies.put("Cancel", "CancelTransaction");
         
         myRegistry.setDependencies(dependencies);
     }
@@ -42,12 +42,12 @@ public class AddScoutTransaction extends Transaction {
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("AddScoutTransactionView");
+        Scene currentScene = myViews.get("RegisterScoutTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("AddScoutTransactionView", this);
+            View newView = ViewFactory.createView("RegisterScoutTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("AddScoutTransactionView", currentScene);
+            myViews.put("RegisterScoutTransactionView", currentScene);
         }
         
         return currentScene;
@@ -80,6 +80,9 @@ public class AddScoutTransaction extends Transaction {
     }
     
     private void processTransaction(Properties p) {
+        updateStatusMessage = "";
+        transactionErrorMessage = "";
+        
         try {
             String troopId = p.getProperty("TroopID");
             
@@ -88,7 +91,7 @@ public class AddScoutTransaction extends Transaction {
             updateStatusMessage = "Scout with Troop ID "+troopId+" already exists.";
             transactionErrorMessage = updateStatusMessage;
             
-        } catch (Exception exc) { 
+        } catch (InvalidPrimaryKeyException exc) { 
             
             // Add new Scout
             Scout scout = new Scout(p); 

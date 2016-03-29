@@ -13,6 +13,14 @@ package userinterface;
  *
  * @author mike
  */
-public interface IFormFillableStrategy {
-    
+public class FormItemFactory {
+    public static IFormItemStrategy getFormItem(String id) {
+        if (id.equals("DefaultFormItem")) {
+            return new TopAlignFormItem();
+        }
+        if (id.equals("TopAlignFormItem")) {
+            return new TopAlignFormItem();
+        }
+        return null;
+    }
 }

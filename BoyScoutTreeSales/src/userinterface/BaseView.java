@@ -30,7 +30,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 public abstract class BaseView extends View {
-    public static final double DEFAULT_WIDTH = 450.0;
+    public static final double DEFAULT_WIDTH = 500.0;
     
     protected Locale myLocale;
     protected Properties myResources;
