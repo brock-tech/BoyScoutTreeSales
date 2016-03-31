@@ -14,7 +14,13 @@ import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import userinterface.SystemLocale;
 
 /**
  *
@@ -25,6 +31,9 @@ public class Scout extends EntityBase {
     protected Properties dependencies;
     
     private String updateStatusMessage = "";
+    
+    private Locale myLocale;
+    private ResourceBundle myMessages;
 
     /**
      * @param troopId
@@ -35,6 +44,9 @@ public class Scout extends EntityBase {
         
         setDependencies();
         
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.Scout", myLocale);
+        
         String query = String.format(
                 "SELECT * FROM %s WHERE (TroopID = %s)",
                 myTableName,
@@ -42,14 +54,15 @@ public class Scout extends EntityBase {
         
         Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
         
+        MessageFormat formatter = new MessageFormat("", myLocale);
+        
         if (allDataRetrieved != null) {
             int size = allDataRetrieved.size();
 
             // There should be exactly one book. Any more will be an error.
             if (size != 1) {
-                throw new InvalidPrimaryKeyException(
-                        String.format("Multiple Scouts found with matching Troop ID : %s", troopId)
-                );
+                formatter.applyPattern(myMessages.getString("multipleScoutsFoundMsg"));
+                throw new InvalidPrimaryKeyException(formatter.format(new Object[] {troopId}));
             }
             else {
                 // Copy all retrived data into persistent state.
@@ -68,9 +81,8 @@ public class Scout extends EntityBase {
             }
         } 
         else {
-            throw new InvalidPrimaryKeyException(
-                    String.format("No Scout found with Troop ID = %s ", troopId)
-            );
+            formatter.applyPattern(myMessages.getString("scoutNotFoundMsg"));
+            throw new InvalidPrimaryKeyException(formatter.format(new Object[] {troopId}));
         }
     }
     
@@ -80,6 +92,9 @@ public class Scout extends EntityBase {
     public Scout(Properties props) {
         super(myTableName);
         setDependencies();
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.Scout", myLocale);
         
         persistentState = new Properties();
 
@@ -123,26 +138,45 @@ public class Scout extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
-        try {
-            if (persistentState.getProperty("ScoutID") != null) {
+        // Set date of last update to today's date
+        LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+        
+        MessageFormat formatter = new MessageFormat("", myLocale);
+        Object[] firstAndLastName = new Object[] {
+            persistentState.getProperty("FirstName"),
+            persistentState.getProperty("LastName")
+        };
+        
+        if (persistentState.getProperty("ScoutID") != null) { // Update Existing
+            try {
                 Properties whereClause = new Properties();
 
                 whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
-            } 
-            else {
-                Integer bookId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ScoutID", bookId.toString());                
+
+                formatter.applyPattern(myMessages.getString("updateSuccessMsg"));
+                updateStatusMessage = formatter.format(firstAndLastName);
+
+            } catch (SQLException ex) {
+                formatter.applyPattern(myMessages.getString("updateErrorMsg"));
+                updateStatusMessage = formatter.format(firstAndLastName);
             }
-            
-            updateStatusMessage = String.format(
-                    "Data for new Scout : %s installed successfully in database!",
-                    persistentState.getProperty("ScoutID")
-            );
         } 
-        catch (SQLException ex) {
-            updateStatusMessage = "Error in installing Scout data in database!";
+        else { // Insert New
+            try {
+                Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("ScoutID", scoutId.toString());
+
+                formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
+                updateStatusMessage = formatter.format(firstAndLastName);
+
+            } catch (SQLException ex) {
+                formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
+                updateStatusMessage = formatter.format(firstAndLastName);
+            }
         }
     }
 
@@ -172,7 +206,7 @@ public class Scout extends EntityBase {
         
         return v;
     }
-
+    
     /**
      * @param tableName */
     //--------------------------------------------------------------------------

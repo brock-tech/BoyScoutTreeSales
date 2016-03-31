@@ -30,7 +30,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 public abstract class BaseView extends View {
-    public static final double DEFAULT_WIDTH = 450.0;
+    public static final double DEFAULT_WIDTH = 500.0;
     
     protected Locale myLocale;
     protected Properties myResources;
@@ -120,7 +120,7 @@ public abstract class BaseView extends View {
      */
     //----------------------------------------------------------
     protected Node createFooter() {
-        HBox footer = new HBox(10);
+        VBox footer = new VBox(10);
         footer.setAlignment(Pos.BASELINE_LEFT);
         footer.setPrefWidth(DEFAULT_WIDTH);
         
