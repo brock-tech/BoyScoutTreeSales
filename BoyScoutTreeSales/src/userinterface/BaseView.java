@@ -120,7 +120,7 @@ public abstract class BaseView extends View {
      */
     //----------------------------------------------------------
     protected Node createFooter() {
-        HBox footer = new HBox(10);
+        VBox footer = new VBox(10);
         footer.setAlignment(Pos.BASELINE_LEFT);
         footer.setPrefWidth(DEFAULT_WIDTH);
         

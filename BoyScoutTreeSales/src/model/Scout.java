@@ -14,11 +14,12 @@ import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
-import javafx.scene.Scene;
-import userinterface.View;
-import userinterface.ViewFactory;
-import userinterface.WindowPosition;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import userinterface.SystemLocale;
 
 /**
  *
@@ -29,6 +30,9 @@ public class Scout extends EntityBase {
     protected Properties dependencies;
     
     private String updateStatusMessage = "";
+    
+    private Locale myLocale;
+    private ResourceBundle myMessages;
 
     /**
      * @param troopId
@@ -38,6 +42,8 @@ public class Scout extends EntityBase {
         super(myTableName);
         
         setDependencies();
+        
+        
         
         String query = String.format(
                 "SELECT * FROM %s WHERE (TroopID = %s)",
@@ -108,6 +114,12 @@ public class Scout extends EntityBase {
         myRegistry.setDependencies(dependencies);
     }
     
+    private void getMessageBundle() {
+        myLocale = SystemLocale.getInstance();
+        
+        myMessages = ResourceBundle.getBundle("model.i18n.Scout", myLocale);
+    }
+    
     /**
      * @param scout1
      * @param scout2
@@ -129,23 +141,28 @@ public class Scout extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
+        // Set date of last update to today's date
+        LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+        
         try {
-            if (persistentState.getProperty("ScoutID") != null) {
+            if (persistentState.getProperty("ScoutID") != null) { // Insert New
                 Properties whereClause = new Properties();
 
                 whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
+                
+                
             } 
-            else {
-                Integer bookId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ScoutID", bookId.toString());                
+            else { // Update Existing
+                Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("ScoutID", scoutId.toString());
+                
+                
+                
             }
-            
-            updateStatusMessage = String.format(
-                    "Data for new Scout : %s installed successfully in database!",
-                    persistentState.getProperty("ScoutID")
-            );
         } 
         catch (SQLException ex) {
             updateStatusMessage = "Error in installing Scout data in database!";
@@ -178,22 +195,7 @@ public class Scout extends EntityBase {
         
         return v;
     }
-    /*
-    public void createAndShowView() {
-        Scene nextScene = (Scene) myViews.get("ScoutView");
-        
-        if (nextScene == null) {
-            View newView = ViewFactory.createView("ScoutView", this);
-            nextScene = new Scene(newView);
-            myViews.put("ScoutView", nextScene);
-        }
-        
-        myStage.setScene(nextScene);
-        myStage.sizeToScene();
-
-        WindowPosition.placeCenter(myStage);
-    }
-    */
+    
     /**
      * @param tableName */
     //--------------------------------------------------------------------------

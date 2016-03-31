@@ -15,7 +15,7 @@ public class ViewFactory {
                 return new SelectAdminActionView(model);
                 
             case "RegisterScoutTransactionView":
-                return new RegisterScoutTransactionView(model);
+                return new ScoutFormView(model);
 
             default:
                 return null;
