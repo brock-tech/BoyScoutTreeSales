@@ -197,7 +197,7 @@ public class ScoutFormView extends BaseView {
                 newScoutData.setProperty("Email", emailField.getText());
                 newScoutData.setProperty("ScoutStatus", (String)statusBox.getValue());
                 
-                myModel.stateChangeRequest("", newScoutData);
+                myModel.stateChangeRequest("Submit", newScoutData);
             }
         }
     }
