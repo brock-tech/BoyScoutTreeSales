@@ -9,8 +9,6 @@
 //********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
-import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
