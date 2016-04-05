@@ -17,7 +17,8 @@ public class TransactionFactory {
         switch (transName) {
             case "RegisterScout":
                 return new RegisterScoutTransaction();
-            
+            case "AddTree":
+                return new AddTreeTransaction();
             default: return null;
         }
     }

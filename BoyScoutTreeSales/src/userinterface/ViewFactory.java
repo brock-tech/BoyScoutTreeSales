@@ -16,7 +16,9 @@ public class ViewFactory {
                 
             case "RegisterScoutTransactionView":
                 return new RegisterScoutTransactionView(model);
-
+            
+            case "AddTreeTransactionView":
+                return new AddTreeTransactionView(model);
             default:
                 return null;
         }
