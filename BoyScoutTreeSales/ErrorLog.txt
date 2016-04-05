@@ -1,0 +1,7 @@
+[4/5/16 10:01 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:03 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:05 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:06 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:07 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:08 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:12 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>

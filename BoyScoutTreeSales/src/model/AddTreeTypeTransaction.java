@@ -9,7 +9,6 @@
 //********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;

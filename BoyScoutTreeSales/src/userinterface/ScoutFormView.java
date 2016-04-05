@@ -188,14 +188,14 @@ public class ScoutFormView extends BaseView {
             if (validate()) {
                 // Submit data
                 Properties newScoutData = new Properties();
-                newScoutData.setProperty("FirstName", firstNameField.getText());
-                newScoutData.setProperty("MiddleName", middleNameField.getText());
-                newScoutData.setProperty("LastName", lastNameField.getText());
-                newScoutData.setProperty("TroopID", troopIdField.getText());
-                newScoutData.setProperty("DateOfBirth", dobField.getText());
-                newScoutData.setProperty("PhoneNumber", phoneNumField.getText());
-                newScoutData.setProperty("Email", emailField.getText());
-                newScoutData.setProperty("ScoutStatus", (String)statusBox.getValue());
+                newScoutData.setProperty("firstName", firstNameField.getText());
+                newScoutData.setProperty("middleInit", middleNameField.getText());
+                newScoutData.setProperty("lastName", lastNameField.getText());
+                newScoutData.setProperty("troopId", troopIdField.getText());
+                newScoutData.setProperty("DOB", dobField.getText());
+                newScoutData.setProperty("phoneNumber", phoneNumField.getText());
+                newScoutData.setProperty("email", emailField.getText());
+                //newScoutData.setProperty("ScoutStatus", (String)statusBox.getValue());
                 
                 myModel.stateChangeRequest("Submit", newScoutData);
             }
