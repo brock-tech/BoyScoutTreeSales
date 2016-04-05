@@ -10,7 +10,9 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -29,15 +31,16 @@ public class AddTreeTypeTransaction extends Transaction {
     @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
-        dependencies.put("Submit", "TransactionError");
+        dependencies.put("Submit", "TransactionError, UpdateStatusMessage");
         dependencies.put("Done", "CancelTransaction");
         
         myRegistry.setDependencies(dependencies);
     }
 
     @Override
-    protected void getMessagesBundle() {
-        
+    protected void getMessagesBundle() 
+    {
+             myMessages = ResourceBundle.getBundle("model.i18n.AddTreeTypeTransaction", myLocale);
     }
 
     @Override
@@ -80,22 +83,29 @@ public class AddTreeTypeTransaction extends Transaction {
     }
     
     private void processTransaction(Properties p) {
-        try {
-            String typeId = p.getProperty("barcodePrefix");
-            
-            TreeType oldTreeType = new TreeType(typeId);
-            
-            updateStatusMessage = "TreeType with Barcode Prefix "+typeId+" already exists.";
-            transactionErrorMessage = updateStatusMessage;
-            
-        } catch (Exception exc) { 
-            
-            // Add new TreeType
-            TreeType newTreeType = new TreeType(p); 
-            newTreeType.update();
-            updateStatusMessage = (String)newTreeType.getState("UpdateStatusMessage");
-            transactionErrorMessage = updateStatusMessage;
-        }
+        
+           MessageFormat formatter = new MessageFormat("", myLocale);
+           try 
+           {
+                String barcodePrefix = p.getProperty("barcodePrefix");
+
+                TreeType oldTreeType = new TreeType(barcodePrefix);
+
+                formatter.applyPattern("existingMsg");
+                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
+                transactionErrorMessage = updateStatusMessage;
+           } 
+           catch (Exception exc) 
+           { 
+                // Add new TreeType
+                String barcodePrefix = p.getProperty("barcodePrefix");
+                TreeType newTreeType = new TreeType(p); 
+                newTreeType.update();
+
+                formatter.applyPattern("insertSuccessMsg");
+                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
+                transactionErrorMessage = updateStatusMessage;
+            }
     }
 }
 

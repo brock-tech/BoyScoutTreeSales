@@ -9,3 +9,7 @@
 [3/29/16 11:22 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
 [3/31/16 10:38 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
 [3/31/16 10:41 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'AddTree' transaction type.>
+[4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTreeType' transaction type.>

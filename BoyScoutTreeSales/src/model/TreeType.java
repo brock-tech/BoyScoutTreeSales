@@ -14,7 +14,13 @@ import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import userinterface.SystemLocale;
 
 
 
@@ -28,6 +34,9 @@ public class TreeType extends EntityBase
     protected Properties dependencies;
     private String updateStatusMessage = "";
     protected TreeLotCoordinator myTLC;
+    private Locale myLocale;
+    private ResourceBundle myMessages;
+
     //--------------------------------------------------------------------------
     public TreeType(TreeLotCoordinator tlc)
     {
@@ -36,20 +45,27 @@ public class TreeType extends EntityBase
         myTLC = tlc;
     }
     //--------------------------------------------------------------------------
-    public TreeType(String typeId, TreeLotCoordinator tlc)
+    public TreeType(String barcodePrefix, TreeLotCoordinator tlc)
             throws InvalidPrimaryKeyException
     {
-        this(typeId);
+        this(barcodePrefix);
 	myTLC = tlc;
     }
     //--------------------------------------------------------------------------
-    public TreeType(String typeId) throws InvalidPrimaryKeyException
+    public TreeType(String barcodePrefix) throws InvalidPrimaryKeyException
     {
 	super(myTableName);
         setDependencies();
-
-        String query = "SELECT * FROM " + myTableName + 
-        " WHERE (typeId = " + typeId + ")";
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeType", myLocale);
+        MessageFormat formatter = new MessageFormat("", myLocale);
+        
+         String query = String.format(
+                "SELECT * FROM %s WHERE (barcodePrefix = %s)",
+                myTableName,
+                barcodePrefix);
+ 
         Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
 	// You must get one Patron at least
@@ -58,8 +74,8 @@ public class TreeType extends EntityBase
             int size = allDataRetrieved.size();
                 if (size != 1)
 		{
-                    throw new InvalidPrimaryKeyException("Multiple TreeTypes matching id : "
-                    + typeId + " found.");
+                    formatter.applyPattern(myMessages.getString("multipleTTFoundMsg"));
+                    throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
 		}
                 else
 		{
@@ -82,8 +98,8 @@ public class TreeType extends EntityBase
 	}
         else
         {
-            throw new InvalidPrimaryKeyException("No TreeType matching id : "
-            + typeId + " found.");
+            formatter.applyPattern(myMessages.getString("TTNotFound"));
+            throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
         }
     }
     //--------------------------------------------------------------------------
@@ -119,30 +135,46 @@ public class TreeType extends EntityBase
     //-----------------------------------------------------------------------------------
     private void updateStateInDatabase()
     {
-        try
+        LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+        Object [] ID_barcodePrefix = new Object[] {persistentState.get("treeTypeId"),
+                persistentState.get("barcodePrefix")};
+        
+        MessageFormat formatter = new MessageFormat("", myLocale);
+        if (persistentState.getProperty("treeTypeID") != null)
         {
-            if (persistentState.getProperty("typeId") != null)
+            try
             {
                 Properties whereClause = new Properties();
-                whereClause.setProperty("typeId",
-                persistentState.getProperty("typeId"));
+                whereClause.setProperty("treeTypeID",
+                persistentState.getProperty("treeTypeID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "TreeType data for TreeType with ID : " +
-                persistentState.getProperty("typeId") + " updated successfully in database";
+               formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
+               updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
-            else
+            catch(SQLException s)
             {
-                Integer patronID =
-                insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("typeId", "" + patronID.intValue());
-                updateStatusMessage = "TreeType data for new TreeType : " +  persistentState.getProperty("typeId")
-                + "installed successfully in database!";
+               formatter.applyPattern(myMessages.getString("insertErrorMsg"));
+               updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
         }   
-        catch (SQLException ex)
+        else
         {
-            updateStatusMessage = "Error in installing TreeType data in database!";
-        }
+            try
+            {
+                Integer treeTypeID =
+                insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("treeTypeID", "" + treeTypeID.intValue());
+               formatter.applyPattern(myMessages.getString("updateSuccessMsg"));
+               updateStatusMessage = formatter.format(ID_barcodePrefix);
+            }
+            catch(SQLException e)
+            {
+               formatter.applyPattern(myMessages.getString("updateErrorMsg"));
+               updateStatusMessage = formatter.format(ID_barcodePrefix);
+            }
+        }   
         //DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
     }
     //--------------------------------------------------------------------------
@@ -157,8 +189,8 @@ public class TreeType extends EntityBase
     //--------------------------------------------------------------------------
    public static int compare(TreeType a, TreeType b)
     {
-        String aNum = (String)a.getState("typeId");
-        String bNum = (String)b.getState("typeId");
+        String aNum = (String)a.getState("barcodePrefix");
+        String bNum = (String)b.getState("barcodePrefix");
 
         return aNum.compareTo(bNum);
     }
@@ -168,20 +200,22 @@ public class TreeType extends EntityBase
     {
         myRegistry.updateSubscribers(key, this);
     }
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
      public Vector<String> getTableListView() 
      {
         Vector<String> v = new Vector<>();
-        v.addElement(persistentState.getProperty("typeId"));
+        v.addElement(persistentState.getProperty("treeTypeId"));
+        v.addElement(persistentState.getProperty("barcodePrefix"));
+        v.addElement(persistentState.getProperty("description"));
 	v.addElement(persistentState.getProperty("cost"));
-	v.addElement(persistentState.getProperty("description"));
+	
         
         return v;
     }
      
     public void dataEntryView()
     {
-        AddTreeTypeTransactionView treeTypeView = new AddTreeTypeTransactionView(this);
+       // AddTreeTypeTransactionView treeTypeView = new AddTreeTypeTransactionView(this);
     }
     @Override
     //--------------------------------------------------------------------------
