@@ -5,3 +5,16 @@
 [3/10/16 12:46 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
 [3/10/16 12:47 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
 [3/29/16 10:33 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[4/5/16 11:55 AM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:00 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:04 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:17 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:21 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:22 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:28 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:29 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 1:42 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>

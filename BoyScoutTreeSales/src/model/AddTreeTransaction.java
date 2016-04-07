@@ -10,6 +10,7 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.sql.SQLException;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
@@ -84,19 +85,22 @@ public class AddTreeTransaction extends Transaction {
         transactionErrorMessage = "";
         
         try {
-            String troopId = p.getProperty("TroopID");
+            String treeBarCode = p.getProperty("treeBarCode");
             
-            Scout oldScout = new Scout(troopId);
+            Tree oldTree = new Tree(treeBarCode);
             
-            updateStatusMessage = "Scout with Troop ID "+troopId+" already exists.";
+            updateStatusMessage = "Tree with Bar Code "+treeBarCode+" already exists.";
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 
             
             // Add new Scout
-            Scout scout = new Scout(p); 
-            scout.update();
-            updateStatusMessage = (String)scout.getState("UpdateStatusMessage");
+            System.out.println("1");
+            Tree tree = new Tree(p); 
+            System.out.println("2");
+            tree.update();
+            System.out.println("3");
+            updateStatusMessage = (String)tree.getState("UpdateStatusMessage");
             transactionErrorMessage = updateStatusMessage;
         }
     }

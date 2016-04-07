@@ -26,6 +26,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 
 /**
  *
@@ -36,10 +40,11 @@ public class AddTreeTransactionView extends BaseView {
     
     protected TextField treeBarCode;
     protected TextField salePrice;
-    protected TextField NameField;
+    protected TextField nameField;
     protected TextField phoneNumField;
     protected TextField emailField;
-    protected ComboBox statusBox;
+    protected TextField dateField;
+    protected TextField timeField;
     protected Button submitButton;
 //    protected Button clearFormButton;
     protected Button cancelButton;
@@ -83,10 +88,10 @@ public class AddTreeTransactionView extends BaseView {
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 1);
         
-        NameField = new TextField();
-        NameField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Customer Name:", NameField);
-        formItem.setPrefWidth(350);
+        nameField = new TextField();
+        nameField.setOnAction(submitHandler);
+        formItem = formItemBuilder.buildControl("Customer Name:", nameField);
+        formItem.setPrefWidth(200);
         formGrid.add(formItem, 0, 2);
         
         emailField = new TextField();
@@ -101,15 +106,23 @@ public class AddTreeTransactionView extends BaseView {
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 4);
         
-        phoneNumField = new TextField();
-        phoneNumField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Current Date:", phoneNumField);
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        dateField = new TextField();
+        dateField.setText(dateFormat.format(date));
+        dateField.setEditable(false);
+        dateField.setOnAction(submitHandler);
+        formItem = formItemBuilder.buildControl("Current Date:", dateField);
         formItem.setPrefWidth(100);
         formGrid.add(formItem, 0, 5);
         
-        emailField = new TextField();
-        emailField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Current Time:", emailField);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        Date time = new Date();
+        timeField = new TextField();
+        timeField.setText(timeFormat.format(time));
+        timeField.setEditable(false);
+        timeField.setOnAction(submitHandler);
+        formItem = formItemBuilder.buildControl("Current Time:", timeField);
         formItem.setPrefWidth(100);
         formGrid.add(formItem, 0, 6);
         
@@ -147,45 +160,45 @@ public class AddTreeTransactionView extends BaseView {
         //    clearForm();
         //}
         else {
+            if (validate()){
             // Verify information in fields and submit
-            Properties p = new Properties();
-            
-            String treeBar = treeBarCode.getText();
-            if ((treeBar == null) || treeBar.equals("")) {
-                displayErrorMessage("Tree Bar Code required!");
-                treeBarCode.requestFocus();
+                Properties p = new Properties();
+                
+                p.setProperty("barcode", treeBarCode.getText());
+                p.setProperty("saleprice", salePrice.getText());
+                p.setProperty("cname", nameField.getText());
+                p.setProperty("cphoneNum", phoneNumField.getText());
+                p.setProperty("cemail", emailField.getText());
+                p.setProperty("date", dateField.getText());
+                p.setProperty("time", timeField.getText());
+                myModel.stateChangeRequest("Submit", p);
             }
-            p.setProperty("treeBarCode", treeBar);
-            
-            String price = salePrice.getText();
-            if ((price == null) || price.equals("")) {
-                displayErrorMessage("Sale Price required!");
-                salePrice.requestFocus();
-            }
-            p.setProperty("salePrice", price);
-            
-            String name = NameField.getText();
-            if ((name == null) || name.equals("")) {
-                displayErrorMessage("Name required!");
-                NameField.requestFocus();
-            }
-            p.setProperty("name", name);
         }
     }
     
-    /*
-    private void clearForm() {
-        treeBarCode.setText("");
-        salePrice.setText("");
-        lastNameField.setText("");
-        dobField.setText("");
-        phoneNumField.setText("");
-        emailField.setText("");
-        troopIdField.setText("");
+    protected boolean validate(){
+        String treeBar = treeBarCode.getText();
+        String price = salePrice.getText();
+        String name = nameField.getText();
         
-        this.requestLayout();
+        if ((treeBar == null) || treeBar.equals("")) {
+            displayErrorMessage("Tree Bar Code required!");
+            treeBarCode.requestFocus();
+            return false;
+        }
+        else if ((price == null) || price.equals("")) {
+            displayErrorMessage("Sale Price required!");
+            salePrice.requestFocus();
+            return false;
+        }
+        else if ((name == null) || name.equals("")) {
+            displayErrorMessage("Name required!");
+            nameField.requestFocus();
+            return false;
+        }
+        return true;
     }
-    */
+    
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {
