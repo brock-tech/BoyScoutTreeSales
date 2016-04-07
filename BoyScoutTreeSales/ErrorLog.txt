@@ -18,3 +18,7 @@
 [4/5/16 12:28 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
 [4/5/16 12:29 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
 [4/7/16 1:42 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:02 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:03 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:05 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:05 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
