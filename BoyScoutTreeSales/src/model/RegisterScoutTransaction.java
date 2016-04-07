@@ -10,7 +10,9 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -37,7 +39,7 @@ public class RegisterScoutTransaction extends Transaction {
 
     @Override
     protected void getMessagesBundle() {
-        
+        myMessages = ResourceBundle.getBundle("model.i18n.RegisterScoutTransaction", myLocale);
     }
 
     @Override
@@ -87,8 +89,14 @@ public class RegisterScoutTransaction extends Transaction {
             String troopId = p.getProperty("TroopID");
             
             Scout oldScout = new Scout(troopId);
+            troopId = (String)oldScout.getState("TroopID");
             
-            updateStatusMessage = "Scout with Troop ID "+troopId+" already exists.";
+            MessageFormat formatter = new MessageFormat(
+                    myMessages.getString("scoutAlreadyExistsMsg"),
+                    myLocale
+            );
+            
+            updateStatusMessage = formatter.format(new Object[] { troopId });
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 

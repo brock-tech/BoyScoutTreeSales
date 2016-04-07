@@ -15,10 +15,10 @@ public class ViewFactory {
                 return new SelectAdminActionView(model);
                 
             case "RegisterScoutTransactionView":
-                return new RegisterScoutTransactionView(model);
+                return new ScoutFormView(model);
             
-            case "AddTreeTransactionView":
-                return new AddTreeTransactionView(model);
+            case "AddTreeTypeTransactionView":
+                return new TreeTypeFormView(model);
             default:
                 return null;
         }

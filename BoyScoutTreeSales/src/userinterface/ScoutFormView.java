@@ -31,8 +31,7 @@ import javafx.scene.layout.VBox;
  *
  * @author mike
  */
-public class RegisterScoutTransactionView extends BaseView {
-    static final String DATE_FORMAT = "";
+public class ScoutFormView extends BaseView {
     
     protected TextField firstNameField;
     protected TextField middleNameField;
@@ -46,7 +45,7 @@ public class RegisterScoutTransactionView extends BaseView {
 //    protected Button clearFormButton;
     protected Button cancelButton;
 
-    public RegisterScoutTransactionView(IModel model) {
+    public ScoutFormView(IModel model) {
         super(model, "ScoutFormView");
         
         myModel.subscribe("UpdateStatusMessage", this);
@@ -75,46 +74,68 @@ public class RegisterScoutTransactionView extends BaseView {
         
         firstNameField = new TextField();
         firstNameField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("First Name:", firstNameField);
-        formItem.setPrefWidth(150);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("firstNameField"),
+                firstNameField
+        );
+        formItem.setPrefWidth(200);
         formGrid.add(formItem, 0, 0);
         
         middleNameField = new TextField();
         middleNameField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Middle Name:", middleNameField);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 1, 0);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("middleNameField"),
+                middleNameField
+        );
+        formItem.setPrefWidth(200);
+        formGrid.add(formItem, 0, 1);
         
         lastNameField = new TextField();
         lastNameField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Last Name:", lastNameField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("lastNameField"),
+                lastNameField
+        );
         formItem.setPrefWidth(350);
-        formGrid.add(formItem, 0, 1, 2, 1);
+        formGrid.add(formItem, 0, 2);
         
         troopIdField = new TextField();
         troopIdField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Troop ID:", troopIdField);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 2);
-        
-        dobField = new TextField();
-        dobField.setOnAction(submitHandler);
-        dobField.setPromptText("yyyy-mm-dd");
-        formItem = formItemBuilder.buildControl("Date of Birth:", dobField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("troopIdField"),
+                troopIdField
+        );
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 3);
         
-        phoneNumField = new TextField();
-        phoneNumField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Phone Number:", phoneNumField);
+        dobField = new TextField();
+        dobField.setOnAction(submitHandler);
+        dobField.setPromptText(myResources.getProperty("datePrompt"));
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("dobField"),
+                dobField
+        );
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 4);
         
+        phoneNumField = new TextField();
+        phoneNumField.setOnAction(submitHandler);
+        phoneNumField.setPromptText(myResources.getProperty("phoneNumPrompt"));
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("phoneNumField"),
+                phoneNumField
+        );
+        formItem.setPrefWidth(150);
+        formGrid.add(formItem, 0, 5);
+        
         emailField = new TextField();
         emailField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Email:", emailField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("emailField"),
+                emailField
+        );
         formItem.setPrefWidth(350);
-        formGrid.add(formItem, 0, 5, 2, 1);
+        formGrid.add(formItem, 0, 6);
         
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
                 "Active",
@@ -122,14 +143,17 @@ public class RegisterScoutTransactionView extends BaseView {
         );
         statusBox = new ComboBox(statusOptions);
         statusBox.setValue("Active");
-        formItem = formItemBuilder.buildControl("Status:", statusBox);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("statusBox"),
+                statusBox
+        );
         formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 6);
+        formGrid.add(formItem, 0, 7);
         
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        submitButton = new Button("Submit");
+        submitButton = new Button(myResources.getProperty("submitButton"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
@@ -139,7 +163,7 @@ public class RegisterScoutTransactionView extends BaseView {
 //        clearFormButton.setPrefWidth(100);
 //        buttonContainer.getChildren().add(clearFormButton);
         
-        cancelButton = new Button("Cancel");
+        cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
@@ -150,7 +174,7 @@ public class RegisterScoutTransactionView extends BaseView {
         return content;
     }
     
-    private void processAction(Event event) {
+    protected void processAction(Event event) {
         clearErrorMessage();
         
         if (event.getSource() == cancelButton) {
@@ -160,28 +184,84 @@ public class RegisterScoutTransactionView extends BaseView {
         //    clearForm();
         //}
         else {
-            // Verify information in fields and submit
-            Properties p = new Properties();
-            
-            String firstName = firstNameField.getText();
-            if ((firstName == null) || firstName.equals("")) {
-                displayErrorMessage("First Name required!");
-                firstNameField.requestFocus();
+            // Verify information in fields
+            if (validate()) {
+                // Submit data
+                Properties newScoutData = new Properties();
+                newScoutData.setProperty("firstName", firstNameField.getText());
+                newScoutData.setProperty("middleInit", middleNameField.getText());
+                newScoutData.setProperty("lastName", lastNameField.getText());
+                newScoutData.setProperty("troopId", troopIdField.getText());
+                newScoutData.setProperty("DOB", dobField.getText());
+                newScoutData.setProperty("phoneNumber", phoneNumField.getText());
+                newScoutData.setProperty("email", emailField.getText());
+                //newScoutData.setProperty("ScoutStatus", (String)statusBox.getValue());
+                
+                myModel.stateChangeRequest("Submit", newScoutData);
             }
-            p.setProperty("FirstName", firstName);
-            
-            // Middle Name can be null
-            String middleName = middleNameField.getText();
-            p.setProperty("MiddleName", middleName);
-            
-            String lastName = lastNameField.getText();
-            if ((lastName == null) || lastName.equals("")) {
-                displayErrorMessage("Last Name required!");
-                lastNameField.requestFocus();
-            }
-            p.setProperty("LastName", lastName);
         }
     }
+    
+    protected boolean validate() {
+        // First Name is NOT NULL
+        String value = firstNameField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errFirstNameNull"));
+            firstNameField.requestFocus();
+            return false;
+        }
+        
+        // Last Name is NOT NULL
+        value = lastNameField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errLastNameNull"));
+            lastNameField.requestFocus();
+            return false;
+        }
+        
+        value = troopIdField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errTroopIdNull"));
+            troopIdField.requestFocus();
+            return false;
+        }
+        
+        // Date of Birth is not null, and must match format
+        value = dobField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errDOBNull"));
+            dobField.requestFocus();
+            return false;
+        }
+        if (!value.matches(myResources.getProperty("dateFormat"))) {
+            displayErrorMessage(myResources.getProperty("errDOBFormat"));
+            dobField.requestFocus();
+            return false;
+        }
+        
+        // Phone number is not null and must match format
+        value = phoneNumField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errPhoneNumNull"));
+            phoneNumField.requestFocus();
+            return false;
+        }
+        if (!value.matches(myResources.getProperty("phoneNumFormat"))) {
+            displayErrorMessage(myResources.getProperty("errPhoneNumFormat"));
+            phoneNumField.requestFocus();
+            return false;
+        }
+        
+        // Email is not null
+        value = emailField.getText();
+        if ((value == null) || "".equals(value)) {
+            displayErrorMessage(myResources.getProperty("errEmailNull"));
+            phoneNumField.requestFocus();
+            return false;
+        }
+        
+        return true;
+    }   
     
     /*
     private void clearForm() {

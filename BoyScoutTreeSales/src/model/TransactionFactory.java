@@ -19,6 +19,8 @@ public class TransactionFactory {
                 return new RegisterScoutTransaction();
             case "AddTree":
                 return new AddTreeTransaction();
+            case "AddTreeType":
+                return new AddTreeTypeTransaction();
             default: return null;
         }
     }
