@@ -60,9 +60,11 @@ public class TreeLotCoordinatorView extends BaseView {
         VBox formContent = new VBox(10);
         formContent.setPrefWidth(DEFAULT_WIDTH);
         formContent.setAlignment(Pos.CENTER);
+        formContent.getStyleClass().add("formContent");
         
         Text welcomeText = new Text(myResources.getProperty("welcomeMessage"));
         welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
         formContent.getChildren().add(welcomeText);
         
         sellTreeButton = new Button(myResources.getProperty("sellTreeButtonText"));
@@ -82,6 +84,7 @@ public class TreeLotCoordinatorView extends BaseView {
         
         exitButton = new Button(myResources.getProperty("exitButtonText"));
         exitButton.setOnAction(buttonHandler);
+        exitButton.getStyleClass().add("exit-button");
         formContent.getChildren().add(exitButton);
         
         return formContent;

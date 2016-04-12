@@ -131,7 +131,6 @@ public abstract class EntityBase extends Persistable
 				"Missing view for display ", Event.ERROR);
 			return;
 		}
-
 		myStage.setScene(otherView);
 		myStage.sizeToScene();
 			

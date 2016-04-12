@@ -12,6 +12,7 @@ import event.Event;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import model.TreeLotCoordinator;
 import userinterface.MainStageContainer;
@@ -54,7 +55,7 @@ public class BoyScoutTreeSales extends Application {
         }
         
         WindowPosition.placeCenter(mainStage);
-        
+                
         mainStage.show();
     }
     

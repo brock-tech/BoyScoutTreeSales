@@ -55,6 +55,7 @@ public class SelectAdminActionView extends BaseView {
         
         Text promptText = new Text(myResources.getProperty("promptText"));
         promptText.setTextAlignment(TextAlignment.CENTER);
+        promptText.getStyleClass().add("information-text");
         formContent.getChildren().add(promptText);
         
         GridPane grid = new GridPane();
