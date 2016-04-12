@@ -15,7 +15,7 @@ package userinterface;
 // system imports
 import java.util.Properties;
 import java.util.Vector;
-import java.util.EventObject;
+import java.util.EventObject;        
 import javafx.scene.Group;
 
 // project imports
