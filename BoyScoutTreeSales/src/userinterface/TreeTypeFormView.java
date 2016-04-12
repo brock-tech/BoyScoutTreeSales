@@ -104,9 +104,9 @@ public class TreeTypeFormView extends BaseView {
         formGrid.add(formItem, 0, 2);
         
         
-        String className = new Exception().getStackTrace()[0].getClassName();
-        if(className.equals("EditTreeTypeTransaction"))
-        {
+        //String className = new Exception().getStackTrace()[0].getClassName();
+        //if(className.equals("EditTreeTypeTransaction"))
+        //{
             searchField = new TextField();
             searchField.setOnAction(submitHandler);
             formItem = formItemBuilder.buildControl(
@@ -115,7 +115,7 @@ public class TreeTypeFormView extends BaseView {
             );
             formItem.setPrefWidth(300);
             formGrid.add(formItem, 0, 3);
-        }
+        //}
        
          HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -170,10 +170,11 @@ public class TreeTypeFormView extends BaseView {
                 {
                     // Submit data
                     Properties newTreeTypeData = new Properties();
-                    newTreeTypeData.setProperty("barcodePrefix", barcodePrefixField.getText());
-                    newTreeTypeData.setProperty("description", descriptionField.getText());
-                    newTreeTypeData.setProperty("cost", costField.getText());
-
+                   
+                    newTreeTypeData.setProperty("TypeDescription", descriptionField.getText());
+                    newTreeTypeData.setProperty("Cost", costField.getText());
+                    newTreeTypeData.setProperty("BarcodePrefix", barcodePrefixField.getText());
+                   
                     myModel.stateChangeRequest("Submit", newTreeTypeData);
                 }
             }

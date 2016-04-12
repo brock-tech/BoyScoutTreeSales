@@ -88,10 +88,10 @@ public class AddTreeTypeTransaction extends Transaction {
            MessageFormat formatter = new MessageFormat("", myLocale);
            try 
            {
-                String barcodePrefix = p.getProperty("barcodePrefix");
+                String barcodePrefix = p.getProperty("BarcodePrefix");
                 
                 TreeType oldTreeType = new TreeType(barcodePrefix);
-                barcodePrefix = (String)oldTreeType.getState("TroopID");
+                barcodePrefix = (String)oldTreeType.getState("BarcodePrefix");
                 
                 formatter.applyPattern("existingMsg");
                 updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
@@ -100,7 +100,7 @@ public class AddTreeTypeTransaction extends Transaction {
            catch (InvalidPrimaryKeyException exc) 
            { 
                 // Add new TreeType
-                String barcodePrefix = p.getProperty("barcodePrefix");
+                String barcodePrefix = p.getProperty("BarcodePrefix");
                 TreeType newTreeType = new TreeType(p); 
                 newTreeType.update();
 
