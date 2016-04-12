@@ -9,7 +9,11 @@
 //********************************************************************
 package userinterface;
 
+
+import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
+import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.Properties;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +30,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import model.EditTreeTypeTransaction;
+import model.TreeTypeCollection;
 
 /**
  *
@@ -36,13 +42,16 @@ public class TreeTypeFormView extends BaseView {
     protected TextField barcodePrefixField;
     protected TextField descriptionField;
     protected TextField costField;
+    protected TextField searchField;
     protected Button submitButton;
 //    protected Button clearFormButton;
     protected Button cancelButton;
 
+    
+    
     public TreeTypeFormView(IModel model) {
         super(model, "TreeTypeFormView");
-        
+      
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -93,6 +102,20 @@ public class TreeTypeFormView extends BaseView {
         );
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 2);
+        
+        
+        //String className = new Exception().getStackTrace()[0].getClassName();
+        //if(className.equals("EditTreeTypeTransaction"))
+        //{
+            searchField = new TextField();
+            searchField.setOnAction(submitHandler);
+            formItem = formItemBuilder.buildControl(
+                    myResources.getProperty("searchField"),
+                    searchField
+            );
+            formItem.setPrefWidth(300);
+            formGrid.add(formItem, 0, 3);
+        //}
        
          HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -121,19 +144,39 @@ public class TreeTypeFormView extends BaseView {
     protected void processAction(Event event) {
         clearErrorMessage();
         
-        if (event.getSource() == cancelButton) {
+        if (event.getSource() == cancelButton) 
+        {
             myModel.stateChangeRequest("Cancel", "");
         }
-        else {
-            // Verify information in fields
-            if (validate()) {
-                // Submit data
-                Properties newTreeTypeData = new Properties();
-                newTreeTypeData.setProperty("barcodePrefix", barcodePrefixField.getText());
-                newTreeTypeData.setProperty("description", descriptionField.getText());
-                newTreeTypeData.setProperty("cost", costField.getText());
-                
-                myModel.stateChangeRequest("Submit", newTreeTypeData);
+        else
+        {
+            if(!searchField.getText().equals(""))
+            {
+                 MessageFormat formatter = new MessageFormat("", myLocale);
+                try
+                {
+                    TreeTypeCollection searchedTT = new TreeTypeCollection();
+                    searchedTT.findTypesWithBarcodePrefix(searchField.getText());  
+                }
+                catch(InvalidPrimaryKeyException e)
+                {
+                    searchField.setText("Tree Type Not Found");
+                }
+
+            }
+            else {
+                // Verify information in fields
+                if (validate()) 
+                {
+                    // Submit data
+                    Properties newTreeTypeData = new Properties();
+                   
+                    newTreeTypeData.setProperty("TypeDescription", descriptionField.getText());
+                    newTreeTypeData.setProperty("Cost", costField.getText());
+                    newTreeTypeData.setProperty("BarcodePrefix", barcodePrefixField.getText());
+                   
+                    myModel.stateChangeRequest("Submit", newTreeTypeData);
+                }
             }
         }
     }

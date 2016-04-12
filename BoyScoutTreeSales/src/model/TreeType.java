@@ -29,7 +29,7 @@ import userinterface.SystemLocale;
  */
 public class TreeType extends EntityBase 
 {
-    private static final String myTableName = "TreeType";
+    private static final String myTableName = "Tree_Type";
     
     protected Properties dependencies;
     private String updateStatusMessage = "";
@@ -62,7 +62,7 @@ public class TreeType extends EntityBase
         MessageFormat formatter = new MessageFormat("", myLocale);
         
          String query = String.format(
-                "SELECT * FROM %s WHERE (barcodePrefix = %s)",
+                "SELECT * FROM %s WHERE (BarcodePrefix = %s)",
                 myTableName,
                 barcodePrefix);
  
@@ -135,23 +135,26 @@ public class TreeType extends EntityBase
     //-----------------------------------------------------------------------------------
     private void updateStateInDatabase()
     {
-        LocalDateTime currentDate = LocalDateTime.now();
-        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
-        Object [] ID_barcodePrefix = new Object[] {persistentState.get("treeTypeId"),
-                persistentState.get("barcodePrefix")};
+        //LocalDateTime currentDate = LocalDateTime.now();
+        //String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        //persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+        Object [] ID_barcodePrefix = new Object[] {persistentState.get("ID"),
+                persistentState.get("BarcodePrefix")};
         
         MessageFormat formatter = new MessageFormat("", myLocale);
-        if (persistentState.getProperty("treeTypeID") != null)
+        if (persistentState.getProperty("BarcodePrefix") != null)
         {
             try
             {
                 Properties whereClause = new Properties();
-                whereClause.setProperty("treeTypeID",
-                persistentState.getProperty("treeTypeID"));
+                whereClause.setProperty("BarcodePrefix",persistentState.getProperty("BarcodePrefix"));
+                System.out.println("n");
                 updatePersistentState(mySchema, persistentState, whereClause);
-               formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
-               updateStatusMessage = formatter.format(ID_barcodePrefix);
+                System.out.println("nice");
+                      System.out.println("ice");
+                formatter = new MessageFormat("Tree Type (Id, Barcode Prefix) '{0} {1}' inserted successfully");
+             
+                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
             catch(SQLException s)
             {
@@ -165,7 +168,7 @@ public class TreeType extends EntityBase
             {
                 Integer treeTypeID =
                 insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("treeTypeID", "" + treeTypeID.intValue());
+                persistentState.setProperty("ID", "" + treeTypeID.intValue());
                formatter.applyPattern(myMessages.getString("updateSuccessMsg"));
                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
@@ -175,7 +178,7 @@ public class TreeType extends EntityBase
                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
         }   
-        //DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
+       System.out.println("updateStateInDatabase " + updateStatusMessage);
     }
     //--------------------------------------------------------------------------
     @Override
@@ -189,8 +192,8 @@ public class TreeType extends EntityBase
     //--------------------------------------------------------------------------
    public static int compare(TreeType a, TreeType b)
     {
-        String aNum = (String)a.getState("barcodePrefix");
-        String bNum = (String)b.getState("barcodePrefix");
+        String aNum = (String)a.getState("BarcodePrefix");
+        String bNum = (String)b.getState("BarcodePrefix");
 
         return aNum.compareTo(bNum);
     }
@@ -204,10 +207,10 @@ public class TreeType extends EntityBase
      public Vector<String> getTableListView() 
      {
         Vector<String> v = new Vector<>();
-        v.addElement(persistentState.getProperty("treeTypeId"));
-        v.addElement(persistentState.getProperty("barcodePrefix"));
-        v.addElement(persistentState.getProperty("description"));
-	v.addElement(persistentState.getProperty("cost"));
+        v.addElement(persistentState.getProperty("ID"));
+        v.addElement(persistentState.getProperty("BarcodePrefix"));
+        v.addElement(persistentState.getProperty("TypeDescription"));
+	v.addElement(persistentState.getProperty("Cost"));
 	
         
         return v;
