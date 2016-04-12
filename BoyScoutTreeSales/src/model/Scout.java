@@ -26,7 +26,7 @@ import userinterface.SystemLocale;
  *
  */
 public class Scout extends EntityBase {
-    private static final String myTableName = "Scout";
+    private static final String myTableName = "scout";
     
     protected Properties dependencies;
     
@@ -139,29 +139,32 @@ public class Scout extends EntityBase {
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
         // Set date of last update to today's date
-        LocalDateTime currentDate = LocalDateTime.now();
-        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+//        LocalDateTime currentDate = LocalDateTime.now();
+//        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
         
-        MessageFormat formatter = new MessageFormat("", myLocale);
+        MessageFormat formatter;
         Object[] firstAndLastName = new Object[] {
-            persistentState.getProperty("FirstName"),
-            persistentState.getProperty("LastName")
+            persistentState.getProperty("firstName"),
+            persistentState.getProperty("lastName")
         };
         
-        if (persistentState.getProperty("ScoutID") != null) { // Update Existing
+        // @todo: use scoutId 
+        //if (persistentState.getProperty("ScoutID") != null) { // Update Existing
+        if (persistentState.getProperty("troopId") != null) { // Update Existing
             try {
                 Properties whereClause = new Properties();
 
-                whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
+                //whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
+                whereClause.setProperty("troopId", persistentState.getProperty("troopId"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
 
-                formatter.applyPattern(myMessages.getString("updateSuccessMsg"));
+                formatter = new MessageFormat(myMessages.getString("updateSuccessMsg"));
                 updateStatusMessage = formatter.format(firstAndLastName);
 
             } catch (SQLException ex) {
-                formatter.applyPattern(myMessages.getString("updateErrorMsg"));
+                formatter = new MessageFormat(myMessages.getString("updateErrorMsg"));
                 updateStatusMessage = formatter.format(firstAndLastName);
             }
         } 
@@ -170,11 +173,11 @@ public class Scout extends EntityBase {
                 Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ScoutID", scoutId.toString());
 
-                formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
+                formatter = new MessageFormat(myMessages.getString("insertSuccessMsg"));
                 updateStatusMessage = formatter.format(firstAndLastName);
 
             } catch (SQLException ex) {
-                formatter.applyPattern(myMessages.getString("insertSuccessMsg"));
+                formatter = new MessageFormat(myMessages.getString("insertErrorMsg"));
                 updateStatusMessage = formatter.format(firstAndLastName);
             }
         }

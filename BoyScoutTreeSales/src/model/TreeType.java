@@ -215,7 +215,7 @@ public class TreeType extends EntityBase
      
     public void dataEntryView()
     {
-       // AddTreeTypeTransactionView treeTypeView = new AddTreeTypeTransactionView(this);
+        //AddTreeTypeTransactionView treeTypeView = new AddTreeTypeTransactionView(this);
     }
     @Override
     //--------------------------------------------------------------------------
