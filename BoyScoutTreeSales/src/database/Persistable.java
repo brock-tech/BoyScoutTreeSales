@@ -590,13 +590,10 @@ abstract public class Persistable
 				System.err.println("Persistable.updatePersistentState - Could not connect to database!");
 				return null;
 			}
-                         System.out.println("111");
-                         System.out.println(theDBConnection.toString());
-                         System.out.println("222");
+
 	    	// construct a SQL statement from the passed parameters
 			SQLUpdateStatement theSQLStatement = new SQLUpdateStatement(schema, updateValues, whereValues);
 			// DEBUG System.out.println("SQL Statement: " + theSQLStatement.toString());
-                         System.out.println("333");
 
 			// verify the construction (should be exception?)
 			if(theSQLStatement == null)
@@ -748,7 +745,7 @@ abstract public class Persistable
 	    	// construct a SQL statement from the passed parameters
 			SQLInsertStatement theSQLStatement = new SQLInsertStatement(schema, insertValues);
 			// DEBUG System.out.println("Persistable.insertPersistentState - SQL Statement: " + theSQLStatement.toString());
-		
+
 			// verify the construction (should be exception?)
 			if(theSQLStatement == null)
 			{

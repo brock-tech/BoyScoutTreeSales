@@ -22,6 +22,8 @@ public class ViewFactory {
                 
             case "AddTreeTypeTransactionView":
                 return new TreeTypeFormView(model);
+            case "EditTreeActionView":
+                return new EditTreeActionView(model);
             default:
                 return null;
         }

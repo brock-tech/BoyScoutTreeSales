@@ -21,6 +21,8 @@ public class TransactionFactory {
                 return new AddTreeTransaction();
             case "AddTreeType":
                 return new AddTreeTypeTransaction();
+            case "EditTree":
+                return new EditTreeAction();
             default: return null;
         }
     }

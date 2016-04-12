@@ -10,11 +10,11 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
-import java.sql.SQLException;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
+import java.util.Vector;
 
 /**
  *
@@ -22,7 +22,8 @@ import userinterface.ViewFactory;
  */
 public class AddTreeTransaction extends Transaction {
     String updateStatusMessage;
-    
+    Vector treeType;
+
     public AddTreeTransaction(){
         super();
     }
@@ -61,6 +62,11 @@ public class AddTreeTransaction extends Transaction {
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
                 return updateStatusMessage;
+            case "getAddTreeTransaction":
+                return this;
+            case "getTreeType":
+                loadTreeType();
+                return treeType;
             default:
                 return null;
         }
@@ -83,7 +89,8 @@ public class AddTreeTransaction extends Transaction {
     private void processTransaction(Properties p) {
         updateStatusMessage = "";
         transactionErrorMessage = "";
-        
+
+        //existing Tree
         try {
             String treeBarCode = p.getProperty("treeBarCode");
             
@@ -94,14 +101,16 @@ public class AddTreeTransaction extends Transaction {
             
         } catch (InvalidPrimaryKeyException exc) { 
             
-            // Add new Scout
-            System.out.println("1");
+            // Add new Tree
             Tree tree = new Tree(p); 
-            System.out.println("2");
             tree.update();
-            System.out.println("3");
             updateStatusMessage = (String)tree.getState("UpdateStatusMessage");
             transactionErrorMessage = updateStatusMessage;
         }
+    }
+    
+    private void loadTreeType(){
+        String query = "SELECT Id, TypeDescription FROM Tree_Type";
+        treeType = getSelectQueryResult(query);
     }
 }

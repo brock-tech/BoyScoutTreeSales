@@ -11,8 +11,6 @@ package userinterface;
 
 import impresario.IModel;
 import java.util.Properties;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -29,6 +26,14 @@ import javafx.scene.layout.VBox;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+
+import model.AddTreeTransaction;
 
 
 /**
@@ -39,6 +44,7 @@ public class AddTreeTransactionView extends BaseView {
     static final String DATE_FORMAT = "";
     
     protected TextField treeBarCode;
+    protected ComboBox treeType;
     protected TextField salePrice;
     protected TextField nameField;
     protected TextField phoneNumField;
@@ -82,29 +88,34 @@ public class AddTreeTransactionView extends BaseView {
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
         
+        getTreeTypeField();
+        formItem = formItemBuilder.buildControl("Tree Type:", treeType);
+        formItem.setPrefWidth(150);
+        formGrid.add(formItem, 0, 1);
+        
         salePrice = new TextField();
         salePrice.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Sale Price:", salePrice);
         formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 1);
+        formGrid.add(formItem, 0, 2);
         
         nameField = new TextField();
         nameField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Customer Name:", nameField);
         formItem.setPrefWidth(200);
-        formGrid.add(formItem, 0, 2);
+        formGrid.add(formItem, 0, 3);
         
         emailField = new TextField();
         emailField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Customer Email:", emailField);
         formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 3);
+        formGrid.add(formItem, 0, 4);
         
         phoneNumField = new TextField();
         phoneNumField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Customer Phone Number:", phoneNumField);
         formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 4);
+        formGrid.add(formItem, 0, 5);
         
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Date date = new Date();
@@ -114,7 +125,7 @@ public class AddTreeTransactionView extends BaseView {
         dateField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Current Date:", dateField);
         formItem.setPrefWidth(100);
-        formGrid.add(formItem, 0, 5);
+        formGrid.add(formItem, 0, 6);
         
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         Date time = new Date();
@@ -124,7 +135,7 @@ public class AddTreeTransactionView extends BaseView {
         timeField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl("Current Time:", timeField);
         formItem.setPrefWidth(100);
-        formGrid.add(formItem, 0, 6);
+        formGrid.add(formItem, 0, 7);
         
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -160,17 +171,22 @@ public class AddTreeTransactionView extends BaseView {
         //    clearForm();
         //}
         else {
-            if (validate()){
-            // Verify information in fields and submit
+            if (validate()){                
+// Verify information in fields and submit
                 Properties p = new Properties();
-                
-                p.setProperty("barcode", treeBarCode.getText());
-                p.setProperty("saleprice", salePrice.getText());
-                p.setProperty("cname", nameField.getText());
-                p.setProperty("cphoneNum", phoneNumField.getText());
-                p.setProperty("cemail", emailField.getText());
-                p.setProperty("date", dateField.getText());
-                p.setProperty("time", timeField.getText());
+                                
+                p.setProperty("isNew", "new");
+                p.setProperty("BarCode", treeBarCode.getText());
+                p.setProperty("TreeType", treeType.getValue().toString().substring(0, 
+                        getIntTreeType(treeType.getValue().toString())));
+                p.setProperty("SalePrice", salePrice.getText());
+                p.setProperty("CName", nameField.getText());
+                p.setProperty("CPhoneNum", phoneNumField.getText());
+                p.setProperty("CEmail", emailField.getText());
+                p.setProperty("Notes", "");
+                p.setProperty("Status", "");
+                p.setProperty("DateStatusUpdated", dateField.getText());
+                p.setProperty("TimeStatusUpdated", timeField.getText());
                 myModel.stateChangeRequest("Submit", p);
             }
         }
@@ -204,5 +220,33 @@ public class AddTreeTransactionView extends BaseView {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
         }
+    }
+   
+    protected void getTreeTypeField(){
+        AddTreeTransaction treeTransaction = (AddTreeTransaction)myModel.getState("getAddTreeTransaction");
+        Vector treeTypeList = (Vector)treeTransaction.getState("getTreeType");
+        ArrayList newList = new ArrayList();
+        String str = new String();
+        
+        for(int i = 0; i < treeTypeList.size(); i++){
+            str = treeTypeList.get(i).toString().replace("{ID=","");
+            str = str.replace(",",".");
+            str = str.replace("TypeDescription=","");
+            str = str.replace("}", "");
+            newList.add(str);
+        }
+ 
+        List<String> optionList = newList;
+        ObservableList<String> options = FXCollections.observableArrayList(optionList);
+        treeType = new ComboBox(options);
+    }
+    
+    protected int getIntTreeType(String str){
+        for (int i = 0; i < str.length(); i++){
+            if(str.charAt(i) == '.'){
+                return i;
+            }
+        }
+        return 1;
     }
 }

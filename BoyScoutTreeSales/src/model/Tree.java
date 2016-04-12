@@ -11,9 +11,11 @@ package model;
 
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.Enumeration;
 
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 /**
@@ -23,7 +25,8 @@ public class Tree extends EntityBase {
     private static final String myTableName = "Tree";
     protected Properties dependencies;
     private String updateStatusMessage = "";
-    
+    private ResourceBundle myMessages;
+
     public Tree(String barcode) throws InvalidPrimaryKeyException {
         super(myTableName);
         
@@ -105,28 +108,42 @@ public class Tree extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
-        try {
-            if (persistentState.getProperty("barcode") != null) {
-                System.out.println("11");
-                Properties whereClause = new Properties();
-                System.out.println("22");    
+        
+        if ((persistentState.getProperty("isNew") == null) &&
+                (persistentState.getProperty("BarCode") != null)) { // Update Existing
+            try {
+                persistentState.remove("isNew");
 
-                whereClause.setProperty("barcode", persistentState.getProperty("barcode"));
-                System.out.println("33");    
+                Properties whereClause = new Properties();
+
+                //whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
+                whereClause.setProperty("BarCode", persistentState.getProperty("BarCode"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
-                System.out.println("44");
 
                 updateStatusMessage = String.format(
                     "Data for new Tree : %s installed successfully in database!",
-                    persistentState.getProperty("barcode")
+                    persistentState.getProperty("BarCode")
                 );
-   
-            } 
-            
+
+            } catch (SQLException ex) {
+                updateStatusMessage = "Error in installing Tree data in database!";
+            }
         } 
-        catch (SQLException ex) {
-            updateStatusMessage = "Error in installing Scout data in database!";
+        else { // Insert New
+            try {
+                persistentState.remove("isNew");
+
+                insertPersistentState(mySchema, persistentState);
+
+                updateStatusMessage = String.format(
+                    "Data for new Tree : %s installed successfully in database!",
+                    persistentState.getProperty("BarCode")
+                );
+
+            } catch (SQLException ex) {
+                updateStatusMessage = "Error in installing Tree data in database!";
+            }
         }
     }
     
@@ -134,7 +151,6 @@ public class Tree extends EntityBase {
     public Object getState(String key) {
         if (key.equals("UpdateStatusMessage"))
             return updateStatusMessage;
-        
         return persistentState.getProperty(key);
     }
 
@@ -155,4 +171,24 @@ public class Tree extends EntityBase {
         return status.equals("Available");
     }
     
+    	/**
+	 * This method is needed solely to enable the Account information to be displayable in a table
+	 *
+	 */
+	//--------------------------------------------------------------------------
+	public Vector<String> getEntryListView()
+	{
+		Vector<String> v = new Vector<String>();
+
+		v.addElement(persistentState.getProperty("BarCode"));
+		v.addElement(persistentState.getProperty("TreeType"));
+		v.addElement(persistentState.getProperty("SalePrice"));
+		v.addElement(persistentState.getProperty("CName"));
+		v.addElement(persistentState.getProperty("CPhoneNum"));
+		v.addElement(persistentState.getProperty("CEmail"));
+		v.addElement(persistentState.getProperty("DateStatusUpdated"));
+		v.addElement(persistentState.getProperty("TimeStatusUpdated"));
+
+		return v;
+	}
 }
