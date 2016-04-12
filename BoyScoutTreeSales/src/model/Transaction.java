@@ -22,11 +22,11 @@ import javafx.stage.Stage;
 import userinterface.MainStageContainer;
 import userinterface.SystemLocale;
 import userinterface.WindowPosition;
-
+import database.Persistable;
 /**
  *
  */
-public abstract class Transaction implements IView, IModel {
+public abstract class Transaction extends Persistable implements IView, IModel {
     // For Impresario
     protected ModelRegistry myRegistry;
     

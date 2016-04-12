@@ -745,7 +745,7 @@ abstract public class Persistable
 	    	// construct a SQL statement from the passed parameters
 			SQLInsertStatement theSQLStatement = new SQLInsertStatement(schema, insertValues);
 			// DEBUG System.out.println("Persistable.insertPersistentState - SQL Statement: " + theSQLStatement.toString());
-		
+
 			// verify the construction (should be exception?)
 			if(theSQLStatement == null)
 			{

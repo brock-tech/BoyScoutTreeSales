@@ -17,12 +17,19 @@ public class TransactionFactory {
         switch (transName) {
             case "RegisterScout":
                 return new RegisterScoutTransaction();
+				
+            case "AddTree":
+                return new AddTreeTransaction();
+				
             case "AddTreeType":
                 return new AddTreeTypeTransaction();
+				
             case "EditTreeType":
                     return new EditTreeTypeTransaction();
-                 
-                
+					
+            case "EditTree":
+                return new EditTreeAction();
+				
             default: return null;
         }
     }
