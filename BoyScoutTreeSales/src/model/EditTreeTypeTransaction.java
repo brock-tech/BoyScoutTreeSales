@@ -7,6 +7,15 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
+//*********************************************************************
+//  COPYRIGHT 2016
+//    College at Brockport, State University of New York.
+//    ALL RIGHTS RESERVED
+//
+// This file is the product of The College at Brockport and cannot
+// be reproduced, copied, or used in any shape or form without
+// the express written consent of The College at Brockport.
+//********************************************************************
 package model;
 
 import exception.InvalidPrimaryKeyException;
@@ -21,10 +30,10 @@ import userinterface.ViewFactory;
  *
  * @author Andrew
  */
-public class AddTreeTypeTransaction extends Transaction {
+public class EditTreeTypeTransaction extends Transaction {
     String updateStatusMessage;
     
-    public AddTreeTypeTransaction() {
+    public EditTreeTypeTransaction() {
         super();
     }
 
@@ -40,17 +49,17 @@ public class AddTreeTypeTransaction extends Transaction {
     @Override
     protected void getMessagesBundle() 
     {
-             myMessages = ResourceBundle.getBundle("model.i18n.AddTreeTypeTransaction", myLocale);
+             myMessages = ResourceBundle.getBundle("model.i18n.EditTreeTypeTransaction", myLocale);
     }
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("AddTreeTypeTransactionView");
+        Scene currentScene = myViews.get("EditTreeTypeTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("AddTreeTypeTransactionView", this);
+            View newView = ViewFactory.createView("EditTreeTypeTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("AddTreeTypeTransactionView", currentScene);
+            myViews.put("EditTreeTypeTransactionView", currentScene);
         }
         
         return currentScene;
@@ -83,32 +92,32 @@ public class AddTreeTypeTransaction extends Transaction {
     }
     
     private void processTransaction(Properties p) {
-             updateStatusMessage = "";
-            transactionErrorMessage = "";
+        
+           updateStatusMessage = "";
+           transactionErrorMessage = ""; 
            MessageFormat formatter = new MessageFormat("", myLocale);
            try 
            {
                 String barcodePrefix = p.getProperty("barcodePrefix");
-                
-                TreeType oldTreeType = new TreeType(barcodePrefix);
-                barcodePrefix = (String)oldTreeType.getState("TroopID");
-                
-                formatter.applyPattern("existingMsg");
+
+                TreeType searchedTreeType = new TreeType(barcodePrefix);
+
+                formatter.applyPattern("TTNotFound");
                 updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
                 transactionErrorMessage = updateStatusMessage;
            } 
-           catch (InvalidPrimaryKeyException exc) 
+           catch (Exception exc) 
            { 
                 // Add new TreeType
                 String barcodePrefix = p.getProperty("barcodePrefix");
-                TreeType newTreeType = new TreeType(p); 
-                newTreeType.update();
+                TreeType searchedTreeType = new TreeType(p); 
+                searchedTreeType.getTableListView();
 
-                formatter.applyPattern("insertSuccessMsg");
-                
+                /*formatter.applyPattern("insertSuccessMsg");
                 updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
-                transactionErrorMessage = updateStatusMessage;
+                transactionErrorMessage = updateStatusMessage;*/
             }
     }
 }
+
 

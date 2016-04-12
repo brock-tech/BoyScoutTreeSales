@@ -13,3 +13,6 @@
 [4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'AddTree' transaction type.>
 [4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
 [4/4/16 6:27 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTreeType' transaction type.>
+[4/10/16 9:46 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[4/10/16 9:46 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'AddTree' transaction type.>
+[4/10/16 9:46 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
