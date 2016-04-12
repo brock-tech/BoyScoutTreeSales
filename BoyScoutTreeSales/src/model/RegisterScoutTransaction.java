@@ -52,6 +52,8 @@ public class RegisterScoutTransaction extends Transaction {
             myViews.put("RegisterScoutTransactionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 
