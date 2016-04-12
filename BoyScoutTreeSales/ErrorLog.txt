@@ -5,3 +5,8 @@
 [4/5/16 10:07 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
 [4/5/16 10:08 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
 [4/5/16 10:12 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[4/12/16 10:35 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'TroopID' in 'where clause'>
+[4/12/16 10:36 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'TroopID' in 'where clause'>
+[4/12/16 10:38 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'TroopID' in 'where clause'>
+[4/12/16 10:40 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'TroopID' in 'where clause'>
+[4/12/16 10:44 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
