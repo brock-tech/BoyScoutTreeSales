@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Formatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import userinterface.SystemLocale;
@@ -138,18 +139,13 @@ public class Scout extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
-        // Set date of last update to today's date.
-        LocalDateTime currentDate = LocalDateTime.now();
-        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
+        if (persistentState.getProperty("DateStatusUpdated") == null) {
+            // Set date of last update to today's date.
+            LocalDateTime currentDate = LocalDateTime.now();
+            String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+            persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
+        }
         
-        MessageFormat formatter;
-        Object[] firstAndLastName = new Object[] {
-            persistentState.getProperty("FirstName"),
-            persistentState.getProperty("LastName")
-        };
-        
-        // @todo: use scoutId 
         if (persistentState.getProperty("ID") != null) { // Update Existing
             try {
                 Properties whereClause = new Properties();
@@ -158,25 +154,33 @@ public class Scout extends EntityBase {
 
                 updatePersistentState(mySchema, persistentState, whereClause);
 
-                formatter = new MessageFormat(myMessages.getString("updateSuccessMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("updateSuccessMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
 
             } catch (SQLException ex) {
-                formatter = new MessageFormat(myMessages.getString("updateErrorMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("updateErrorMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
             }
         } 
         else { // Insert New
             try {
                 Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", scoutId.toString());
-
-                formatter = new MessageFormat(myMessages.getString("insertSuccessMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("insertSuccessMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
 
             } catch (SQLException ex) {
-                formatter = new MessageFormat(myMessages.getString("insertErrorMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("insertErrorMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
             }
         }
     }
@@ -199,13 +203,36 @@ public class Scout extends EntityBase {
     //--------------------------------------------------------------------------
     @Override
     public void stateChangeRequest(String key, Object value) {
+        if (persistentState.containsKey(key))
+            persistentState.setProperty(key, (String)value);
+        
         myRegistry.updateSubscribers(key, this);
     }
     
     public Vector<String> getTableListView() {
         Vector<String> v = new Vector<>();
         
+        v.add(persistentState.getProperty("ID"));
+        v.add(persistentState.getProperty("FirstName"));
+        v.add(persistentState.getProperty("MiddleName"));
+        v.add(persistentState.getProperty("LastName"));
+        v.add(persistentState.getProperty("MemberID"));
+        v.add(persistentState.getProperty("DateOfBirth"));
+        v.add(persistentState.getProperty("PhoneNumber"));
+        v.add(persistentState.getProperty("Email"));
+        v.add(persistentState.getProperty("Status"));
+        v.add(persistentState.getProperty("DateStatusUpdated"));
+        
         return v;
+    }
+    
+    public void setInactive() {
+        // Set date of last update to today's date.
+        LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
+        
+        persistentState.setProperty("Status", "Inactive");
     }
     
     /**

@@ -28,6 +28,12 @@ public class ViewFactory {
           
             case "EditTreeActionView":
                 return new EditTreeActionView(model);
+                
+            case "EditScoutTransactionView":
+                return new EditScoutTransactionView(model);
+                
+            case "ScoutDataView":
+                return new ScoutFormView(model);
 
             default:
                 return null;

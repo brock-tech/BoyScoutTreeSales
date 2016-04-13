@@ -42,13 +42,13 @@ public class ScoutFormView extends BaseView {
     protected TextField memberIdField;
     protected ComboBox statusBox;
     protected Button submitButton;
-    protected Button clearFormButton;
     protected Button cancelButton;
 
     public ScoutFormView(IModel model) {
         super(model, "ScoutFormView");
         
         myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("ScoutToDisplay", this);
     }
 
     @Override
@@ -60,12 +60,21 @@ public class ScoutFormView extends BaseView {
             }
         };
         
-        IFormItemStrategy formItemBuilder = FormItemFactory.getFormItem("TopAlignFormItem");
-        Pane formItem;
-        
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        
+        IFormItemStrategy formItemBuilder;
+        Pane formItem;
+        try {
+            formItemBuilder = (IFormItemStrategy)Class.forName(
+                    "userinterface.TopAlignFormItem").newInstance();
+        }
+        catch (Exception cnfe) {
+            System.err.printf("Form Item Strategy error: " + cnfe.getMessage());
+            return content;
+        }
+
         
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -157,11 +166,6 @@ public class ScoutFormView extends BaseView {
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
         
-        clearFormButton = new Button("Clear Form");
-        clearFormButton.setOnAction(submitHandler);
-        clearFormButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(clearFormButton);
-        
         cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
@@ -179,10 +183,7 @@ public class ScoutFormView extends BaseView {
         if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
-        else if (event.getSource() == clearFormButton) {
-            clearForm();
-        }
-        else {
+        else if (event.getSource() == submitButton) {
             // Verify information in fields
             if (validate()) {
                 // Submit data
@@ -268,22 +269,23 @@ public class ScoutFormView extends BaseView {
         return true;
     }   
     
-    private void clearForm() {
-        firstNameField.setText("");
-        middleNameField.setText("");
-        lastNameField.setText("");
-        dobField.setText("");
-        phoneNumField.setText("");
-        emailField.setText("");
-        memberIdField.setText("");
-        
-        this.requestLayout();
-    }
-    
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
+        }
+        else if (key.equals("ScoutToDisplay")) {
+            IModel selectedScout = (IModel)value;
+            if (selectedScout != null) {
+                firstNameField.setText((String) selectedScout.getState("FirstName"));
+                middleNameField.setText((String) selectedScout.getState("MiddleName"));
+                lastNameField.setText((String) selectedScout.getState("LastName"));
+                memberIdField.setText((String) selectedScout.getState("MemberID"));
+                dobField.setText((String) selectedScout.getState("DateOfBirth"));
+                phoneNumField.setText((String) selectedScout.getState("PhoneNumber"));
+                emailField.setText((String) selectedScout.getState("Email"));
+                statusBox.setValue(selectedScout.getState("Status"));
+            }
         }
     }
 }
