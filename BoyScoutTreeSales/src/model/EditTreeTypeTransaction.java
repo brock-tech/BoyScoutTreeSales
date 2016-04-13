@@ -7,55 +7,49 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
-//*********************************************************************
-//  COPYRIGHT 2016
-//    College at Brockport, State University of New York.
-//    ALL RIGHTS RESERVED
-//
-// This file is the product of The College at Brockport and cannot
-// be reproduced, copied, or used in any shape or form without
-// the express written consent of The College at Brockport.
-//********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
-import java.text.MessageFormat;
+import java.util.Enumeration;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import userinterface.View;
 import userinterface.ViewFactory;
 
 /**
  *
- * @author Andrew
+ * @author mike
  */
 public class EditTreeTypeTransaction extends Transaction {
-    String updateStatusMessage;
-    private Vector<TreeType> treeTypes;
-    private static final String myTableName = "Tree_Type";
-    private Properties persistentState;
+    protected String updateStatusMessage;
     
-    public EditTreeTypeTransaction() 
-    {
-        super();  
-        treeTypes = new Vector<TreeType>();
+    protected TreeTypeCollection treeTypeCollection;
+    
+    private TreeType selectedTreeType;
+    
+    public EditTreeTypeTransaction() {
+        super();
     }
 
     @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
-        dependencies.put("Submit", "TransactionError, UpdateStatusMessage");
+        dependencies.put("SearchTreeTypes", "TreeTypes,TransactionError");
+        dependencies.put("RemoveTreeType", "TreeTypes,TransactionError,UpdateStatusMessage");
+        dependencies.put("EditTreeType", "TreeTypeToDisplay");
+        dependencies.put("Submit", "TreeTypes,TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
         
         myRegistry.setDependencies(dependencies);
     }
 
     @Override
-    protected void getMessagesBundle() 
-    {
-             myMessages = ResourceBundle.getBundle("model.i18n.EditTreeTypeTransaction", myLocale);
+    protected void getMessagesBundle() {
+        //myMessages = ResourceBundle.getBundle("model.i18n.EditScoutTransaction", myLocale);
     }
 
     @Override
@@ -72,24 +66,18 @@ public class EditTreeTypeTransaction extends Transaction {
         
         return currentScene;
     }
-
-    @Override
-    public Object getState(String key) {
-        switch (key) {
-            case "TransactionError":
-                return transactionErrorMessage;
-            case "UpdateStatusMessage":
-                return updateStatusMessage;
-            case "getTreeType":
-                return this;
-            case "getAllTrees":
-                allTreeTypes();
-                return treeTypes;
-            case "getTreeList":
-                return treeTypes;
-            default:
-                return null;
+    
+    private void createAndShowTreeTypeView() {
+        Scene currentScene = myViews.get("TreeTypeFormView");
+        
+        if (currentScene == null) {
+            View newView = ViewFactory.createView("TreeTypeDataView", this);
+            currentScene = new Scene(newView);
+            currentScene.getStylesheets().add("userinterface/style.css");
+            myViews.put("TreeTypeDataView", currentScene);
         }
+        
+        swapToView(currentScene);
     }
 
     @Override
@@ -98,90 +86,90 @@ public class EditTreeTypeTransaction extends Transaction {
             case "DoYourJob":
                 doYourJob();
                 break;
+            case "SearchTreeTypes":
+                searchTreeTypes((Properties)value);
+                break;
+            case "EditTreeType":
+                editTreeType((String)value);
+                break;
+            case "RemoveTreeType":
+                removeTreeType((String) value);
             case "Submit":
-                processTransaction((Properties)value);
-            case "Search":
-                if (value != null)
-                {
-                    persistentState = (Properties) value;
-                    findTreeTypeByBacodePrefix(persistentState.getProperty("BarCode"));
-                }
-            case "Retrieve All":
-                   allTreeTypes();
+                updateSelectedTreeType((Properties)value);
+                break;
+            case "Cancel":
+                swapToView(createView());
                 break;
         }
         
         myRegistry.updateSubscribers(key, this);
     }
+
+    @Override
+    public Object getState(String key) {
+        switch (key) {
+            case "TransactionError":
+                return transactionErrorMessage;
+            case "UpdateStatusMessage":
+                return updateStatusMessage;
+            case "TreeTypes":
+                return treeTypeCollection.getState("TreeTypes");
+            case "TreeTypeToDisplay":
+                return selectedTreeType;
+            default:
+                return null;
+        }
+    }
     
-    private void processTransaction(Properties p) {
+    protected void searchTreeTypes(Properties props) {
+        String barcodePrefix = props.getProperty("BarcodePrefix");
         
-           updateStatusMessage = "";
-           transactionErrorMessage = ""; 
-           MessageFormat formatter = new MessageFormat("", myLocale);
-           try 
-           {
-                String barcodePrefix = p.getProperty("barcodePrefix");
+        treeTypeCollection = new TreeTypeCollection();
+        
+        try {
+            treeTypeCollection.lookupTreeTypesByBarcode(barcodePrefix);
+            System.out.println("barcode is " + barcodePrefix);
+        } catch (Exception e) {
+            transactionErrorMessage = e.getMessage();
+        }
+    }
+    
+    protected void removeTreeType(String treeTypeId) {
+        selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
+        String typeId = (String)selectedTreeType.getState("ID");
+        
+        Alert confirmDialog = new Alert(AlertType.CONFIRMATION, String.format(
+                "Are you sure you want to remove '%s'?",
+                typeId));
+        Optional<ButtonType> result = confirmDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            selectedTreeType.remove();
 
-                TreeType searchedTreeType = new TreeType(barcodePrefix);
+        }
+    }
+    
+    protected void editTreeType(String treeTypeId) {
+        selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
+        
+        createAndShowTreeTypeView();
+    }
+    
+    protected void updateSelectedTreeType(Properties p) {
+        
+        Enumeration allKeys = p.propertyNames();
+        while (allKeys.hasMoreElements()) {
+            String nextKey = (String) allKeys.nextElement();
+            String nextValue = p.getProperty(nextKey);
 
-                formatter.applyPattern("TTNotFound");
-                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
-                transactionErrorMessage = updateStatusMessage;
-           } 
-           catch (Exception exc) 
-           { 
-                // Add new TreeType
-                String barcodePrefix = p.getProperty("barcodePrefix");
-                TreeType searchedTreeType = new TreeType(p); 
-                searchedTreeType.getTableListView();
-
-                /*formatter.applyPattern("insertSuccessMsg");
-                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
-                transactionErrorMessage = updateStatusMessage;*/
+            if (nextValue != null) {
+                selectedTreeType.stateChangeRequest(nextKey, nextValue);
             }
         }
-    
-    
-      private void findTreeTypeByBacodePrefix(String barcodePrefix){
-        treeTypes.clear();
-                
-         String query = String.format(
-                "SELECT * FROM %s WHERE (BarcodePrefix = %s)", myTableName,barcodePrefix);
-        Vector allDataRetrieved = getSelectQueryResult(query);
-        for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
-            {
-                Properties nextTreeTypeData = (Properties)allDataRetrieved.elementAt(cnt);
-                TreeType next = new TreeType(nextTreeTypeData);
-                if (next != null)
-                {
-                    treeTypes.add(next);
-                }
-            }
+        
+        selectedTreeType.update();
+        updateStatusMessage = (String)selectedTreeType.getState("UpdateStatusMessage");
+        transactionErrorMessage = updateStatusMessage;
+        
+        swapToView(createView());
     }
-
-    private void allTreeTypes(){
-        treeTypes.clear();
-
-        String query = "SELECT ID, TypeDescription, Cost, BarcodePrefix FROM " + myTableName;
-        Vector allDataRetrieved = getSelectQueryResult(query);
-        for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
-            {
-                Properties nextTreeTypeData = (Properties)allDataRetrieved.elementAt(cnt);
-                TreeType next = new TreeType(nextTreeTypeData);
-                if(next != null)
-                {
-                    treeTypes.add(next);
-                }
-            }
-    }
-    
-    
-    protected Vector<TreeType> getTreeTypes()
-    {
-        return treeTypes;
-    }
-    
 }
-
-

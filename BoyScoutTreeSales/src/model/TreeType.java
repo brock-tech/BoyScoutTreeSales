@@ -194,16 +194,29 @@ public class TreeType extends EntityBase
     {
         myRegistry.updateSubscribers(key, this);
     }
+    
+    public void remove()
+    {
+        try{
+ 
+            deletePersistentState(mySchema, persistentState);
+        }
+        catch(SQLException e)
+        {
+             updateStatusMessage = String.format(myLocale, myMessages.getString("deleteErrorMsg"),
+             persistentState.get("ID"));
+        }
+ 
+    }
     //-------------------------------------------------------------------------
      public Vector<String> getTableListView() 
      {
         Vector<String> v = new Vector<>();
         v.addElement(persistentState.getProperty("ID"));
-        v.addElement(persistentState.getProperty("BarcodePrefix"));
         v.addElement(persistentState.getProperty("TypeDescription"));
 	v.addElement(persistentState.getProperty("Cost"));
-	
-        
+        v.addElement(persistentState.getProperty("BarcodePrefix"));
+
         return v;
     }
      

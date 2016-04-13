@@ -10,77 +10,109 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IView;
 import java.util.Properties;
 import java.util.Vector;
 
 /**
- *
- * @author mike
+ * 
  */
-public class TreeTypeCollection extends EntityBase {
-    private static String myTableName = "TreeType";
+public class TreeTypeCollection extends EntityBase implements IView {
+    private static final String myTableName = "Tree_Type";
     
     private Vector<TreeType> treeTypes;
     
     public TreeTypeCollection() {
         super(myTableName);
+        
         treeTypes = new Vector<>();
     }
-    
-    public void findTypesWithBarcodePrefix(String barcodePrefix)
-        throws InvalidPrimaryKeyException {
-        String query = String.format(
-                "SELECT * FROM %s WHERE barcodePrefix = %s",
-                myTableName, 
-                barcodePrefix
-        );
-        
-        Vector allDataRetrieved = getSelectQueryResult(query);
-        
-        if (allDataRetrieved != null) {
-            treeTypes = new Vector<>();
-            
-            for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
-                Properties nextTypeData = (Properties)allDataRetrieved.elementAt(cnt);
-                
-                TreeType type = new TreeType(nextTypeData);
-                if (type != null) {
-                    addTreeType(type);
-                }
-            }
+
+    @Override
+    public Object getState(String key) {
+        if (key.equals("TreeTypes")) {
+            return treeTypes;
         }
+        return null;
+    }
+
+    @Override
+    public void stateChangeRequest(String key, Object value) {
+        myRegistry.updateSubscribers(key, this);
+    }
+
+    @Override
+    public void updateState(String key, Object value) {
+        stateChangeRequest(key, value);
     }
     
-    public TreeType retrieve(String typeId) {
+    private int findIndexToAdd(TreeType t) {
+        int low = 0;
+        int high = treeTypes.size()-1;
+        int middle;
+        
+        while (low <= high) {
+            middle = (low + high) / 2;
+            TreeType midTreeType = treeTypes.elementAt(middle);
+
+            int result = TreeType.compare(t, midTreeType);
+
+            if (result == 0) {
+                return middle;
+            } else if (result < 0) {
+                high = middle - 1;
+            } else {
+                low = middle + 1;
+            }
+        }
+        return low;
+    }
+    
+    private void addTreeType(TreeType t) {
+        int index = findIndexToAdd(t);
+        System.out.println("index is " + index);
+        treeTypes.insertElementAt(t, index);
+    }
+    
+    public TreeType retrieve(String id) {
         TreeType retValue = null;
-        for (int cnt = 0; cnt < treeTypes.size(); cnt++) {
-            TreeType nextType = treeTypes.elementAt(cnt);
-            String nextTypeId = (String)nextType.getState("typeId");
-            if (nextTypeId.equals(typeId)) {
-                retValue = nextType;
+        for (TreeType t : treeTypes) {
+            String nextTreeTypeId = (String)t.getState("ID");
+            if (id.equals(nextTreeTypeId)) {
+                retValue = t;
                 break;
             }
         }
         return retValue;
     }
     
-    private void addTreeType(TreeType t) {
-        treeTypes.add(t);
-    }
-
-    @Override
-    public Object getState(String key) {
-        return null;
-    }
-
-    @Override
-    public void stateChangeRequest(String key, Object value) {
+    public void lookupTreeTypesByBarcode(String barcodePrefix) 
+            throws InvalidPrimaryKeyException {
         
+        String query = "SELECT * FROM "+myTableName
+                +" WHERE (BarcodePrefix LIKE '%"+barcodePrefix+"%')";
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        
+        if (allDataRetrieved != null) {
+            treeTypes = new Vector<>();
+            System.out.println(allDataRetrieved.size() + " amount retrieved");
+            for (Object nextTreeTypeData : allDataRetrieved) {
+                TreeType nextTreeType = new TreeType((Properties)nextTreeTypeData);
+                
+                addTreeType(nextTreeType);
+            }
+        }
+        else {
+            throw new InvalidPrimaryKeyException(
+                    String.format("No Tree Types found with barcode prefix like '%s',"
+                            + " and Last name like '%s'",
+                    barcodePrefix));
+        }
     }
     
-    @Override
     protected void initializeSchema(String tableName) {
-        
+        if (mySchema == null) {
+            mySchema = getSchemaInfo(myTableName);
+        }
     }
-    
 }

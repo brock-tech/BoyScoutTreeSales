@@ -25,6 +25,9 @@ public class ViewFactory {
              
             case "EditTreeTypeTransactionView":
                 return new EditTreeTypeFormView(model);
+            
+            case "TreeTypeDataView":
+                    return new AddTreeTypeFormView(model);
           
             case "EditTreeActionView":
                 return new EditTreeActionView(model);

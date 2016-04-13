@@ -148,6 +148,7 @@ public class AddTreeTypeFormView extends BaseView {
 
              //System.out.println("barcode " + barcodePrefixField.getText() );
              myModel.stateChangeRequest("Submit", newTreeTypeData);
+             displayMessage((String)myModel.getState("UpdateStatusMessage"));
          }
         }
     }
@@ -176,5 +177,14 @@ public class AddTreeTypeFormView extends BaseView {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
         }
+        else if (key.equals("TreeTypeToDisplay")) {
+            IModel selectedTreeType = (IModel)value;
+            if (selectedTreeType != null) {
+                barcodePrefixField.setText((String) selectedTreeType.getState("BarcodePrefix"));
+                descriptionField.setText((String) selectedTreeType.getState("TypeDescription"));
+                costField.setText((String) selectedTreeType.getState("Cost"));
+            }
+        }
     }
+        
 }
