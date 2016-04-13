@@ -170,21 +170,22 @@ public class Tree extends EntityBase {
         return status.equals("Available");
     }
     
-    	/**
-	 * This method is needed solely to enable the Account information to be displayable in a table
-	 *
-	 */
-	//--------------------------------------------------------------------------
-	public Vector<String> getEntryListView()
-	{
-		Vector<String> v = new Vector<String>();
+    /**
+     * This method is needed solely to enable the Account information to be displayable in a table
+     *
+     */
+    //--------------------------------------------------------------------------
+    public Vector<String> getEntryListView()
+    {
+            Vector<String> v = new Vector<String>();
 
-		v.addElement(persistentState.getProperty("BarCode"));
-		v.addElement(persistentState.getProperty("TreeType"));
-		v.addElement(persistentState.getProperty("SalePrice"));
-		v.addElement(persistentState.getProperty("Notes"));
-		v.addElement(persistentState.getProperty("Status"));
+            v.addElement(persistentState.getProperty("BarCode"));
+            v.addElement(persistentState.getProperty("TreeType"));
+            v.addElement(persistentState.getProperty("SalePrice"));
+            v.addElement(persistentState.getProperty("Notes"));
+            v.addElement(persistentState.getProperty("Status"));
 
-		return v;
-	}
+            return v;
+    }
+
 }

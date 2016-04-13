@@ -19,25 +19,25 @@ public class ViewFactory {
             
             case "TreeTransactionView":
                 return new TreeTransactionView(model);
+                
+            case "AddTreeTypeTransactionView":
+                return new AddTreeTypeFormView(model);
              
             case "EditTreeTypeTransactionView":
-                return new EditTreeTypeFormView(model);
-          
+                return new EditTreeTypeFormView(model);        
+            
             case "EditTreeActionView":
                 return new EditTreeActionView(model);
-                
+            
             case "EditScoutTransactionView":
                 return new EditScoutTransactionView(model);
-                
+            
             case "ScoutDataView":
                 return new ScoutFormView(model);
-
-           case "AddTreeTypeTransactionView":
-                return new TreeTypeFormView(model);
-
-            case "EditTreeActionView":
-                return new EditTreeActionView(model);
-
+            
+            case "TreeDataView":
+                return new TreeTransactionView(model);
+                
             default:
                 return null;
         }

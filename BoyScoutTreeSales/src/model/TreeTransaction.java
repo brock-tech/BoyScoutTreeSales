@@ -55,7 +55,8 @@ public class TreeTransaction extends Transaction {
         Properties dependencies = new Properties();
         dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        
+        dependencies.put("Back", "CancelTransaction");
+
         myRegistry.setDependencies(dependencies);
     }
 
@@ -73,6 +74,8 @@ public class TreeTransaction extends Transaction {
             currentScene = new Scene(newView);
             myViews.put("TreeTransactionView", currentScene);
         }
+        
+        currentScene.getStylesheets().add("userinterface/style.css");
         
         return currentScene;
     }

@@ -79,7 +79,9 @@ public class EditTreeActionView extends BaseView {
         
         treeBarCode = new TextField();
         treeBarCode.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Tree Barcode:", treeBarCode);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("Tree Barcode:"),
+                treeBarCode);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
         
@@ -89,27 +91,27 @@ public class EditTreeActionView extends BaseView {
         tableOfTrees = new TableView<TreeTableModel>();
         tableOfTrees.getSelectionModel();
         
-        TableColumn BarCodeColumn = new TableColumn("BarCode") ;
+        TableColumn BarCodeColumn = new TableColumn(myResources.getProperty("BarCode"));
         BarCodeColumn.setMinWidth(100);
         BarCodeColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("BarCode"));
 
-        TableColumn TreeTypeColumn = new TableColumn("TreeType") ;
+        TableColumn TreeTypeColumn = new TableColumn(myResources.getProperty("TreeType"));
         TreeTypeColumn.setMinWidth(100);
         TreeTypeColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("TreeType"));
 
-        TableColumn SalePriceColumn = new TableColumn("SalePrice") ;
+        TableColumn SalePriceColumn = new TableColumn(myResources.getProperty("SalePrice")) ;
         SalePriceColumn.setMinWidth(100);
         SalePriceColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("SalePrice"));
         
-        TableColumn NotesColumn = new TableColumn("Notes") ;
+        TableColumn NotesColumn = new TableColumn(myResources.getProperty("Notes")) ;
         NotesColumn.setMinWidth(100);
         NotesColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("Notes"));
         
-        TableColumn StatusColumn = new TableColumn("Status") ;
+        TableColumn StatusColumn = new TableColumn(myResources.getProperty("Status")) ;
         StatusColumn.setMinWidth(100);
         StatusColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("Status"));
@@ -123,12 +125,12 @@ public class EditTreeActionView extends BaseView {
 
         formGrid.add(scrollPane, 0, 1);
         
-        searchButton = new Button("Search");
+        searchButton = new Button(myResources.getProperty("Search"));
         searchButton.setOnAction(submitHandler);
         searchButton.setPrefWidth(100);
         buttonContainer.getChildren().add(searchButton);
         
-        modifyButton = new Button("Modify");
+        modifyButton = new Button(myResources.getProperty("Modify"));
         modifyButton.setOnAction(submitHandler);
         modifyButton.setPrefWidth(100);
         buttonContainer.getChildren().add(modifyButton);
@@ -138,7 +140,7 @@ public class EditTreeActionView extends BaseView {
 //        clearFormButton.setPrefWidth(100);
 //        buttonContainer.getChildren().add(clearFormButton);
         
-        cancelButton = new Button("Cancel");
+        cancelButton = new Button(myResources.getProperty("Cancel"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
@@ -155,7 +157,7 @@ public class EditTreeActionView extends BaseView {
         
         props.setProperty("BarCode", treeBarCode.getText());
         if (event.getSource() == cancelButton) {
-            myModel.stateChangeRequest("Cancel", "");
+            myModel.stateChangeRequest("Back", null);
         }
         else if (event.getSource() == searchButton){
             myModel.stateChangeRequest("Search", props);
