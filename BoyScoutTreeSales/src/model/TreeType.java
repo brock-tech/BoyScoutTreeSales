@@ -109,6 +109,9 @@ public class TreeType extends EntityBase
         setDependencies();
         persistentState = new Properties();
         Enumeration allKeys = props.propertyNames();
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeType", myLocale);
+        
         while (allKeys.hasMoreElements() == true)
         {
             String nextKey = (String)allKeys.nextElement();
@@ -141,7 +144,7 @@ public class TreeType extends EntityBase
         Object [] ID_barcodePrefix = new Object[] {persistentState.get("ID"),
                 persistentState.get("BarcodePrefix")};
         
-        MessageFormat formatter = new MessageFormat("", myLocale);
+        MessageFormat formatter;
         if (persistentState.getProperty("BarcodePrefix") != null)
         {
             try
@@ -152,13 +155,13 @@ public class TreeType extends EntityBase
                 updatePersistentState(mySchema, persistentState, whereClause);
                 System.out.println("nice");
                       System.out.println("ice");
-                formatter = new MessageFormat("Tree Type (Id, Barcode Prefix) '{0} {1}' inserted successfully");
-             
+                
+              formatter = new MessageFormat(myMessages.getString("insertSuccessMsg"));
                 updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
             catch(SQLException s)
             {
-               formatter.applyPattern(myMessages.getString("insertErrorMsg"));
+               formatter = new MessageFormat(myMessages.getString("insertErrorMsg"));
                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
         }   
@@ -169,12 +172,12 @@ public class TreeType extends EntityBase
                 Integer treeTypeID =
                 insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", "" + treeTypeID.intValue());
-               formatter.applyPattern(myMessages.getString("updateSuccessMsg"));
+               formatter = new MessageFormat(myMessages.getString("updateSuccessMsg"));
                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
             catch(SQLException e)
             {
-               formatter.applyPattern(myMessages.getString("updateErrorMsg"));
+               formatter = new MessageFormat(myMessages.getString("updateErrorMsg"));
                updateStatusMessage = formatter.format(ID_barcodePrefix);
             }
         }   
