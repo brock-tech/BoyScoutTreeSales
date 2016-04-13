@@ -16,11 +16,15 @@ public class TransactionFactory {
     public static Transaction createTransaction(String transName) {
         switch (transName) {
             case "RegisterScout":
-                return new RegisterScoutTransaction();
+                return new RegisterScoutTransaction();    
+            case "EditScout":
+                return new EditScoutTransaction();
             case "AddTree":
                 return new TreeTransaction();
             case "AddTreeType":
-                return new AddTreeTypeTransaction();
+                return new AddTreeTypeTransaction();				
+            case "EditTreeType":
+                    return new EditTreeTypeTransaction();
             case "EditTree":
                 return new EditTreeAction();
             case "EditOneTree":

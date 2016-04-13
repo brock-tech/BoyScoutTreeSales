@@ -30,7 +30,7 @@ import javafx.scene.text.TextAlignment;
  *
  */
 public abstract class BaseView extends View {
-    public static final double DEFAULT_WIDTH = 500.0;
+    public static final double DEFAULT_WIDTH = 800.0;
     
     protected Locale myLocale;
     protected Properties myResources;
@@ -59,7 +59,7 @@ public abstract class BaseView extends View {
         
         VBox container = new VBox(10);
         container.setPrefWidth(DEFAULT_WIDTH);
-        container.setBackground(Background.EMPTY);
+        container.getStyleClass().add("body");
         
         container.getChildren().add(createHeader());
         container.getChildren().add(createContent());
@@ -98,8 +98,10 @@ public abstract class BaseView extends View {
         HBox titleContainer = new HBox(10);
         titleContainer.setPrefSize(DEFAULT_WIDTH, 40.0);
         titleContainer.setAlignment(Pos.CENTER);
+        titleContainer.getStyleClass().add("header");
         
         Text titleText = new Text(myResources.getProperty("titleText"));
+        titleText.getStyleClass().add("header-text");
         titleText.setFont(Font.font("SansSerif", FontWeight.BOLD, 20.0));
         titleText.setFill(Color.web("GREEN"));
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -123,13 +125,13 @@ public abstract class BaseView extends View {
         VBox footer = new VBox(10);
         footer.setAlignment(Pos.BASELINE_LEFT);
         footer.setPrefWidth(DEFAULT_WIDTH);
+        footer.getStyleClass().add("footer");
         
         statusLog = new MessageView("");
         footer.getChildren().add(statusLog);
         
         Text copyrightText = new Text(myResources.getProperty("copyrightText"));
-        copyrightText.setFont(Font.font("SansSerif", FontWeight.NORMAL, 12.0));
-        copyrightText.setFill(Color.web("GRAY"));
+        copyrightText.getStyleClass().add("footer-text");
         copyrightText.setTextAlignment(TextAlignment.LEFT);
         footer.getChildren().add(copyrightText);
                 

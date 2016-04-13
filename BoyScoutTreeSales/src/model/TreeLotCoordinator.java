@@ -89,6 +89,7 @@ public class TreeLotCoordinator implements IModel, IView {
         if (nextScene == null) {
             View newView = ViewFactory.createView("TreeLotCoordinatorView", this);
             nextScene = new Scene(newView);
+            nextScene.getStylesheets().add("userinterface/style.css");
             myViews.put("TreeLotCoordinatorView", nextScene);
         }
         
@@ -101,6 +102,7 @@ public class TreeLotCoordinator implements IModel, IView {
         if (nextScene == null) {
             View newView = ViewFactory.createView("SelectAdminActionView", this);
             nextScene = new Scene(newView);
+            nextScene.getStylesheets().add("userinterface/style.css");
             myViews.put("SelectAdminActionView", nextScene);
         }
         

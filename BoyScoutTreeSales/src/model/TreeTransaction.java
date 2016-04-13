@@ -55,7 +55,8 @@ public class TreeTransaction extends Transaction {
         Properties dependencies = new Properties();
         dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        
+        dependencies.put("Back", "CancelTransaction");
+
         myRegistry.setDependencies(dependencies);
     }
 

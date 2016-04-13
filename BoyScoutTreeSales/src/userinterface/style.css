@@ -1,0 +1,57 @@
+.root {
+    -fx-font: 16px "Helvetica Bold";
+}
+
+.body {
+    -fx-background-color: #CCCC51;
+}
+
+.header {
+    -fx-background-color: #DBDB58;
+}
+
+.header-text {
+    -fx-fill: #663300;
+    -fx-font: 20px "Helvetica Bold";
+    -fx-font-weight: bold;
+}
+
+.footer {
+    -fx-background-color: #DBDB58;
+}
+
+.footer-text {
+    -fx-fill: gray;
+    -fx-font: 12px "SansSerif";
+}
+
+.information-text {
+/*    -fx-fill: #663300; */
+    -fx-font: 17px "Helvetica Bold";
+    -fx-font-weight: bold;
+}
+
+.button {
+    /*-fx-font: 16px "Helvetica Bold";*/
+    -fx-padding: 10;
+    -fx-background-color: #8FB258;
+    -fx-font-weight: bold;
+    -fx-text-fill: #192B33;
+
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-effect: dropshadow( three-pass-box, black, 2, 0.1, 3, 3 );
+
+}
+
+.button:hover {
+    /*-fx-font: 16px "Helvetica Bold";*/
+    /*-fx-padding: 10;*/
+    -fx-background-color: #FED833;	
+    /*-fx-text-fill: #F57E20;*/
+}
+
+.exit-text {
+	
+    /*-fx-font: 20px "Helvetica Bold";*/
+}

@@ -52,6 +52,8 @@ public class RegisterScoutTransaction extends Transaction {
             myViews.put("RegisterScoutTransactionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 
@@ -86,17 +88,17 @@ public class RegisterScoutTransaction extends Transaction {
         transactionErrorMessage = "";
         
         try {
-            String troopId = p.getProperty("TroopID");
+            String memberId = p.getProperty("MemberID");
             
-            Scout oldScout = new Scout(troopId);
-            troopId = (String)oldScout.getState("TroopID");
+            Scout oldScout = new Scout(memberId);
+            memberId = (String)oldScout.getState("MemberID");
             
             MessageFormat formatter = new MessageFormat(
                     myMessages.getString("scoutAlreadyExistsMsg"),
                     myLocale
             );
             
-            updateStatusMessage = formatter.format(new Object[] { troopId });
+            updateStatusMessage = formatter.format(new Object[] { memberId });
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 

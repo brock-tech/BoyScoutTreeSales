@@ -53,22 +53,14 @@ public class TreeTransactionView extends BaseView {
     protected Button cancelButton;
 
     public TreeTransactionView(IModel model) {
-        super(model, "TreeFormView");
+        super(model, "TreeTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("TreeToDisplay", this);
     }
     
     @Override
     protected Node createContent() {
-        // check if its new or modify form
-        TreeTransaction tree = (TreeTransaction)myModel.getState("getTreeTransaction");
-
-        if (tree.getState("getProperties") != null)
-        {
-            System.out.println(tree.getState("getProperties"));
-            Properties p = new Properties();
-            p = (Properties)tree.getState("getProperties");
-        }
         
         EventHandler<ActionEvent> submitHandler = new EventHandler<ActionEvent>() {
             @Override
@@ -93,30 +85,38 @@ public class TreeTransactionView extends BaseView {
 
         treeBarCode = new TextField();
         treeBarCode.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Tree Barcode:", treeBarCode);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("Tree Barcode:"), 
+                treeBarCode);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
         
         getTreeTypeField();
-        formItem = formItemBuilder.buildControl("Tree Type:", treeType);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("Tree Type:"),
+                treeType);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 1);
         
         salePrice = new TextField();
         salePrice.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Sale Price:", salePrice);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("Sale Price:"),
+                salePrice);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 2);
 
         notes = new TextField();
         notes.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl("Notes:", notes);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("Notes:"),
+                notes);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 3);
         
         ObservableList<String> options = FXCollections.observableArrayList(
-            "Avalaible",
-            "Unvalaible"
+            myResources.getProperty("Avalaible"),
+            myResources.getProperty("Unvalaible")
         );
         
         status = new ComboBox(options);
@@ -127,12 +127,12 @@ public class TreeTransactionView extends BaseView {
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        submitButton = new Button("Submit");
+        submitButton = new Button(myResources.getProperty("Submit"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
         
-        cancelButton = new Button("Cancel");
+        cancelButton = new Button(myResources.getProperty("Cancel"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
@@ -191,10 +191,21 @@ public class TreeTransactionView extends BaseView {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
         }
+        else if (key.equals("TreeToDisplay")) {
+            IModel selectedTree = (IModel)value;
+            if (selectedTree != null) {
+                treeBarCode.setText((String) selectedTree.getState("BarCode"));
+                //treeType.setText((String) selectedTree.getState("MiddleName"));
+                salePrice.setText((String) selectedTree.getState("SalePrice"));
+                notes.setText((String) selectedTree.getState("Notes"));
+                //status.setText((String) selectedTree.getState("DateOfBirth"));
+            }
+        }
     }
    
     protected void getTreeTypeField(){
-        TreeTransaction treeTransaction = (TreeTransaction)myModel.getState("getTreeTransaction");
+        //TreeTransaction treeTransaction = (TreeTransaction)myModel.getState("getTreeTransaction");
+        TreeTransaction treeTransaction = new TreeTransaction();
         Vector treeTypeList = (Vector)treeTransaction.getState("getTreeType");
         ArrayList newList = new ArrayList();
         String str = new String();

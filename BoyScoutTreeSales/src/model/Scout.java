@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Formatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import userinterface.SystemLocale;
@@ -26,14 +27,14 @@ import userinterface.SystemLocale;
  *
  */
 public class Scout extends EntityBase {
-    private static final String myTableName = "scout";
+    private static final String myTableName = "Scout";
     
     protected Properties dependencies;
     
     private String updateStatusMessage = "";
     
-    private Locale myLocale;
-    private ResourceBundle myMessages;
+    private final Locale myLocale;
+    private final ResourceBundle myMessages;
 
     /**
      * @param troopId
@@ -123,8 +124,8 @@ public class Scout extends EntityBase {
      * @return  */
     //--------------------------------------------------------------------------
     public static int compare(Scout scout1, Scout scout2) {
-        String name1 = (String)scout1.getState("lastName");
-        String name2 = (String)scout2.getState("lastName");
+        String name1 = (String)scout1.getState("LastName");
+        String name2 = (String)scout2.getState("LastName");
         
         return name1.compareTo(name2);
     }
@@ -138,47 +139,48 @@ public class Scout extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
-        // Set date of last update to today's date
-//        LocalDateTime currentDate = LocalDateTime.now();
-//        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-//        persistentState.setProperty("DateLastUpdate", dateLastUpdate);
+        if (persistentState.getProperty("DateStatusUpdated") == null) {
+            // Set date of last update to today's date.
+            LocalDateTime currentDate = LocalDateTime.now();
+            String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+            persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
+        }
         
-        MessageFormat formatter;
-        Object[] firstAndLastName = new Object[] {
-            persistentState.getProperty("firstName"),
-            persistentState.getProperty("lastName")
-        };
-        
-        // @todo: use scoutId 
-        //if (persistentState.getProperty("ScoutID") != null) { // Update Existing
-        if (persistentState.getProperty("troopId") != null) { // Update Existing
+        if (persistentState.getProperty("ID") != null) { // Update Existing
             try {
                 Properties whereClause = new Properties();
 
-                //whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
-                whereClause.setProperty("troopId", persistentState.getProperty("troopId"));
+                whereClause.setProperty("ID", persistentState.getProperty("ID"));
 
                 updatePersistentState(mySchema, persistentState, whereClause);
 
-                formatter = new MessageFormat(myMessages.getString("updateSuccessMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("updateSuccessMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
 
             } catch (SQLException ex) {
-                formatter = new MessageFormat(myMessages.getString("updateErrorMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("updateErrorMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
             }
         } 
         else { // Insert New
             try {
                 Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ScoutID", scoutId.toString());
-
-                formatter = new MessageFormat(myMessages.getString("insertSuccessMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                persistentState.setProperty("ID", scoutId.toString());
+                
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("insertSuccessMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
 
             } catch (SQLException ex) {
-                formatter = new MessageFormat(myMessages.getString("insertErrorMsg"));
-                updateStatusMessage = formatter.format(firstAndLastName);
+                updateStatusMessage = String.format(myLocale,
+                        myMessages.getString("insertErrorMsg"),
+                        persistentState.getProperty("FirstName"),
+                        persistentState.getProperty("LastName"));
             }
         }
     }
@@ -201,13 +203,36 @@ public class Scout extends EntityBase {
     //--------------------------------------------------------------------------
     @Override
     public void stateChangeRequest(String key, Object value) {
+        if (persistentState.containsKey(key))
+            persistentState.setProperty(key, (String)value);
+        
         myRegistry.updateSubscribers(key, this);
     }
     
     public Vector<String> getTableListView() {
         Vector<String> v = new Vector<>();
         
+        v.add(persistentState.getProperty("ID"));
+        v.add(persistentState.getProperty("FirstName"));
+        v.add(persistentState.getProperty("MiddleName"));
+        v.add(persistentState.getProperty("LastName"));
+        v.add(persistentState.getProperty("MemberID"));
+        v.add(persistentState.getProperty("DateOfBirth"));
+        v.add(persistentState.getProperty("PhoneNumber"));
+        v.add(persistentState.getProperty("Email"));
+        v.add(persistentState.getProperty("Status"));
+        v.add(persistentState.getProperty("DateStatusUpdated"));
+        
         return v;
+    }
+    
+    public void setInactive() {
+        // Set date of last update to today's date.
+        LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
+        
+        persistentState.setProperty("Status", "Inactive");
     }
     
     /**
