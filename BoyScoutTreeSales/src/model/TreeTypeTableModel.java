@@ -16,51 +16,51 @@ import javafx.beans.property.SimpleStringProperty;
 //==============================================================================
 public class TreeTypeTableModel
 {
-        private final SimpleStringProperty treeTypeID;
-	private final SimpleStringProperty barcodePrefix;
-	private final SimpleStringProperty description;
-	private final SimpleStringProperty cost;
+        private final SimpleStringProperty ID;
+	private final SimpleStringProperty BarcodePrefix;
+	private final SimpleStringProperty TypeDescription;
+	private final SimpleStringProperty Cost;
 	//----------------------------------------------------------------------------
 	public TreeTypeTableModel(Vector<String> treeTypeData)
 	{
-		treeTypeID =  new SimpleStringProperty(treeTypeData.elementAt(0));
-		barcodePrefix =  new SimpleStringProperty(treeTypeData.elementAt(1));
-		description =  new SimpleStringProperty(treeTypeData.elementAt(2));
-		cost =  new SimpleStringProperty(treeTypeData.elementAt(3));
+		ID =  new SimpleStringProperty(treeTypeData.elementAt(0));
+		BarcodePrefix =  new SimpleStringProperty(treeTypeData.elementAt(1));
+		TypeDescription =  new SimpleStringProperty(treeTypeData.elementAt(2));
+		Cost =  new SimpleStringProperty(treeTypeData.elementAt(3));
 	}
 //------------------------Getters---------------------------------------------------
 	public SimpleStringProperty getTreeTypeID() 
 	{
-		return treeTypeID;
+		return ID;
 	}
 	public SimpleStringProperty getBarcodePrefix() 
 	{
-		return barcodePrefix;
+		return BarcodePrefix;
 	}
 	public SimpleStringProperty getDescription() 
 	{
-		return description;
+		return TypeDescription;
 	}
 	public SimpleStringProperty getCost() 
 	{
-		return cost;
+		return Cost;
 	}
 	
 	public void setTreeTypeID(String c) 
 	{
-		treeTypeID.set(c);;
+		ID.set(c);;
 	}
 	public void setBarcodePrefix(String sc) 
 	{
-		barcodePrefix.set(sc);;
+		BarcodePrefix.set(sc);;
 	}
 	public void setDescription(String z)
 	{
-		description.set(z);
+		TypeDescription.set(z);
 	}
 	public void setCost(String e) 
 	{
-		cost.set(e);
+		Cost.set(e);
 	}
 
 }

@@ -22,6 +22,7 @@ import exception.InvalidPrimaryKeyException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -32,9 +33,14 @@ import userinterface.ViewFactory;
  */
 public class EditTreeTypeTransaction extends Transaction {
     String updateStatusMessage;
+    private Vector<TreeType> treeTypes;
+    private static final String myTableName = "Tree_Type";
+    private Properties persistentState;
     
-    public EditTreeTypeTransaction() {
-        super();
+    public EditTreeTypeTransaction() 
+    {
+        super();  
+        treeTypes = new Vector<TreeType>();
     }
 
     @Override
@@ -74,6 +80,13 @@ public class EditTreeTypeTransaction extends Transaction {
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
                 return updateStatusMessage;
+            case "getTreeType":
+                return this;
+            case "getAllTrees":
+                allTreeTypes();
+                return treeTypes;
+            case "getTreeList":
+                return treeTypes;
             default:
                 return null;
         }
@@ -87,6 +100,14 @@ public class EditTreeTypeTransaction extends Transaction {
                 break;
             case "Submit":
                 processTransaction((Properties)value);
+            case "Search":
+                if (value != null)
+                {
+                    persistentState = (Properties) value;
+                    findTreeTypeByBacodePrefix(persistentState.getProperty("BarCode"));
+                }
+            case "Retrieve All":
+                   allTreeTypes();
                 break;
         }
         
@@ -119,7 +140,48 @@ public class EditTreeTypeTransaction extends Transaction {
                 updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
                 transactionErrorMessage = updateStatusMessage;*/
             }
+        }
+    
+    
+      private void findTreeTypeByBacodePrefix(String barcodePrefix){
+        treeTypes.clear();
+                
+         String query = String.format(
+                "SELECT * FROM %s WHERE (BarcodePrefix = %s)", myTableName,barcodePrefix);
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
+            {
+                Properties nextTreeTypeData = (Properties)allDataRetrieved.elementAt(cnt);
+                TreeType next = new TreeType(nextTreeTypeData);
+                if (next != null)
+                {
+                    treeTypes.add(next);
+                }
+            }
     }
+
+    private void allTreeTypes(){
+        treeTypes.clear();
+
+        String query = "SELECT ID, TypeDescription, Cost, BarcodePrefix FROM " + myTableName;
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
+            {
+                Properties nextTreeTypeData = (Properties)allDataRetrieved.elementAt(cnt);
+                TreeType next = new TreeType(nextTreeTypeData);
+                if(next != null)
+                {
+                    treeTypes.add(next);
+                }
+            }
+    }
+    
+    
+    protected Vector<TreeType> getTreeTypes()
+    {
+        return treeTypes;
+    }
+    
 }
 
 
