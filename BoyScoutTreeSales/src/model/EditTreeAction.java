@@ -9,12 +9,13 @@
 //********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
+import java.util.Iterator;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
 import java.util.Vector;
+import userinterface.WindowPosition;
 /**
  *
  * @author PHONG
@@ -22,6 +23,7 @@ import java.util.Vector;
 public class EditTreeAction extends Transaction {
     String updateStatusMessage;
     private Vector<Tree> trees;
+    private Tree selectedTree;
     private static final String myTableName = "Tree";
     private Properties persistentState;
     
@@ -36,7 +38,9 @@ public class EditTreeAction extends Transaction {
         Properties dependencies = new Properties();
         dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        
+        dependencies.put("Back", "CancelTransaction");
+        dependencies.put("EditTree", "TreeToDisplay");
+
         myRegistry.setDependencies(dependencies);
     }
 
@@ -55,9 +59,22 @@ public class EditTreeAction extends Transaction {
             myViews.put("EditTreeActionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 
+    private void createAndShowTreeTransactionView() {
+        Scene currentScene = (Scene) myViews.get("TreeTransactionView");
+        if (currentScene == null) {
+            View newView = ViewFactory.createView("TreeDataView", this);
+            currentScene = new Scene(newView);
+            myViews.put("TreeTransactionView", currentScene);
+        }
+        
+        swapToView(currentScene);
+    }
+        
     @Override
     public Object getState(String key) {
         switch (key) {
@@ -72,6 +89,10 @@ public class EditTreeAction extends Transaction {
                 return trees;
             case "getTreeList":
                 return trees;
+            case "TreeToDisplay":
+                System.out.println("ICIII");
+                System.out.println(selectedTree);
+                return selectedTree;                
             default:
                 return null;
         }
@@ -89,13 +110,21 @@ public class EditTreeAction extends Transaction {
             case "Search":
                 if (value != null){
                     persistentState = (Properties) value;
-                    findTreeByBarCode(persistentState.getProperty("BarCode"));
+                    findTreesByBarCode(persistentState.getProperty("BarCode"));
                 }
                 else
                     findAllTrees();
                 break;
+            case "Modify":
+                persistentState = (Properties) value;
+                selectedTree = findTreeByBarCode(persistentState.getProperty("BarCode"));
+                createAndShowTreeTransactionView();
+                break;
+            case "Cancel":
+                swapToView(createView());
+                break;
         }
-        
+
         myRegistry.updateSubscribers(key, this);
     }
     
@@ -103,11 +132,19 @@ public class EditTreeAction extends Transaction {
 
     }
     
-    private void findTreeByBarCode(String barcode){
+    private Tree findTreeByBarCode(String barcode){
+        String query = "SELECT * FROM " + myTableName + " WHERE BarCode = " + barcode + ";";    
+    
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        Properties nextTreeData = (Properties)allDataRetrieved.elementAt(0);
+        Tree tree = new Tree(nextTreeData);                
+        return (tree);
+    }
+    
+    private void findTreesByBarCode(String barcode){
         trees.clear();
         String query = "SELECT * FROM " + myTableName + " WHERE BarCode LIKE '%" + barcode + "%';";
         
-        System.out.println(query);
         Vector allDataRetrieved = getSelectQueryResult(query);
         for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
             {
@@ -123,8 +160,8 @@ public class EditTreeAction extends Transaction {
     private void findAllTrees(){
         trees.clear();
 
-        String query = "SELECT BarCode, TreeType, SalePrice, CName, CPhoneNum, CEmail, " +
-              "DateStatusUpdated, TimeStatusUpdated FROM " + myTableName;
+        String query = "SELECT BarCode, TreeType, SalePrice, " +
+              "Notes, Status FROM " + myTableName;
         Vector allDataRetrieved = getSelectQueryResult(query);
         for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
             {
@@ -140,4 +177,11 @@ public class EditTreeAction extends Transaction {
     private Vector<Tree> getTrees(){
         return trees;
     }
+
+    public void switchToScene(Scene nextScene) {
+        myStage.setScene(nextScene);
+        myStage.sizeToScene();
+
+        WindowPosition.placeCenter(myStage);
+    } 
 }

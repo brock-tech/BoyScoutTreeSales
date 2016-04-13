@@ -9,11 +9,8 @@ public class TreeTableModel
     private final SimpleStringProperty BarCode;
     private final SimpleStringProperty TreeType;
     private final SimpleStringProperty SalePrice;
-    private final SimpleStringProperty CName;
-    private final SimpleStringProperty CPhoneNum;
-    private final SimpleStringProperty Cemail;
-    private final SimpleStringProperty DateStatusUpdated;
-    private final SimpleStringProperty TimeStatusUpdated;
+    private final SimpleStringProperty Notes;
+    private final SimpleStringProperty Status;
         
 	//----------------------------------------------------------------------------
     public TreeTableModel(Vector<String> treeData)
@@ -21,11 +18,8 @@ public class TreeTableModel
         BarCode =  new SimpleStringProperty(treeData.elementAt(0));
         TreeType =  new SimpleStringProperty(treeData.elementAt(1));
         SalePrice =  new SimpleStringProperty(treeData.elementAt(2));
-        CName =  new SimpleStringProperty(treeData.elementAt(3));
-        CPhoneNum =  new SimpleStringProperty(treeData.elementAt(4));
-        Cemail =  new SimpleStringProperty(treeData.elementAt(5));
-        DateStatusUpdated =  new SimpleStringProperty(treeData.elementAt(6));
-        TimeStatusUpdated =  new SimpleStringProperty(treeData.elementAt(7));
+        Notes =  new SimpleStringProperty(treeData.elementAt(3));
+        Status =  new SimpleStringProperty(treeData.elementAt(4));
     }
 
 	//----------------------------------------------------------------------------
@@ -57,51 +51,22 @@ public class TreeTableModel
     public void setSalePrice(String price) {
         SalePrice.set(price);
     }
-
-    //----------------------------------------------------------------------------
-    public String getCName() {
-        return CName.get();
-    }
-
-		//----------------------------------------------------------------------------
-    public void setCName(String name) {
-        CName.set(name);
-    }
-
-		//----------------------------------------------------------------------------
-    public String getCPhoneNum() {
-        return CPhoneNum.get();
+    
+    public String getNotes() {
+        return Notes.get();
     }
 
     //----------------------------------------------------------------------------
-    public void setCPhoneNum(String phone) {
-        CPhoneNum.set(phone);
-    }
-
-    public String getCemail() {
-        return CPhoneNum.get();
-    }
-
-    //----------------------------------------------------------------------------
-    public void setCemail(String mail) {
-        CPhoneNum.set(mail);
+    public void setNotes(String note) {
+        Notes.set(note);
     }
     
-    public String getDateStatusUpdated() {
-        return DateStatusUpdated.get();
+    public String getStatus() {
+        return Status.get();
     }
 
     //----------------------------------------------------------------------------
-    public void setDateStatusUpdated(String date) {
-        DateStatusUpdated.set(date);
-    }
-    
-    public String getTimeStatusUpdated() {
-        return TimeStatusUpdated.get();
-    }
-
-    //----------------------------------------------------------------------------
-    public void setTimeStatusUpdated(String time) {
-        TimeStatusUpdated.set(time);
+    public void setStatus(String status) {
+        Status.set(status);
     }
 }

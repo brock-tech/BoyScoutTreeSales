@@ -108,7 +108,6 @@ public class Tree extends EntityBase {
     /** */
     //--------------------------------------------------------------------------
     private void updateStateInDatabase() {
-        
         if ((persistentState.getProperty("isNew") == null) &&
                 (persistentState.getProperty("BarCode") != null)) { // Update Existing
             try {
@@ -167,28 +166,26 @@ public class Tree extends EntityBase {
     }
     
     public boolean isAvailable() {
-        String status = persistentState.getProperty("treeStatus");
+        String status = persistentState.getProperty("Status");
         return status.equals("Available");
     }
     
-    	/**
-	 * This method is needed solely to enable the Account information to be displayable in a table
-	 *
-	 */
-	//--------------------------------------------------------------------------
-	public Vector<String> getEntryListView()
-	{
-		Vector<String> v = new Vector<String>();
+    /**
+     * This method is needed solely to enable the Account information to be displayable in a table
+     *
+     */
+    //--------------------------------------------------------------------------
+    public Vector<String> getEntryListView()
+    {
+            Vector<String> v = new Vector<String>();
 
-		v.addElement(persistentState.getProperty("BarCode"));
-		v.addElement(persistentState.getProperty("TreeType"));
-		v.addElement(persistentState.getProperty("SalePrice"));
-		v.addElement(persistentState.getProperty("CName"));
-		v.addElement(persistentState.getProperty("CPhoneNum"));
-		v.addElement(persistentState.getProperty("CEmail"));
-		v.addElement(persistentState.getProperty("DateStatusUpdated"));
-		v.addElement(persistentState.getProperty("TimeStatusUpdated"));
+            v.addElement(persistentState.getProperty("BarCode"));
+            v.addElement(persistentState.getProperty("TreeType"));
+            v.addElement(persistentState.getProperty("SalePrice"));
+            v.addElement(persistentState.getProperty("Notes"));
+            v.addElement(persistentState.getProperty("Status"));
 
-		return v;
-	}
+            return v;
+    }
+
 }

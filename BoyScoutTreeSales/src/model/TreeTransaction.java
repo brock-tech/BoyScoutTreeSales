@@ -10,6 +10,7 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.util.Enumeration;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
@@ -20,20 +21,42 @@ import java.util.Vector;
  *
  * @author PHONG
  */
-public class AddTreeTransaction extends Transaction {
+public class TreeTransaction extends Transaction {
     String updateStatusMessage;
     Vector treeType;
-
-    public AddTreeTransaction(){
+    Vector data;
+    Properties persistentState;
+    
+    public TreeTransaction(){
         super();
+        
+        persistentState = null;
     }
+ 
+    public TreeTransaction(Properties props){
+        super();
+        setDependencies();
+        
+        persistentState = new Properties();
+
+        Enumeration allKeys = props.propertyNames();
+        while (allKeys.hasMoreElements()) {
+            String nextKey = (String) allKeys.nextElement();
+            String nextValue = props.getProperty(nextKey);
+
+            if (nextValue != null) {
+                persistentState.setProperty(nextKey, nextValue);
+            }
+        }
+    }    
     
      @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
         dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        
+        dependencies.put("Back", "CancelTransaction");
+
         myRegistry.setDependencies(dependencies);
     }
 
@@ -44,13 +67,15 @@ public class AddTreeTransaction extends Transaction {
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("AddTreeTransactionView");
+        Scene currentScene = myViews.get("TreeTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("AddTreeTransactionView", this);
+            View newView = ViewFactory.createView("TreeTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("AddTreeTransactionView", currentScene);
+            myViews.put("TreeTransactionView", currentScene);
         }
+        
+        currentScene.getStylesheets().add("userinterface/style.css");
         
         return currentScene;
     }
@@ -62,11 +87,14 @@ public class AddTreeTransaction extends Transaction {
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
                 return updateStatusMessage;
-            case "getAddTreeTransaction":
+            case "getTreeTransaction":
                 return this;
             case "getTreeType":
                 loadTreeType();
                 return treeType;
+            case "getProperties":
+                getProperties();
+                return persistentState;
             default:
                 return null;
         }
@@ -89,10 +117,9 @@ public class AddTreeTransaction extends Transaction {
     private void processTransaction(Properties p) {
         updateStatusMessage = "";
         transactionErrorMessage = "";
-
         //existing Tree
         try {
-            String treeBarCode = p.getProperty("treeBarCode");
+            String treeBarCode = p.getProperty("BarCode");
             
             Tree oldTree = new Tree(treeBarCode);
             
@@ -100,9 +127,8 @@ public class AddTreeTransaction extends Transaction {
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 
-            
             // Add new Tree
-            Tree tree = new Tree(p); 
+            Tree tree = new Tree(p);
             tree.update();
             updateStatusMessage = (String)tree.getState("UpdateStatusMessage");
             transactionErrorMessage = updateStatusMessage;
@@ -112,5 +138,9 @@ public class AddTreeTransaction extends Transaction {
     private void loadTreeType(){
         String query = "SELECT Id, TypeDescription FROM Tree_Type";
         treeType = getSelectQueryResult(query);
+    }
+    
+    private Properties getProperties(){
+        return persistentState;
     }
 }

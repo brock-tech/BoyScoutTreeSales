@@ -98,7 +98,8 @@ public class RegisterScoutTransaction extends Transaction {
                     myLocale
             );
             
-            updateStatusMessage = formatter.format(new Object[] { memberId });
+            updateStatusMessage = String.format(myLocale,
+                    myMessages.getString("scoutAlreadyExistsMsg"), memberId);
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 
@@ -107,7 +108,6 @@ public class RegisterScoutTransaction extends Transaction {
             Scout scout = new Scout(p); 
             scout.update();
             updateStatusMessage = (String)scout.getState("UpdateStatusMessage");
-            transactionErrorMessage = updateStatusMessage;
         }
     }
 }
