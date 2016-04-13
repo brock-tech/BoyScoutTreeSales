@@ -37,6 +37,7 @@ public class ViewFactory {
             
             case "TreeDataView":
                 return new TreeTransactionView(model);
+                
             default:
                 return null;
         }
