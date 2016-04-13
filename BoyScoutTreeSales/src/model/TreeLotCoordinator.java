@@ -146,6 +146,7 @@ public class TreeLotCoordinator implements IModel, IView {
             case "EditScout":
             case "AddTree":
             case "EditTree":
+            case "EditOneTree":
             case "AddTreeType":
             case "EditTreeType":
                 doTransaction(key);

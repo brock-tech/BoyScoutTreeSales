@@ -9,12 +9,13 @@
 //********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
+import java.util.Iterator;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
 import java.util.Vector;
+import userinterface.WindowPosition;
 /**
  *
  * @author PHONG
@@ -57,7 +58,7 @@ public class EditTreeAction extends Transaction {
         
         return currentScene;
     }
-
+    
     @Override
     public Object getState(String key) {
         switch (key) {
@@ -94,6 +95,9 @@ public class EditTreeAction extends Transaction {
                 else
                     findAllTrees();
                 break;
+            case "Modify":
+                createAndShowTreeTransactionView((Properties)value);
+                break;
         }
         
         myRegistry.updateSubscribers(key, this);
@@ -107,7 +111,6 @@ public class EditTreeAction extends Transaction {
         trees.clear();
         String query = "SELECT * FROM " + myTableName + " WHERE BarCode LIKE '%" + barcode + "%';";
         
-        System.out.println(query);
         Vector allDataRetrieved = getSelectQueryResult(query);
         for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
             {
@@ -123,8 +126,8 @@ public class EditTreeAction extends Transaction {
     private void findAllTrees(){
         trees.clear();
 
-        String query = "SELECT BarCode, TreeType, SalePrice, CName, CPhoneNum, CEmail, " +
-              "DateStatusUpdated, TimeStatusUpdated FROM " + myTableName;
+        String query = "SELECT BarCode, TreeType, SalePrice, " +
+              "Notes, Status FROM " + myTableName;
         Vector allDataRetrieved = getSelectQueryResult(query);
         for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
             {
@@ -140,4 +143,24 @@ public class EditTreeAction extends Transaction {
     private Vector<Tree> getTrees(){
         return trees;
     }
+    
+    private void createAndShowTreeTransactionView(Properties props) {
+        Scene nextScene = (Scene) myViews.get("TreeTransactionView");
+        TreeTransaction tree = new TreeTransaction(props);
+
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("TreeTransactionView", tree);
+            nextScene = new Scene(newView);
+            myViews.put("TreeTransactionView", nextScene);
+        }
+        
+        switchToScene(nextScene);
+    }
+
+    public void switchToScene(Scene nextScene) {
+        myStage.setScene(nextScene);
+        myStage.sizeToScene();
+
+        WindowPosition.placeCenter(myStage);
+    } 
 }

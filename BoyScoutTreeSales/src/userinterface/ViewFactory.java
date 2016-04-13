@@ -17,11 +17,8 @@ public class ViewFactory {
             case "RegisterScoutTransactionView":
                 return new ScoutFormView(model);
             
-            case "AddTreeTransactionView":
-                return new AddTreeTransactionView(model);
-                
-            case "AddTreeTypeTransactionView":
-                return new AddTreeTypeFormView(model);
+            case "TreeTransactionView":
+                return new TreeTransactionView(model);
              
             case "EditTreeTypeTransactionView":
                 return new EditTreeTypeFormView(model);
@@ -34,6 +31,12 @@ public class ViewFactory {
                 
             case "ScoutDataView":
                 return new ScoutFormView(model);
+
+           case "AddTreeTypeTransactionView":
+                return new TreeTypeFormView(model);
+
+            case "EditTreeActionView":
+                return new EditTreeActionView(model);
 
             default:
                 return null;

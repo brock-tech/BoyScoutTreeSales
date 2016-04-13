@@ -22,8 +22,8 @@ public class TransactionFactory {
                 return new EditScoutTransaction();
 				
             case "AddTree":
-                return new AddTreeTransaction();
-				
+                return new TreeTransaction();
+
             case "AddTreeType":
                 return new AddTreeTypeTransaction();
 				
@@ -32,7 +32,10 @@ public class TransactionFactory {
 					
             case "EditTree":
                 return new EditTreeAction();
-				
+
+            case "EditOneTree":
+                return new TreeTransaction();
+
             default: return null;
         }
     }
