@@ -11,6 +11,7 @@ package model;
 
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -46,7 +47,7 @@ public class EditTreeAction extends Transaction {
 
     @Override
     protected void getMessagesBundle() {
-        
+       myMessages = ResourceBundle.getBundle("model.i18n.TreeTransaction", myLocale);
     }
 
     @Override
@@ -90,8 +91,6 @@ public class EditTreeAction extends Transaction {
             case "getTreeList":
                 return trees;
             case "TreeToDisplay":
-                System.out.println("ICIII");
-                System.out.println(selectedTree);
                 return selectedTree;                
             default:
                 return null;
@@ -116,8 +115,7 @@ public class EditTreeAction extends Transaction {
                     findAllTrees();
                 break;
             case "Modify":
-                persistentState = (Properties) value;
-                selectedTree = findTreeByBarCode(persistentState.getProperty("BarCode"));
+                selectedTree = findTreeByBarCode((String)value);
                 createAndShowTreeTransactionView();
                 break;
             case "Cancel":

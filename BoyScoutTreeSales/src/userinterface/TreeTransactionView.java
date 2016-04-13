@@ -86,14 +86,14 @@ public class TreeTransactionView extends BaseView {
         treeBarCode = new TextField();
         treeBarCode.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Tree Barcode:"), 
+                myResources.getProperty("TreeBarCode"), 
                 treeBarCode);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
         
         getTreeTypeField();
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Tree Type:"),
+                myResources.getProperty("TreeType"),
                 treeType);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 1);
@@ -101,7 +101,7 @@ public class TreeTransactionView extends BaseView {
         salePrice = new TextField();
         salePrice.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Sale Price:"),
+                myResources.getProperty("SalePrice"),
                 salePrice);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 2);
@@ -109,14 +109,14 @@ public class TreeTransactionView extends BaseView {
         notes = new TextField();
         notes.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Notes:"),
+                myResources.getProperty("Notes"),
                 notes);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 3);
         
         ObservableList<String> options = FXCollections.observableArrayList(
-            myResources.getProperty("Avalaible"),
-            myResources.getProperty("Unvalaible")
+            myResources.getProperty("Available"),
+            myResources.getProperty("Unavailable")
         );
         
         status = new ComboBox(options);
@@ -149,9 +149,7 @@ public class TreeTransactionView extends BaseView {
         if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
-        //else if (event.getSource() == clearFormButton) {
-        //    clearForm();
-        //}
+
         else {
             if (validate()){                
 // Verify information in fields and submit
@@ -173,13 +171,13 @@ public class TreeTransactionView extends BaseView {
         String treeBar = treeBarCode.getText();
         String price = salePrice.getText();
         
-        if ((treeBar == null) || treeBar.equals("")) {
-            displayErrorMessage("Tree Bar Code required!");
+        if ((treeBar == null) || treeBar.equals("") || isNumber(treeBar) == false) {
+            displayErrorMessage(myResources.getProperty("NoBarCode"));
             treeBarCode.requestFocus();
             return false;
         }
         else if ((price == null) || price.equals("")) {
-            displayErrorMessage("Sale Price required!");
+            displayErrorMessage(myResources.getProperty("NoSalePrice"));
             salePrice.requestFocus();
             return false;
         }
@@ -242,4 +240,13 @@ public class TreeTransactionView extends BaseView {
         str = oldstring.replace("}", "");
         return str;
     }
+    
+    protected boolean isNumber(String string) {
+    try {
+        Long.parseLong(string);
+    } catch (Exception e) {
+        return false;
+    }
+    return true;
+}
 }

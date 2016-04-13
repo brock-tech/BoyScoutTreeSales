@@ -70,3 +70,6 @@
 [4/12/16 11:05 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
 [4/12/16 11:07 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
 [4/12/16 11:08 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'CName' in 'field list'>
+[4/13/16 6:52 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/13/16 7:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'where clause'>
+[4/13/16 7:06 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'field list'>

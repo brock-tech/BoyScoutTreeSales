@@ -80,7 +80,7 @@ public class EditTreeActionView extends BaseView {
         treeBarCode = new TextField();
         treeBarCode.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Tree Barcode:"),
+                myResources.getProperty("TreeBarCode"),
                 treeBarCode);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
@@ -91,7 +91,7 @@ public class EditTreeActionView extends BaseView {
         tableOfTrees = new TableView<TreeTableModel>();
         tableOfTrees.getSelectionModel();
         
-        TableColumn BarCodeColumn = new TableColumn(myResources.getProperty("BarCode"));
+        TableColumn BarCodeColumn = new TableColumn(myResources.getProperty("TreeBarCode"));
         BarCodeColumn.setMinWidth(100);
         BarCodeColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("BarCode"));
@@ -140,7 +140,7 @@ public class EditTreeActionView extends BaseView {
 //        clearFormButton.setPrefWidth(100);
 //        buttonContainer.getChildren().add(clearFormButton);
         
-        cancelButton = new Button(myResources.getProperty("Cancel"));
+        cancelButton = new Button(myResources.getProperty("Back"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
@@ -164,17 +164,14 @@ public class EditTreeActionView extends BaseView {
             getEntryTableModelValuesByBarCode();
         }
         else if (event.getSource() == modifyButton){
-            TreeTableModel tree = tableOfTrees.getSelectionModel().getSelectedItem();                        
-            props.setProperty("BarCode", tree.getBarCode());  
-            props.setProperty("TreeType", tree.getBarCode());  
-            props.setProperty("SalePrice", tree.getBarCode());  
-            props.setProperty("Notes", tree.getBarCode());  
-            props.setProperty("Status", tree.getBarCode());  
-            myModel.stateChangeRequest("Modify", props);
+            TreeTableModel itemSelected = tableOfTrees.getSelectionModel().getSelectedItem();
+            if (itemSelected == null) {
+                System.out.println("No item selected");
+                displayErrorMessage(myResources.getProperty("errNoTreeSelected"));
+            }
+            else
+                myModel.stateChangeRequest("Modify", itemSelected.getBarCode());
         }
-        //else if (event.getSource() == clearFormButton) {
-        //    clearForm();
-        //}
     }
     
     @Override
