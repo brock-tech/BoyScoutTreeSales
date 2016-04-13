@@ -49,7 +49,7 @@ public class Scout extends EntityBase {
         myMessages = ResourceBundle.getBundle("model.i18n.Scout", myLocale);
         
         String query = String.format(
-                "SELECT * FROM %s WHERE (TroopID = %s)",
+                "SELECT * FROM %s WHERE (MemberID = '%s')",
                 myTableName,
                 troopId);
         
