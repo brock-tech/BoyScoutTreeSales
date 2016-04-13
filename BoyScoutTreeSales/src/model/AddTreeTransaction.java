@@ -52,6 +52,8 @@ public class AddTreeTransaction extends Transaction {
             myViews.put("AddTreeTransactionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 

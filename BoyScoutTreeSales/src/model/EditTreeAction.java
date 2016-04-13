@@ -55,6 +55,8 @@ public class EditTreeAction extends Transaction {
             myViews.put("EditTreeActionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 
