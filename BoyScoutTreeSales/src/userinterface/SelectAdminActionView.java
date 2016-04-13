@@ -66,32 +66,32 @@ public class SelectAdminActionView extends BaseView {
         grid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
         
         addScoutButton = new Button(myResources.getProperty("addScoutButtonText"));
-        addScoutButton.setPrefSize(150.0, 25.0);
+        addScoutButton.setPrefSize(200.0, 25.0);
         addScoutButton.setOnAction(buttonHandler);
         grid.add(addScoutButton, 0, 0);
         
         editScoutButton = new Button(myResources.getProperty("editScoutButtonText"));
-        editScoutButton.setPrefSize(150.0, 25.0);
+        editScoutButton.setPrefSize(200.0, 25.0);
         editScoutButton.setOnAction(buttonHandler);
         grid.add(editScoutButton, 0, 1);
         
         addTreeButton = new Button(myResources.getProperty("addTreeButtonText"));
-        addTreeButton.setPrefSize(150.0, 25.0);
+        addTreeButton.setPrefSize(200.0, 25.0);
         addTreeButton.setOnAction(buttonHandler);
         grid.add(addTreeButton, 1, 0);
         
         editTreeButton = new Button(myResources.getProperty("editTreeButtonText"));
-        editTreeButton.setPrefSize(150.0, 25.0);
+        editTreeButton.setPrefSize(200.0, 25.0);
         editTreeButton.setOnAction(buttonHandler);
         grid.add(editTreeButton, 1, 1);
         
         addTreeTypeButton = new Button(myResources.getProperty("addTreeTypeButtonText"));
-        addTreeTypeButton.setPrefSize(150.0, 25.0);
+        addTreeTypeButton.setPrefSize(200.0, 25.0);
         addTreeTypeButton.setOnAction(buttonHandler);
         grid.add(addTreeTypeButton, 2, 0);
         
         editTreeTypeButton = new Button(myResources.getProperty("editTreeTypeButtonText"));
-        editTreeTypeButton.setPrefSize(150.0, 25.0);
+        editTreeTypeButton.setPrefSize(200.0, 25.0);
         editTreeTypeButton.setOnAction(buttonHandler);
         grid.add(editTreeTypeButton, 2, 1);
         
