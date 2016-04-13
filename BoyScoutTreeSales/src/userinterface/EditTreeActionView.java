@@ -46,7 +46,7 @@ public class EditTreeActionView extends BaseView {
     protected TextField treeBarCode;
     protected Button searchButton;
     protected TableView<TreeTableModel> tableOfTrees;
-    protected Button submitButton;
+    protected Button modifyButton;
 //    protected Button clearFormButton;
     protected Button cancelButton;
 
@@ -103,34 +103,19 @@ public class EditTreeActionView extends BaseView {
         SalePriceColumn.setMinWidth(100);
         SalePriceColumn.setCellValueFactory(
                       new PropertyValueFactory<TreeTableModel, String>("SalePrice"));
-
-        TableColumn CNameColumn = new TableColumn("CName") ;
-        CNameColumn.setMinWidth(100);
-        CNameColumn.setCellValueFactory(
-                      new PropertyValueFactory<TreeTableModel, String>("CName"));
-
-        TableColumn CPhoneNumColumn = new TableColumn("CPhoneNum") ;
-        CPhoneNumColumn.setMinWidth(100);
-        CPhoneNumColumn.setCellValueFactory(
-                      new PropertyValueFactory<TreeTableModel, String>("CPhoneNum"));
-
-        TableColumn CemailColumn = new TableColumn("Cemail") ;
-        CemailColumn.setMinWidth(100);
-        CemailColumn.setCellValueFactory(
-                      new PropertyValueFactory<TreeTableModel, String>("Cemail"));
         
-        TableColumn DateStatusUpdatedColumn = new TableColumn("DateStatusUpdated") ;
-        DateStatusUpdatedColumn.setMinWidth(100);
-        DateStatusUpdatedColumn.setCellValueFactory(
-                      new PropertyValueFactory<TreeTableModel, String>("DateStatusUpdated"));
+        TableColumn NotesColumn = new TableColumn("Notes") ;
+        NotesColumn.setMinWidth(100);
+        NotesColumn.setCellValueFactory(
+                      new PropertyValueFactory<TreeTableModel, String>("Notes"));
         
-        TableColumn TimeStatusUpdatedColumn = new TableColumn("TimeStatusUpdated") ;
-        TimeStatusUpdatedColumn.setMinWidth(100);
-        TimeStatusUpdatedColumn.setCellValueFactory(
-                      new PropertyValueFactory<TreeTableModel, String>("TimeStatusUpdated"));
+        TableColumn StatusColumn = new TableColumn("Status") ;
+        StatusColumn.setMinWidth(100);
+        StatusColumn.setCellValueFactory(
+                      new PropertyValueFactory<TreeTableModel, String>("Status"));
         
         tableOfTrees.getColumns().addAll(BarCodeColumn, TreeTypeColumn, SalePriceColumn, 
-            CNameColumn, CPhoneNumColumn, CemailColumn, DateStatusUpdatedColumn, TimeStatusUpdatedColumn);
+             NotesColumn, StatusColumn);
 
         ScrollPane scrollPane = new ScrollPane();
                     scrollPane.setPrefSize(520, 150);
@@ -143,10 +128,10 @@ public class EditTreeActionView extends BaseView {
         searchButton.setPrefWidth(100);
         buttonContainer.getChildren().add(searchButton);
         
-        submitButton = new Button("Submit");
-        submitButton.setOnAction(submitHandler);
-        submitButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(submitButton);
+        modifyButton = new Button("Modify");
+        modifyButton.setOnAction(submitHandler);
+        modifyButton.setPrefWidth(100);
+        buttonContainer.getChildren().add(modifyButton);
         
 //        clearFormButton = new Button("Clear Form");
 //        clearFormButton.setOnAction(submitHandler);
@@ -169,13 +154,21 @@ public class EditTreeActionView extends BaseView {
         Properties props = new Properties();
         
         props.setProperty("BarCode", treeBarCode.getText());
-        System.out.println(props);
         if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
         else if (event.getSource() == searchButton){
             myModel.stateChangeRequest("Search", props);
             getEntryTableModelValuesByBarCode();
+        }
+        else if (event.getSource() == modifyButton){
+            TreeTableModel tree = tableOfTrees.getSelectionModel().getSelectedItem();                        
+            props.setProperty("BarCode", tree.getBarCode());  
+            props.setProperty("TreeType", tree.getBarCode());  
+            props.setProperty("SalePrice", tree.getBarCode());  
+            props.setProperty("Notes", tree.getBarCode());  
+            props.setProperty("Status", tree.getBarCode());  
+            myModel.stateChangeRequest("Modify", props);
         }
         //else if (event.getSource() == clearFormButton) {
         //    clearForm();
