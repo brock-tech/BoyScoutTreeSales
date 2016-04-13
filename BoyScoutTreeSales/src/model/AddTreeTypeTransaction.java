@@ -40,7 +40,7 @@ public class AddTreeTypeTransaction extends Transaction {
     @Override
     protected void getMessagesBundle() 
     {
-             myMessages = ResourceBundle.getBundle("model.i18n.AddTreeTypeTransaction", myLocale);
+             myMessages = ResourceBundle.getBundle("model.i18n.TreeType", myLocale);
     }
 
     @Override
@@ -95,22 +95,24 @@ public class AddTreeTypeTransaction extends Transaction {
                 TreeType oldTreeType = new TreeType(barcodePrefix);
                 barcodePrefix = (String)oldTreeType.getState("BarcodePrefix");
                 
-                formatter.applyPattern("existingMsg");
-                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
+               updateStatusMessage = String.format(myMessages.getString("multipleTTFoundMsg"), 
+                       p.getProperty("BarcodePrefix"));
                 transactionErrorMessage = updateStatusMessage;
            } 
            catch (InvalidPrimaryKeyException exc) 
            { 
                 // Add new TreeType
                 String barcodePrefix = p.getProperty("BarcodePrefix");
-                TreeType newTreeType = new TreeType(p); 
-                newTreeType.update();
-
-                formatter.applyPattern("insertSuccessMsg");
                 
-                updateStatusMessage = formatter.format(new Object[] { barcodePrefix });
+                TreeType newTreeType = new TreeType(p);
+               // System.out.println("try here " + barcodePrefix);
+                
+                newTreeType.update();
+            updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 
+             newTreeType.getState("ID"),barcodePrefix) ;
                 transactionErrorMessage = updateStatusMessage;
             }
+           System.out.println(transactionErrorMessage);
     }
 }
 

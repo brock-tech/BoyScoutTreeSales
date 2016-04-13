@@ -75,6 +75,8 @@ public class TreeTransaction extends Transaction {
             myViews.put("TreeTransactionView", currentScene);
         }
         
+        currentScene.getStylesheets().add("userinterface/style.css");
+        
         return currentScene;
     }
 

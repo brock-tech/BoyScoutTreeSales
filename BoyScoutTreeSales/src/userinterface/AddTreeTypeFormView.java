@@ -37,7 +37,7 @@ import model.TreeTypeCollection;
  *
  * @author Andrew
  */
-public class TreeTypeFormView extends BaseView {
+public class AddTreeTypeFormView extends BaseView {
     
     protected TextField barcodePrefixField;
     protected TextField descriptionField;
@@ -49,7 +49,7 @@ public class TreeTypeFormView extends BaseView {
 
     
     
-    public TreeTypeFormView(IModel model) {
+    public AddTreeTypeFormView(IModel model) {
         super(model, "TreeTypeFormView");
       
         myModel.subscribe("UpdateStatusMessage", this);
@@ -102,20 +102,6 @@ public class TreeTypeFormView extends BaseView {
         );
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 2);
-        
-        
-        //String className = new Exception().getStackTrace()[0].getClassName();
-        //if(className.equals("EditTreeTypeTransaction"))
-        //{
-            searchField = new TextField();
-            searchField.setOnAction(submitHandler);
-            formItem = formItemBuilder.buildControl(
-                    myResources.getProperty("searchField"),
-                    searchField
-            );
-            formItem.setPrefWidth(300);
-            formGrid.add(formItem, 0, 3);
-        //}
        
          HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -141,7 +127,8 @@ public class TreeTypeFormView extends BaseView {
         return content;
     }
     
-    protected void processAction(Event event) {
+    protected void processAction(Event event) 
+    {
         clearErrorMessage();
         
         if (event.getSource() == cancelButton) 
@@ -149,35 +136,19 @@ public class TreeTypeFormView extends BaseView {
             myModel.stateChangeRequest("Cancel", "");
         }
         else
-        {
-            if(!searchField.getText().equals(""))
-            {
-                 MessageFormat formatter = new MessageFormat("", myLocale);
-                try
-                {
-                    TreeTypeCollection searchedTT = new TreeTypeCollection();
-                    searchedTT.findTypesWithBarcodePrefix(searchField.getText());  
-                }
-                catch(InvalidPrimaryKeyException e)
-                {
-                    searchField.setText("Tree Type Not Found");
-                }
+        {      // Verify information in fields
+         if (validate()) 
+         {
+             // Submit data
+             Properties newTreeTypeData = new Properties();
 
-            }
-            else {
-                // Verify information in fields
-                if (validate()) 
-                {
-                    // Submit data
-                    Properties newTreeTypeData = new Properties();
-                   
-                    newTreeTypeData.setProperty("TypeDescription", descriptionField.getText());
-                    newTreeTypeData.setProperty("Cost", costField.getText());
-                    newTreeTypeData.setProperty("BarcodePrefix", barcodePrefixField.getText());
-                   
-                    myModel.stateChangeRequest("Submit", newTreeTypeData);
-                }
-            }
+             newTreeTypeData.setProperty("TypeDescription", descriptionField.getText());
+             newTreeTypeData.setProperty("Cost", costField.getText());
+             newTreeTypeData.setProperty("BarcodePrefix", barcodePrefixField.getText());
+
+             //System.out.println("barcode " + barcodePrefixField.getText() );
+             myModel.stateChangeRequest("Submit", newTreeTypeData);
+         }
         }
     }
     
