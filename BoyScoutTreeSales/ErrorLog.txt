@@ -63,3 +63,10 @@
 [4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
 [4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
 [4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/12/16 10:11 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/12/16 10:19 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 10:34 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:02 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:05 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:07 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:08 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'CName' in 'field list'>

@@ -18,11 +18,13 @@ public class TransactionFactory {
             case "RegisterScout":
                 return new RegisterScoutTransaction();
             case "AddTree":
-                return new AddTreeTransaction();
+                return new TreeTransaction();
             case "AddTreeType":
                 return new AddTreeTypeTransaction();
             case "EditTree":
                 return new EditTreeAction();
+            case "EditOneTree":
+                return new TreeTransaction();
             default: return null;
         }
     }
