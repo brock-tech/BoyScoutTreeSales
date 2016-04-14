@@ -80,7 +80,7 @@ public class AddTreeTransactionView extends BaseView {
         /*
         getTreeTypeField();
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Tree Type:"),
+                myResources.getProperty("TreeType"),
                 treeType);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 1);
@@ -88,7 +88,7 @@ public class AddTreeTransactionView extends BaseView {
         salePrice = new TextField();
         salePrice.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Sale Price:"),
+                myResources.getProperty("SalePrice"),
                 salePrice);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 2);
@@ -104,8 +104,8 @@ public class AddTreeTransactionView extends BaseView {
         
         /*
         ObservableList<String> options = FXCollections.observableArrayList(
-            myResources.getProperty("Avalaible"),
-            myResources.getProperty("Unvalaible")
+            myResources.getProperty("Available"),
+            myResources.getProperty("Unavailable")
         );
         
         statusBox = new ComboBox(options);

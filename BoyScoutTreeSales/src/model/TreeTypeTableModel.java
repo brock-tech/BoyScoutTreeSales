@@ -24,35 +24,35 @@ public class TreeTypeTableModel
 	public TreeTypeTableModel(Vector<String> treeTypeData)
 	{
 		ID =  new SimpleStringProperty(treeTypeData.elementAt(0));
-		BarcodePrefix =  new SimpleStringProperty(treeTypeData.elementAt(1));
-		TypeDescription =  new SimpleStringProperty(treeTypeData.elementAt(2));
-		Cost =  new SimpleStringProperty(treeTypeData.elementAt(3));
+		BarcodePrefix =  new SimpleStringProperty(treeTypeData.elementAt(3));
+		TypeDescription =  new SimpleStringProperty(treeTypeData.elementAt(1));
+		Cost =  new SimpleStringProperty(treeTypeData.elementAt(2));
 	}
 //------------------------Getters---------------------------------------------------
-	public SimpleStringProperty getTreeTypeID() 
+	public String getTreeTypeID() 
 	{
-		return ID;
+		return ID.get();
 	}
-	public SimpleStringProperty getBarcodePrefix() 
+	public String getBarcodePrefix() 
 	{
-		return BarcodePrefix;
+		return BarcodePrefix.get();
 	}
-	public SimpleStringProperty getDescription() 
+	public String getDescription() 
 	{
-		return TypeDescription;
+		return TypeDescription.get();
 	}
-	public SimpleStringProperty getCost() 
+	public String getCost() 
 	{
-		return Cost;
+		return Cost.get();
 	}
 	
 	public void setTreeTypeID(String c) 
 	{
-		ID.set(c);;
+		ID.set(c);
 	}
 	public void setBarcodePrefix(String sc) 
 	{
-		BarcodePrefix.set(sc);;
+		BarcodePrefix.set(sc);
 	}
 	public void setDescription(String z)
 	{

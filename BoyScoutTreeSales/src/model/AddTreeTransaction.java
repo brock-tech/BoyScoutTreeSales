@@ -11,6 +11,7 @@ package model;
 
 import exception.InvalidPrimaryKeyException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -37,7 +38,7 @@ public class AddTreeTransaction extends Transaction {
 
     @Override
     protected void getMessagesBundle() {
-        
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeTransaction", myLocale);
     }
 
     @Override
@@ -91,8 +92,8 @@ public class AddTreeTransaction extends Transaction {
             String treeBarCode = p.getProperty("BarCode");
             
             Tree oldTree = new Tree(treeBarCode);
-            
-            updateStatusMessage = "Tree with Bar Code "+treeBarCode+" already exists.";
+            updateStatusMessage = String.format(myMessages.getString("multipleTFoundMsg"), 
+                       p.getProperty("BarCode"));
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 
