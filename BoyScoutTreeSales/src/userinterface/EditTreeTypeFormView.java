@@ -102,17 +102,17 @@ public class EditTreeTypeFormView extends BaseView {
         idColumn.setVisible(false);
         
         TableColumn typeColumn = new TableColumn(myResources.getProperty("TypeDescription"));
-        typeColumn.setMinWidth(125);
+        typeColumn.setMinWidth(275);
         typeColumn.setCellValueFactory(
                 new PropertyValueFactory("TypeDescription"));
         
         TableColumn costColumn = new TableColumn(myResources.getProperty("Cost"));
-        costColumn.setMinWidth(125);
+        costColumn.setMinWidth(250);
         costColumn.setCellValueFactory(
                 new PropertyValueFactory("Cost"));
         
         TableColumn barcodeColumn = new TableColumn(myResources.getProperty("BarcodePrefix"));
-        barcodeColumn.setMinWidth(125);
+        barcodeColumn.setMinWidth(250);
         barcodeColumn.setCellValueFactory(
                 new PropertyValueFactory("BarcodePrefix"));
         
