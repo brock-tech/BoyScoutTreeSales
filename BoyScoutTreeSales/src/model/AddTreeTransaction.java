@@ -100,7 +100,8 @@ public class AddTreeTransaction extends Transaction {
             // Add new Tree
             Tree tree = new Tree(p);
             tree.insert();
-            updateStatusMessage = (String)tree.getState("UpdateStatusMessage");
+            updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 
+                       p.getProperty("BarCode"));
             transactionErrorMessage = updateStatusMessage;
         }
     }
