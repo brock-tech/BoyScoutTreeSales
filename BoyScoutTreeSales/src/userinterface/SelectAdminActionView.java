@@ -31,6 +31,7 @@ public class SelectAdminActionView extends BaseView {
     Button editScoutButton;
     Button addTreeButton;
     Button editTreeButton;
+    Button removeTreeButton;
     Button addTreeTypeButton;
     Button editTreeTypeButton;
     Button backButton;
@@ -85,6 +86,11 @@ public class SelectAdminActionView extends BaseView {
         editTreeButton.setOnAction(buttonHandler);
         grid.add(editTreeButton, 1, 1);
         
+        removeTreeButton = new Button(myResources.getProperty("removeTreeButtonText"));
+        removeTreeButton.setPrefSize(200.0, 25.0);
+        removeTreeButton.setOnAction(buttonHandler);
+        grid.add(removeTreeButton, 1, 2);
+        
         addTreeTypeButton = new Button(myResources.getProperty("addTreeTypeButtonText"));
         addTreeTypeButton.setPrefSize(200.0, 25.0);
         addTreeTypeButton.setOnAction(buttonHandler);
@@ -107,25 +113,28 @@ public class SelectAdminActionView extends BaseView {
     protected void processAction(Event evt) {
         Object sender = evt.getSource();
         
-        if (sender.equals(backButton)) {
+        if (sender == backButton) {
             myModel.stateChangeRequest("CancelTransaction", "");
         }
-        else if (sender.equals(addScoutButton)) {
+        else if (sender == addScoutButton) {
             myModel.stateChangeRequest("RegisterScout", "");
         }
-        else if (sender.equals(editScoutButton)) {
+        else if (sender == editScoutButton) {
             myModel.stateChangeRequest("EditScout", "");
         }
-        else if (sender.equals(addTreeButton)) {
+        else if (sender == addTreeButton) {
             myModel.stateChangeRequest("AddTree", "");
         }
-        else if (sender.equals(editTreeButton)) {
+        else if (sender == editTreeButton) {
             myModel.stateChangeRequest("EditTree", "");
         }
-        else if (sender.equals(addTreeTypeButton)) {
+        else if (sender == removeTreeButton) {
+            myModel.stateChangeRequest("RemoveTree", "");
+        }
+        else if (sender == addTreeTypeButton) {
             myModel.stateChangeRequest("AddTreeType", "");
         }
-        else if (sender.equals(editTreeTypeButton)) {
+        else if (sender == editTreeTypeButton) {
             myModel.stateChangeRequest("EditTreeType", "");
         }
     }

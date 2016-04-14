@@ -51,12 +51,29 @@ public class TreeTypeCollection extends EntityBase {
         }
     }
     
-    public TreeType retrieve(String typeId) {
+    public void findAllTreeTypes() {
+        treeTypes = new Vector<>();
+        
+        String query = "SELECT * FROM "+myTableName;
+        
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        
+        if (allDataRetrieved != null) {
+            for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+                Properties nextTypeData = (Properties)allDataRetrieved.elementAt(cnt);
+                
+                TreeType type = new TreeType(nextTypeData);
+                addTreeType(type);
+            }
+        }
+    }
+    
+    public TreeType retrieve(String barcodePrefix) {
         TreeType retValue = null;
         for (int cnt = 0; cnt < treeTypes.size(); cnt++) {
             TreeType nextType = treeTypes.elementAt(cnt);
-            String nextTypeId = (String)nextType.getState("typeId");
-            if (nextTypeId.equals(typeId)) {
+            String nextTypeId = (String)nextType.getState("BarcodePrefix");
+            if (nextTypeId.equals(barcodePrefix)) {
                 retValue = nextType;
                 break;
             }
@@ -64,12 +81,38 @@ public class TreeTypeCollection extends EntityBase {
         return retValue;
     }
     
-    private void addTreeType(TreeType t) {
-        treeTypes.add(t);
+    private int findIndexToAdd(TreeType type) {
+        int low = 0;
+        int high = treeTypes.size()-1;
+        int middle;
+        
+        while (low <= high) {
+            middle = (low + high) / 2;
+            TreeType midType = treeTypes.elementAt(middle);
+
+            int result = TreeType.compare(type, midType);
+
+            if (result == 0) {
+                return middle;
+            } else if (result < 0) {
+                high = middle - 1;
+            } else {
+                low = middle + 1;
+            }
+        }
+        return low;
+    }
+    
+    private void addTreeType(TreeType type) {
+        int index = findIndexToAdd(type);
+        treeTypes.insertElementAt(type, index);
     }
 
     @Override
     public Object getState(String key) {
+        if (key.equals("TreeTypes")) {
+            return treeTypes;
+        }
         return null;
     }
 

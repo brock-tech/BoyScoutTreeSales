@@ -90,7 +90,8 @@ public class ScoutCollection extends EntityBase implements IView {
         
         String query = "SELECT * FROM "+myTableName
                 +" WHERE (FirstName LIKE '%"+firstName
-                +"%') AND (LastName LIKE '%"+lastName+"%')";
+                +"%') AND (LastName LIKE '%"+lastName+"%')"
+                +"AND (Status != 'Inactive')";
         
         Vector allDataRetrieved = getSelectQueryResult(query);
         

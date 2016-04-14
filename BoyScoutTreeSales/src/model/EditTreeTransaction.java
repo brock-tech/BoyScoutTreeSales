@@ -9,37 +9,32 @@
 //********************************************************************
 package model;
 
-import java.util.Iterator;
+import exception.InvalidPrimaryKeyException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
-import java.util.Vector;
-import userinterface.WindowPosition;
+
 /**
  *
  * @author PHONG
  */
-public class EditTreeAction extends Transaction {
-    String updateStatusMessage;
-    private Vector<Tree> trees;
-    private Tree selectedTree;
-    private static final String myTableName = "Tree";
-    private Properties persistentState;
+public class EditTreeTransaction extends Transaction {
+    protected String updateStatusMessage;
+    protected Tree selectedTree;
     
-    public EditTreeAction(){
+    public EditTreeTransaction(){
         super();
-        
-        trees = new Vector<Tree>();
     }
     
     @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
-        dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
+        dependencies.put("SubmitBarcode", "TransactionError,UpdateStatusMessage,TreeToDisplay");
+        dependencies.put("UpdateTree", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        dependencies.put("Back", "CancelTransaction");
-        dependencies.put("EditTree", "TreeToDisplay");
 
         myRegistry.setDependencies(dependencies);
     }
@@ -51,12 +46,12 @@ public class EditTreeAction extends Transaction {
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("EditTreeActionView");
+        Scene currentScene = myViews.get("EnterTreeBarcodeView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("EditTreeActionView", this);
+            View newView = ViewFactory.createView("EnterTreeBarcodeView", this);
             currentScene = new Scene(newView);
-            myViews.put("EditTreeActionView", currentScene);
+            myViews.put("EnterTreeBarcodeView", currentScene);
         }
         
         currentScene.getStylesheets().add("userinterface/style.css");
@@ -64,12 +59,15 @@ public class EditTreeAction extends Transaction {
         return currentScene;
     }
 
-    private void createAndShowTreeTransactionView() {
-        Scene currentScene = (Scene) myViews.get("TreeTransactionView");
+    private void createAndShowTreeView() {
+        Scene currentScene = (Scene) myViews.get("EditTreeTransactionView");
         if (currentScene == null) {
-            View newView = ViewFactory.createView("TreeDataView", this);
+            View newView = ViewFactory.createView("EditTreeTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("TreeTransactionView", currentScene);
+            
+            currentScene.getStylesheets().add("userinterface/style.css");
+            
+            myViews.put("EditTreeTransactionView", currentScene);
         }
         
         swapToView(currentScene);
@@ -80,19 +78,13 @@ public class EditTreeAction extends Transaction {
         switch (key) {
             case "TransactionError":
                 return transactionErrorMessage;
+                
             case "UpdateStatusMessage":
                 return updateStatusMessage;
-            case "getTree":
-                return this;
-            case "getAllTrees":
-                findAllTrees();
-                return trees;
-            case "getTreeList":
-                return trees;
+                
             case "TreeToDisplay":
-                System.out.println("ICIII");
-                System.out.println(selectedTree);
-                return selectedTree;                
+                return selectedTree;              
+                
             default:
                 return null;
         }
@@ -104,9 +96,16 @@ public class EditTreeAction extends Transaction {
             case "DoYourJob":
                 doYourJob();
                 break;
-            case "Submit":
+                
+            case "SubmitBarcode":
+                processBarcode((String)value);
+                break;
+                
+            case "UpdateTree":
                 processTransaction((Properties)value);
                 break;
+                
+                /*
             case "Search":
                 if (value != null){
                     persistentState = (Properties) value;
@@ -123,15 +122,37 @@ public class EditTreeAction extends Transaction {
             case "Cancel":
                 swapToView(createView());
                 break;
+                */
         }
 
         myRegistry.updateSubscribers(key, this);
     }
     
-    private void processTransaction(Properties p) {
-
+    protected void processBarcode(String bc) {
+        try {
+            selectedTree = new Tree(bc);
+            createAndShowTreeView();
+        } catch (InvalidPrimaryKeyException ex) {
+            transactionErrorMessage = "Error: No Tree exists under that Bar Code!";
+        }
     }
     
+    protected void processTransaction(Properties p) {
+        if (!selectedTree.getState("Status").equals(p.getProperty("Status"))) {
+            LocalDateTime currentDate = LocalDateTime.now();
+            String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+            selectedTree.stateChangeRequest("DateStatusUpdated", dateLastUpdate);
+        }
+        selectedTree.stateChangeRequest("Notes", p.getProperty("Notes"));
+        
+        selectedTree.update();
+        updateStatusMessage = (String)selectedTree.getState("UpdateStatusMessage");
+        transactionErrorMessage = updateStatusMessage;
+        
+        swapToView(createView());
+    }
+    
+    /*
     private Tree findTreeByBarCode(String barcode){
         String query = "SELECT * FROM " + myTableName + " WHERE BarCode = " + barcode + ";";    
     
@@ -183,5 +204,6 @@ public class EditTreeAction extends Transaction {
         myStage.sizeToScene();
 
         WindowPosition.placeCenter(myStage);
-    } 
+    }
+    */
 }

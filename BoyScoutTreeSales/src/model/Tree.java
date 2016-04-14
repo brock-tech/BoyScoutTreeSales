@@ -90,6 +90,12 @@ public class Tree extends EntityBase {
             }
         }
     }
+    
+    public static int compare(Tree t1, Tree t2) {
+        String barcode1 = (String)t1.getState("BarCode");
+        String barcode2 = (String)t2.getState("BarCode");
+        return barcode1.compareTo(barcode2);
+    }
 
         /** */
     //--------------------------------------------------------------------------
@@ -99,50 +105,53 @@ public class Tree extends EntityBase {
         myRegistry.setDependencies(dependencies);
     }
     
-        /** */
-    //--------------------------------------------------------------------------
-    public void update() {
-        updateStateInDatabase();
-    }
-    
     /** */
     //--------------------------------------------------------------------------
-    private void updateStateInDatabase() {
-        if ((persistentState.getProperty("isNew") == null) &&
-                (persistentState.getProperty("BarCode") != null)) { // Update Existing
-            try {
-                persistentState.remove("isNew");
+    public void update() {
+        try {
+            Properties whereClause = new Properties();
+            
+            whereClause.setProperty("BarCode", persistentState.getProperty("BarCode"));
 
-                Properties whereClause = new Properties();
+            updatePersistentState(mySchema, persistentState, whereClause);
 
-                //whereClause.setProperty("ScoutID", persistentState.getProperty("ScoutID"));
-                whereClause.setProperty("BarCode", persistentState.getProperty("BarCode"));
+            updateStatusMessage = String.format(
+                    "Data for Tree %s installed successfully in database!",
+                    persistentState.getProperty("BarCode")
+            );
 
-                updatePersistentState(mySchema, persistentState, whereClause);
+        } catch (SQLException ex) {
+            updateStatusMessage = "Error in installing Tree data in database!";
+        }
+    }
+    
+    public void insert() {
+        try {
+            insertPersistentState(mySchema, persistentState);
 
-                updateStatusMessage = String.format(
+            updateStatusMessage = String.format(
                     "Data for new Tree : %s installed successfully in database!",
                     persistentState.getProperty("BarCode")
-                );
+            );
 
-            } catch (SQLException ex) {
-                updateStatusMessage = "Error in installing Tree data in database!";
-            }
-        } 
-        else { // Insert New
-            try {
-                persistentState.remove("isNew");
-
-                insertPersistentState(mySchema, persistentState);
-
-                updateStatusMessage = String.format(
-                    "Data for new Tree : %s installed successfully in database!",
+        } catch (SQLException ex) {
+            updateStatusMessage = "Error in installing Tree data in database!";
+        }
+    }
+    
+    public void delete() {
+        try {
+            Properties deleteClause = new Properties();
+            deleteClause.setProperty("BarCode", persistentState.getProperty("BarCode"));
+            
+            deletePersistentState(mySchema, deleteClause);
+            
+            updateStatusMessage = String.format(
+                    "Tree : %s has been successfully deleted!",
                     persistentState.getProperty("BarCode")
-                );
-
-            } catch (SQLException ex) {
-                updateStatusMessage = "Error in installing Tree data in database!";
-            }
+            );
+        } catch (SQLException ex) {
+            updateStatusMessage = "Error deleting Tree in database!";
         }
     }
     
@@ -155,7 +164,11 @@ public class Tree extends EntityBase {
 
     @Override
     public void stateChangeRequest(String key, Object value) {
+        if (persistentState.containsKey(key)) {
+            persistentState.setProperty(key, (String)value);
+        }
         
+        myRegistry.updateSubscribers(key, this);
     }
 
     @Override

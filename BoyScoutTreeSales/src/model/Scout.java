@@ -18,7 +18,6 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
-import java.util.Formatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import userinterface.SystemLocale;
