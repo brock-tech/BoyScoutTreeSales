@@ -40,7 +40,7 @@ public class ScoutFormView extends BaseView {
     protected TextField phoneNumField;
     protected TextField emailField;
     protected TextField memberIdField;
-    protected ComboBox statusBox;
+    //protected ComboBox statusBox;
     protected Button submitButton;
     protected Button cancelButton;
 
@@ -149,14 +149,14 @@ public class ScoutFormView extends BaseView {
                 "Active",
                 "Inactive"
         );
-        statusBox = new ComboBox(statusOptions);
-        statusBox.setValue("Active");
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("statusBox"),
-                statusBox
-        );
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 7);
+//        statusBox = new ComboBox(statusOptions);
+//        statusBox.setValue("Active");
+//        formItem = formItemBuilder.buildControl(
+//                myResources.getProperty("statusBox"),
+//                statusBox
+//        );
+//        formItem.setPrefWidth(150);
+//        formGrid.add(formItem, 0, 7);
         
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -195,7 +195,7 @@ public class ScoutFormView extends BaseView {
                 newScoutData.setProperty("DateOfBirth", dobField.getText());
                 newScoutData.setProperty("PhoneNumber", phoneNumField.getText());
                 newScoutData.setProperty("Email", emailField.getText());
-                newScoutData.setProperty("Status", (String)statusBox.getValue());
+                newScoutData.setProperty("Status", "Active");
                 
                 myModel.stateChangeRequest("Submit", newScoutData);
             }
@@ -284,7 +284,7 @@ public class ScoutFormView extends BaseView {
                 dobField.setText((String) selectedScout.getState("DateOfBirth"));
                 phoneNumField.setText((String) selectedScout.getState("PhoneNumber"));
                 emailField.setText((String) selectedScout.getState("Email"));
-                statusBox.setValue(selectedScout.getState("Status"));
+//                statusBox.setValue(selectedScout.getState("Status"));
             }
         }
     }

@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -141,13 +142,16 @@ public class EditScoutTransaction extends Transaction {
         String lastName = (String)selectedScout.getState("LastName");
         
         Alert confirmDialog = new Alert(AlertType.CONFIRMATION, String.format(
-                "Are you sure you want to set '%s %s' to 'Inactive' ?",
+                "Are you sure you want to remove\n'%s %s'?",
                 firstName,
                 lastName));
+        confirmDialog.setWidth(600);
         Optional<ButtonType> result = confirmDialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             selectedScout.setInactive();
             selectedScout.update();
+            
+            ((Vector)scoutCollection.getState("Scouts")).remove(selectedScout);
         }
     }
     

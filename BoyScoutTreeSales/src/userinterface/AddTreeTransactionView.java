@@ -23,40 +23,28 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-
-import model.TreeTransaction;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javafx.scene.control.TextArea;
 
 
 /**
  *
  * @author PHONG
  */
-public class TreeTransactionView extends BaseView {
-    static final String DATE_FORMAT = "";
-    
-    protected TextField treeBarCode;
-    protected ComboBox treeType;
-    protected TextField salePrice;
-    protected ComboBox status;
-    protected TextField notes;
+public class AddTreeTransactionView extends BaseView {
+    protected TextField barCodeField;
+//    protected ComboBox treeType;
+//    protected TextField salePrice;
+//    protected ComboBox statusBox;
+    protected TextArea notesField;
     protected Button submitButton;
-//    protected Button clearFormButton;
     protected Button cancelButton;
 
-    public TreeTransactionView(IModel model) {
-        super(model, "TreeTransactionView");
+    public AddTreeTransactionView(IModel model) {
+        super(model, "AddTreeTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);
-        myModel.subscribe("TreeToDisplay", this);
     }
     
     @Override
@@ -81,16 +69,15 @@ public class TreeTransactionView extends BaseView {
         formGrid.setHgap(10);
         formGrid.setVgap(10);
         formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
-        
 
-        treeBarCode = new TextField();
-        treeBarCode.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("TreeBarCode"), 
-                treeBarCode);
+        barCodeField = new TextField();
+        barCodeField.setOnAction(submitHandler);
+        formItem = formItemBuilder.buildControl(myResources.getProperty("treeBarCode"), 
+                barCodeField);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
         
+        /*
         getTreeTypeField();
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("TreeType"),
@@ -105,34 +92,37 @@ public class TreeTransactionView extends BaseView {
                 salePrice);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 2);
+        */
 
-        notes = new TextField();
-        notes.setOnAction(submitHandler);
+        notesField = new TextArea();
+        notesField.setPrefRowCount(5);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("Notes"),
-                notes);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 3);
+                myResources.getProperty("notes"),
+                notesField);
+        formItem.setPrefWidth(300);
+        formGrid.add(formItem, 0, 1);
         
+        /*
         ObservableList<String> options = FXCollections.observableArrayList(
             myResources.getProperty("Available"),
             myResources.getProperty("Unavailable")
         );
         
-        status = new ComboBox(options);
-        formItem = formItemBuilder.buildControl("Status:", status);
+        statusBox = new ComboBox(options);
+        formItem = formItemBuilder.buildControl("Status:", statusBox);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 4);
+        */
         
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        submitButton = new Button(myResources.getProperty("Submit"));
+        submitButton = new Button(myResources.getProperty("submit"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
         
-        cancelButton = new Button(myResources.getProperty("Cancel"));
+        cancelButton = new Button(myResources.getProperty("cancel"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
@@ -149,37 +139,46 @@ public class TreeTransactionView extends BaseView {
         if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
-
         else {
             if (validate()){                
-// Verify information in fields and submit
                 Properties p = new Properties();
-                                
-                p.setProperty("isNew", "new");
-                p.setProperty("BarCode", treeBarCode.getText());
-                p.setProperty("TreeType", treeType.getValue().toString().substring(0, 
-                getIntTreeType(treeType.getValue().toString())));
-                p.setProperty("SalePrice", salePrice.getText());
-                p.setProperty("Notes", notes.getText());
-                p.setProperty("Status", status.getValue().toString());
+                String barCode = barCodeField.getText();
+                p.setProperty("BarCode", barCode);
+                
+                String barCodePrefix = barCode.substring(0, 2);
+                p.setProperty("TreeType", barCodePrefix);
+                
+                p.setProperty("Notes", notesField.getText());
+                
+                p.setProperty("Status", "Available");
+                
+                //LocalDateTime currentDate = LocalDateTime.now();
+                //String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                //p.setProperty("DateStatusUpdated", dateLastUpdate);
+                p.setProperty("SalePrice", "0");
+                
                 myModel.stateChangeRequest("Submit", p);
             }
         }
     }
     
     protected boolean validate(){
-        String treeBar = treeBarCode.getText();
-        String price = salePrice.getText();
+        String treeBar = barCodeField.getText();
         
-        if ((treeBar == null) || treeBar.equals("") || isNumber(treeBar) == false) {
-            displayErrorMessage(myResources.getProperty("NoBarCode"));
-            treeBarCode.requestFocus();
+        if ((treeBar == null) || "".equals(treeBar)) {
+            displayErrorMessage(myResources.getProperty("errBarCodeMissing"));
+            barCodeField.requestFocus();
             return false;
         }
-        else if ((price == null) || price.equals("")) {
-            displayErrorMessage(myResources.getProperty("NoSalePrice"));
-            salePrice.requestFocus();
+        if (!treeBar.matches("[0-9]+")) {
+            displayErrorMessage(myResources.getProperty("errBarCodeInvalid"));
+            barCodeField.requestFocus();
             return false;
+        }
+        
+        String notes = notesField.getText();
+        if ((notes == null) || "".equals(notes)) {
+            notesField.setText("<empty>");
         }
         return true;
     }
@@ -187,20 +186,11 @@ public class TreeTransactionView extends BaseView {
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {
-            displayMessage((String)myModel.getState("UpdateStatusMessage"));
-        }
-        else if (key.equals("TreeToDisplay")) {
-            IModel selectedTree = (IModel)value;
-            if (selectedTree != null) {
-                treeBarCode.setText((String) selectedTree.getState("BarCode"));
-                //treeType.setText((String) selectedTree.getState("MiddleName"));
-                salePrice.setText((String) selectedTree.getState("SalePrice"));
-                notes.setText((String) selectedTree.getState("Notes"));
-                //status.setText((String) selectedTree.getState("DateOfBirth"));
-            }
+            displayMessage((String)value);
         }
     }
    
+    /*
     protected void getTreeTypeField(){
         //TreeTransaction treeTransaction = (TreeTransaction)myModel.getState("getTreeTransaction");
         TreeTransaction treeTransaction = new TreeTransaction();
@@ -240,13 +230,5 @@ public class TreeTransactionView extends BaseView {
         str = oldstring.replace("}", "");
         return str;
     }
-    
-    protected boolean isNumber(String string) {
-    try {
-        Long.parseLong(string);
-    } catch (Exception e) {
-        return false;
-    }
-    return true;
-}
+    */
 }

@@ -10,54 +10,28 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
-import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
-import java.util.Vector;
 
 /**
  *
  * @author PHONG
  */
-public class TreeTransaction extends Transaction {
+public class AddTreeTransaction extends Transaction {
     String updateStatusMessage;
-    Vector treeType;
-    Vector data;
-    Properties persistentState;
     
-    public TreeTransaction(){
+    public AddTreeTransaction(){
         super();
-        
-        persistentState = null;
-    }
- 
-    public TreeTransaction(Properties props){
-        super();
-        setDependencies();
-        
-        persistentState = new Properties();
-
-        Enumeration allKeys = props.propertyNames();
-        while (allKeys.hasMoreElements()) {
-            String nextKey = (String) allKeys.nextElement();
-            String nextValue = props.getProperty(nextKey);
-
-            if (nextValue != null) {
-                persistentState.setProperty(nextKey, nextValue);
-            }
-        }
-    }    
+    }   
     
      @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
         dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
-        dependencies.put("Back", "CancelTransaction");
 
         myRegistry.setDependencies(dependencies);
     }
@@ -69,12 +43,12 @@ public class TreeTransaction extends Transaction {
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("TreeTransactionView");
+        Scene currentScene = myViews.get("AddTreeTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("TreeTransactionView", this);
+            View newView = ViewFactory.createView("AddTreeTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("TreeTransactionView", currentScene);
+            myViews.put("AddTreeTransactionView", currentScene);
         }
         
         currentScene.getStylesheets().add("userinterface/style.css");
@@ -89,14 +63,6 @@ public class TreeTransaction extends Transaction {
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
                 return updateStatusMessage;
-            case "getTreeTransaction":
-                return this;
-            case "getTreeType":
-                loadTreeType();
-                return treeType;
-            case "getProperties":
-                getProperties();
-                return persistentState;
             default:
                 return null;
         }
@@ -116,11 +82,11 @@ public class TreeTransaction extends Transaction {
         myRegistry.updateSubscribers(key, this);
     }
     
+    
     private void processTransaction(Properties p) {
         updateStatusMessage = "";
         transactionErrorMessage = "";
-
-        MessageFormat formatter = new MessageFormat("", myLocale);
+        
         //existing Tree
         try {
             String treeBarCode = p.getProperty("BarCode");
@@ -133,19 +99,10 @@ public class TreeTransaction extends Transaction {
         } catch (InvalidPrimaryKeyException exc) { 
             // Add new Tree
             Tree tree = new Tree(p);
-            tree.update();
+            tree.insert();
             updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 
-             p.getProperty("BarCode")) ;
+                       p.getProperty("BarCode"));
             transactionErrorMessage = updateStatusMessage;
         }
-    }
-    
-    private void loadTreeType(){
-        String query = "SELECT Id, TypeDescription FROM Tree_Type";
-        treeType = getSelectQueryResult(query);
-    }
-    
-    private Properties getProperties(){
-        return persistentState;
     }
 }

@@ -20,15 +20,15 @@ public class TransactionFactory {
             case "EditScout":
                 return new EditScoutTransaction();
             case "AddTree":
-                return new TreeTransaction();
+                return new AddTreeTransaction();
             case "AddTreeType":
                 return new AddTreeTypeTransaction();				
             case "EditTreeType":
                     return new EditTreeTypeTransaction();
             case "EditTree":
-                return new EditTreeAction();
-            case "EditOneTree":
-                return new TreeTransaction();
+                return new EditTreeTransaction();
+            case "RemoveTree":
+                return new RemoveTreeTransaction();
             default: return null;
         }
     }

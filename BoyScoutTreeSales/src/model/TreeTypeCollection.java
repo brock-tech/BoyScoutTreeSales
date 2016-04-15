@@ -46,16 +46,35 @@ public class TreeTypeCollection extends EntityBase implements IView {
         stateChangeRequest(key, value);
     }
     
-    private int findIndexToAdd(TreeType t) {
+    private void addTreeType(TreeType t) {
+        int index = findIndexToAdd(t);
+        //System.out.println("index is " + index);
+        treeTypes.insertElementAt(t, index);
+    }
+    
+    public TreeType retrieve(String barcodePrefix) {
+        TreeType retValue = null;
+        for (int cnt = 0; cnt < treeTypes.size(); cnt++) {
+            TreeType nextType = treeTypes.elementAt(cnt);
+            String nextTypeId = (String)nextType.getState("BarcodePrefix");
+            if (nextTypeId.equals(barcodePrefix)) {
+                retValue = nextType;
+                break;
+            }
+        }
+        return retValue;
+    }
+    
+    private int findIndexToAdd(TreeType type) {
         int low = 0;
         int high = treeTypes.size()-1;
         int middle;
         
         while (low <= high) {
             middle = (low + high) / 2;
-            TreeType midTreeType = treeTypes.elementAt(middle);
+            TreeType midType = treeTypes.elementAt(middle);
 
-            int result = TreeType.compare(t, midTreeType);
+            int result = TreeType.compare(type, midType);
 
             if (result == 0) {
                 return middle;
@@ -67,25 +86,7 @@ public class TreeTypeCollection extends EntityBase implements IView {
         }
         return low;
     }
-    
-    private void addTreeType(TreeType t) {
-        int index = findIndexToAdd(t);
-        System.out.println("index is " + index);
-        treeTypes.insertElementAt(t, index);
-    }
-    
-    public TreeType retrieve(String id) {
-        TreeType retValue = null;
-        for (TreeType t : treeTypes) {
-            String nextTreeTypeId = (String)t.getState("ID");
-            if (id.equals(nextTreeTypeId)) {
-                retValue = t;
-                break;
-            }
-        }
-        return retValue;
-    }
-    
+
     public void lookupTreeTypesByBarcode(String barcodePrefix) 
             throws InvalidPrimaryKeyException {
         
