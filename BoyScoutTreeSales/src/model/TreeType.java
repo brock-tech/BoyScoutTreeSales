@@ -146,7 +146,7 @@ public class TreeType extends EntityBase
             }
             catch(SQLException s)
             {
-               updateStatusMessage = String.format(myLocale,myMessages.getString("errorSuccessMsg"),
+               updateStatusMessage = String.format(myLocale,myMessages.getString("updateErrorMsg"),
               persistentState.get("ID"), persistentState.get("BarcodePrefix" ));
             }
         }   
@@ -200,6 +200,8 @@ public class TreeType extends EntityBase
         try{
  
             deletePersistentState(mySchema, persistentState);
+            updateStatusMessage = String.format(myLocale, myMessages.getString("deleteSuccessMsg"),
+             persistentState.get("ID"), persistentState.get("BarcodePrefix"));
         }
         catch(SQLException e)
         {

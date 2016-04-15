@@ -7,7 +7,7 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
-package userinterface;
+package userinterface;             
 
 import impresario.IModel;
 import java.util.Enumeration;
@@ -124,7 +124,7 @@ public class EditTreeTypeFormView extends BaseView {
         );
         
         ScrollPane tableScrollPane = new ScrollPane();
-        tableScrollPane.setPrefSize(DEFAULT_WIDTH, 300);
+        tableScrollPane.setPrefSize(500, 270);
         tableScrollPane.setContent(tableOfTreeTypes);
         content.getChildren().add(tableScrollPane);
         
@@ -190,6 +190,7 @@ public class EditTreeTypeFormView extends BaseView {
             }
             else {
                 myModel.stateChangeRequest("RemoveTreeType", itemSelected.getTreeTypeID());
+                displayMessage(myResources.getProperty("deleteSuccess"));
             }
         }
         else if (source == editButton) {

@@ -94,6 +94,7 @@ public class EditTreeTypeTransaction extends Transaction {
                 break;
             case "RemoveTreeType":
                 removeTreeType((String) value);
+                break;
             case "Submit":
                 updateSelectedTreeType((Properties)value);
                 break;
@@ -136,14 +137,16 @@ public class EditTreeTypeTransaction extends Transaction {
     
     protected void removeTreeType(String treeTypeId) {
         selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
-        String typeId = (String)selectedTreeType.getState("ID");
+        String barcodePrefix = (String)selectedTreeType.getState("BarcodePrefix");
         
         Alert confirmDialog = new Alert(AlertType.CONFIRMATION, String.format(
                 "Are you sure you want to remove '%s'?",
-                typeId));
+                barcodePrefix));
         Optional<ButtonType> result = confirmDialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             selectedTreeType.remove();
+        updateStatusMessage = (String)selectedTreeType.getState("deleteSuccessMsg");
+        transactionErrorMessage = updateStatusMessage;
 
         }
     }

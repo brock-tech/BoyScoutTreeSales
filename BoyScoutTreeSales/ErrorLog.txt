@@ -73,3 +73,7 @@
 [4/13/16 6:52 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
 [4/13/16 7:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'where clause'>
 [4/13/16 7:06 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'field list'>
+[4/14/16 10:04 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:09 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:18 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:21 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
