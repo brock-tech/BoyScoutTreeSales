@@ -42,6 +42,8 @@ public class TreeLotCoordinator implements IModel, IView {
     private final Stage myStage;
 
     private String transactionErrorMessage = "";
+    
+    private Session currentSession;
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
