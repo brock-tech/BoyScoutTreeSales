@@ -29,6 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.Scout;
 
 /**
@@ -64,7 +66,14 @@ public class EditScoutTransactionView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
+        
+         Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         IFormItemStrategy formItemBuilder;
+
+        
         Pane formItem;
         try {
             formItemBuilder = (IFormItemStrategy)Class.forName(

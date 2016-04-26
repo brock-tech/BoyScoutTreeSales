@@ -26,6 +26,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -63,6 +65,11 @@ public class ScoutFormView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
