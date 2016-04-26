@@ -50,7 +50,7 @@ public class SellTreeTransaction extends Transaction {
       myViews.put("SellTreeTransactionView", currentScene);
     }
 
-    currentScene.getStylesheets().add("userinterface/styles.css");
+    currentScene.getStylesheets().add("userinterface/style.css");
     return currentScene;
   }
 
@@ -82,7 +82,7 @@ public class SellTreeTransaction extends Transaction {
   private void processTransaction(Properties p) {
     updateStatusMessage = "";
     transactionErrorMessage = "";
-
+    Tree treeSold = null;
     //Existing Transaction
     try {
       String saleID = p.getProperty("ID");
@@ -91,7 +91,6 @@ public class SellTreeTransaction extends Transaction {
       updateStatusMessage = String.format(myMessages.getString("multipleTransFoundMsg"),
                   p.getProperty("ID"));
       transactionErrorMessage = updateStatusMessage;
-
     } catch (InvalidPrimaryKeyException exc) {
       //Add new Transaction
       Sale sale = new Sale(p);
@@ -99,6 +98,17 @@ public class SellTreeTransaction extends Transaction {
       updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
                   p.getProperty("ID"));
       transactionErrorMessage = updateStatusMessage;
+    }
+    try{
+         treeSold = new Tree(p.getProperty("Barcode"));
+        updateStatusMessage = String.format(myMessages.getString("treeBarcodeNotFound"),
+                  p.getProperty("Barcode"));
+      transactionErrorMessage = updateStatusMessage;
+    }
+    catch(InvalidPrimaryKeyException exc)
+    {
+        if(treeSold != null)
+            treeSold.delete();
     }
   }
 }

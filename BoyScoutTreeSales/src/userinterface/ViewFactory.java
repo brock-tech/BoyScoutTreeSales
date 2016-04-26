@@ -38,6 +38,10 @@ public class ViewFactory {
             case "ScoutDataView":
                 return new ScoutFormView(model);
                 
+            case "SellTreeTransactionView":
+                return new SellTreeView(model);
+                
+                
             default:
                 return null;
         }
