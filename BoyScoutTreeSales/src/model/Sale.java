@@ -45,7 +45,7 @@ public class Sale extends EntityBase {
             // There should be exactly one book. Any more will be an error.
             if (size != 1) {
                 throw new InvalidPrimaryKeyException(
-                        String.format("Multiple Transactions found with matching ID : %s", barcode)
+                        String.format("Multiple Transactions found with matching ID : %s", id)
                 );
             }
             else {

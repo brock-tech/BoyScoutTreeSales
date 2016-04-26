@@ -9,18 +9,12 @@
 //********************************************************************
 package model;
 
-import java.util.Properties;
-import java.util.Vector;
-
 import exception.InvalidPrimaryKeyException;
-import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
-import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
-import userinterface.SystemLocale;
+import javafx.scene.Scene;
+import userinterface.View;
+import userinterface.ViewFactory;
 
 /**
  *
@@ -97,20 +91,14 @@ public class SellTreeTransaction extends Sale {
       updateStatusMessage = String.format(myMessages.getString("multipleTransFoundMsg"),
                   p.getProperty("ID"));
       transactionErrorMessage = updateStatusMessage;
-      
+
     } catch (InvalidPrimaryKeyException exc) {
-
-    }
-    /*try {
-      String memberId = p.getProperty("ID");
-
-      Sale treeSale = new Sale(memberId);
-      memberId = (String)treeSale.getState("ID");
-
-      MessageFormat formatter = new MessageFormat(
-              myMessages.getString("")*/
-
+      //Add new Transaction
+      Sale sale = new Sale(p);
+      sale.insert();
+      updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
+                  p.getProperty("ID"));
+      transactionErrorMessage = updateStatusMessage;
     }
   }
-
 }
