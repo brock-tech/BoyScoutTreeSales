@@ -9,11 +9,13 @@
 //********************************************************************
 package model;
 
+import impresario.IModel;
+
 /**
  *
  */
 public class TransactionFactory {
-    public static Transaction createTransaction(String transName) {
+    public static Transaction createTransaction(String transName, IModel tlc) {
         switch (transName) {
             case "RegisterScout":
                 return new RegisterScoutTransaction();    
@@ -29,6 +31,8 @@ public class TransactionFactory {
                 return new EditTreeTransaction();
             case "RemoveTree":
                 return new RemoveTreeTransaction();
+            case "OpenSession":
+                return new OpenSessionTransaction();
             default: return null;
         }
     }

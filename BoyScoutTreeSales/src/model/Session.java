@@ -33,13 +33,14 @@ public class Session extends EntityBase {
     private final Locale myLocale;
     private final ResourceBundle myMessages;
     
+    
     public Session(String id) throws InvalidPrimaryKeyException {
         super(myTableName);
         
         setDependencies();
         
         myLocale = SystemLocale.getInstance();
-        myMessages = ResourceBundle.getBundle("model.i18n.Session", myLocale);
+        myMessages = null;// ResourceBundle.getBundle("model.i18n.Session", myLocale);
         
         String query = String.format("SELECT * FROM %s WHERE (ID = '%s')", myTableName, id);
         
@@ -54,13 +55,13 @@ public class Session extends EntityBase {
             }
             else {
                 // Copy all retrived data into persistent state.
-                Properties retrievedScoutData = allDataRetrieved.elementAt(0);
+                Properties retrievedSessionData = allDataRetrieved.elementAt(0);
                 persistentState = new Properties();
 
-                Enumeration allKeys = retrievedScoutData.propertyNames();
+                Enumeration allKeys = retrievedSessionData.propertyNames();
                 while (allKeys.hasMoreElements()) {
                     String nextKey = (String) allKeys.nextElement();
-                    String nextValue = retrievedScoutData.getProperty(nextKey);
+                    String nextValue = retrievedSessionData.getProperty(nextKey);
 
                     if (nextValue != null) {
                         persistentState.setProperty(nextKey, nextValue);
@@ -93,11 +94,21 @@ public class Session extends EntityBase {
         }
     }
     
+    private Session() {
+        super(myTableName);
+        
+        setDependencies();
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = null;// ResourceBundle.getBundle("model.i18n.Session", myLocale);
+    }
+    
     private void setDependencies() {
         dependencies = new Properties();
         
         myRegistry.setDependencies(dependencies);
     }
+    
     /** */
     //--------------------------------------------------------------------------
     public void update() {
@@ -123,8 +134,8 @@ public class Session extends EntityBase {
         } 
         else { // Insert New
             try {
-                Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ID", scoutId.toString());
+                Integer id = insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("ID", id.toString());
                 
                 updateStatusMessage = ""; // @todo: Add message
 
@@ -148,6 +159,43 @@ public class Session extends EntityBase {
             persistentState.setProperty(key, (String)value);
         
         myRegistry.updateSubscribers(key, this);
+    }
+    
+    public static Session findOpenSession() throws InvalidPrimaryKeyException {
+        String query = "SELECT * FROM "+myTableName+" WHERE (EndTime = '<empty>')";
+        
+        Session session = new Session();
+        
+        Vector<Properties> allDataRetrieved = session.getSelectQueryResult(query);
+        
+        if (allDataRetrieved != null) {
+            int size = allDataRetrieved.size();
+
+            // There should be exactly one session. Any more will be an error.
+            if (size != 1) {
+                throw new InvalidPrimaryKeyException(""); // TODO: Add message
+            }
+            else {
+                // Copy all retrived data into persistent state.
+                Properties retrievedSessionData = allDataRetrieved.elementAt(0);
+                session.persistentState = new Properties();
+
+                Enumeration allKeys = retrievedSessionData.propertyNames();
+                while (allKeys.hasMoreElements()) {
+                    String nextKey = (String) allKeys.nextElement();
+                    String nextValue = retrievedSessionData.getProperty(nextKey);
+
+                    if (nextValue != null) {
+                        session.persistentState.setProperty(nextKey, nextValue);
+                    }
+                }
+            }
+        } 
+        else {
+            throw new InvalidPrimaryKeyException(""); // TODO: Add message
+        }
+        
+        return session;
     }
 
     @Override

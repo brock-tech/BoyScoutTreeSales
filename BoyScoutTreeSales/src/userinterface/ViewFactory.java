@@ -38,6 +38,15 @@ public class ViewFactory {
             case "ScoutDataView":
                 return new ScoutFormView(model);
                 
+            case "OpenSessionTransactionView":
+                return new OpenSessionTransactionView(model);
+                
+            case "OpenShiftLookupView":
+                return new OpenShiftLookupView(model);
+                
+            case "OpenShiftFormView":
+                return new OpenShiftFormView(model);
+                
             default:
                 return null;
         }

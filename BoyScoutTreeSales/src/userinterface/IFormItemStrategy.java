@@ -9,7 +9,7 @@
 //********************************************************************
 package userinterface;
 
-import javafx.scene.control.Control;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 /**
@@ -17,5 +17,5 @@ import javafx.scene.layout.Pane;
  * @author mike
  */
 public interface IFormItemStrategy {
-    public Pane buildControl(String description, Control control);
+    public Pane buildControl(String description, Node control);
 }
