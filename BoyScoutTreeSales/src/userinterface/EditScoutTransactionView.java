@@ -29,6 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.Scout;
 
 /**
@@ -63,6 +65,12 @@ public class EditScoutTransactionView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("table");
+        
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
@@ -99,7 +107,6 @@ public class EditScoutTransactionView extends BaseView {
         tableOfScouts = new TableView<>();
         tableOfScouts.getSelectionModel();
         tableOfScouts.setEditable(false);
-        
         
         TableColumn idColumn = new TableColumn(myResources.getProperty("id"));
         idColumn.setMinWidth(20);
@@ -170,7 +177,7 @@ public class EditScoutTransactionView extends BaseView {
         tableScrollPane.setContent(tableOfScouts);
         content.getChildren().add(tableScrollPane);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         editButton = new Button(myResources.getProperty("editButton"));

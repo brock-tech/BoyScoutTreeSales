@@ -77,3 +77,11 @@
 [4/14/16 10:09 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
 [4/14/16 10:18 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
 [4/14/16 10:21 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/19/16 9:37 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/19/16 10:18 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/19/16 10:18 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/21/16 9:31 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/21/16 10:43 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/26/16 9:26 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/26/16 9:35 AM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/26/16 9:43 AM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>

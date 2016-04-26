@@ -29,6 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.TreeType;
 import model.TreeTypeTableModel;
 import static userinterface.BaseView.DEFAULT_WIDTH;
@@ -65,6 +67,12 @@ public class EditTreeTypeFormView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("table");
+        
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
@@ -77,7 +85,7 @@ public class EditTreeTypeFormView extends BaseView {
             return content;
         }
         
-        HBox searchContainer = new HBox(10);
+        HBox searchContainer = new HBox(20);
         searchContainer.setAlignment(Pos.CENTER);
         
         barcodeSearch = new TextField();
@@ -128,7 +136,7 @@ public class EditTreeTypeFormView extends BaseView {
         tableScrollPane.setContent(tableOfTreeTypes);
         content.getChildren().add(tableScrollPane);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         editButton = new Button(myResources.getProperty("editButton"));
