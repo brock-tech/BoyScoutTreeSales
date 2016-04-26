@@ -19,7 +19,7 @@ import userinterface.ViewFactory;
 /**
  *
  */
-public class SellTreeTransaction extends Sale {
+public class SellTreeTransaction extends Transaction {
   String updateStatusMessage;
 
   public SellTreeTransaction() {
@@ -70,7 +70,7 @@ public class SellTreeTransaction extends Sale {
   public void stateChangeRequest(String key, Object value) {
     switch (key) {
       case "DoYourJob":
-        DoYourJob();
+        doYourJob();
         break;
       case "Submit":
         processTransaction((Properties)value);
