@@ -138,7 +138,7 @@ public class SellTreeTransaction extends Transaction {
       transactionErrorMessage = updateStatusMessage;
     }
     try{
-         treeSold = new Tree(p.getProperty("Barcode"));
+         treeSold = new Tree(p.getProperty("BarCode"));
         updateStatusMessage = String.format(myMessages.getString("treeBarcodeNotFound"),
                   p.getProperty("Barcode"));
       transactionErrorMessage = updateStatusMessage;
@@ -146,7 +146,7 @@ public class SellTreeTransaction extends Transaction {
     catch(InvalidPrimaryKeyException exc)
     {
         if(treeSold != null)
-            treeSold.delete();
+            treeSold.setSold();
     }
   }
 }

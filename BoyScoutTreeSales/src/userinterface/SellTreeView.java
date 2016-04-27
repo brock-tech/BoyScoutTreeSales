@@ -41,6 +41,8 @@ import javafx.scene.layout.VBox;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Tree;
@@ -257,12 +259,11 @@ public class SellTreeView extends BaseView {
              newSaleData.setProperty("TransactionDate", transactionDateField.getText());
              newSaleData.setProperty("TransactionTime", transactionTimeField.getText());
 
-             /*DateFormat dateFormat = new SimpleDateFormat(myResources.getProperty("currentDateFormat"));
-             //get current date time with Date()
-             //yyyy/MM/dd HH:mm:ss
-	     Date date = new Date();
-             newSaleData.setProperty("DateStatusUpdated", dateFormat.format(date));
-
+             LocalDateTime currentDate = LocalDateTime.now();
+             String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+             newSaleData.setProperty("DateStatusUpdated", dateLastUpdate);
+             
+            
              //System.out.println("barcode " + barcodePrefixField.getText() );*/
              myModel.stateChangeRequest("Submit", newSaleData);
              displayMessage((String)myModel.getState("UpdateStatusMessage"));
@@ -355,9 +356,13 @@ public class SellTreeView extends BaseView {
             }
             if (selectedTree != null) {
 
-                barcodeField.setText((String) selectedTree.getState("BarCode"));
+               LocalDateTime currentDate = LocalDateTime.now();
+               String transactionTime = currentDate.format(DateTimeFormatter.ISO_TIME);
+               
+               transactionTimeField.setText(transactionTime);
+               barcodeField.setText((String) selectedTree.getState("BarCode"));
                sessionIDField.setText(sessionID);
-                transactionAmountField.setText((String) selTree.getState("Cost"));
+               transactionAmountField.setText((String) selTree.getState("Cost"));
 
             }
         }
