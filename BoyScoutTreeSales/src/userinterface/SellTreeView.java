@@ -41,6 +41,7 @@ import javafx.scene.layout.VBox;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import model.Tree;
 
 /**
  *
@@ -70,6 +71,7 @@ public class SellTreeView extends BaseView {
         super(model, "SellTreeView");
       
         myModel.subscribe("UpdateStatusMessage", this);
+         myModel.subscribe("SaleToDisplay", this);
     }
 
     @Override
@@ -236,6 +238,7 @@ public class SellTreeView extends BaseView {
              Properties newSaleData = new Properties();
 
              //newSaleData.setProperty("ID", idField.getText());
+             newSaleData.setProperty("SessionID", sessionIDField.getText());
              newSaleData.setProperty("TransactionType", transactionTypeField.getText());
              newSaleData.setProperty("Barcode", barcodeField.getText());
              
@@ -335,14 +338,12 @@ public class SellTreeView extends BaseView {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
         }
-       /* else if (key.equals("TreeTypeToDisplay")) {
-            IModel selectedTreeType = (IModel)value;
-            if (selectedTreeType != null) {
-                barcodePrefixField.setText((String) selectedTreeType.getState("BarcodePrefix"));
-                descriptionField.setText((String) selectedTreeType.getState("TypeDescription"));
-                costField.setText((String) selectedTreeType.getState("Cost"));
+        else if (key.equals("SaleToDisplay")) {
+             Tree selectedTree = (Tree)value;
+            if (selectedTree != null) {
+                barcodeField.setText((String) selectedTree.getState("BarCode"));
             }
-        }*/
+        }
     }
         
 }

@@ -32,6 +32,7 @@ public class SellTreeTransaction extends Transaction {
     Properties dependencies = new Properties();
     dependencies.put("Submit", "TransactionError,UpdateStatusMessage");
     dependencies.put("Cancel", "CancelTransaction");
+   dependencies.put("SubmitBarcode", "TransactionError,UpdateStatusMessage,SaleToDisplay");
 
     myRegistry.setDependencies(dependencies);
   }
@@ -77,6 +78,8 @@ public class SellTreeTransaction extends Transaction {
         return transactionErrorMessage;
       case "UpdateStatusMessage":
         return updateStatusMessage;
+        case "SaleToDisplay":
+                return selectedTree;  
       default:
         return null;
     }
