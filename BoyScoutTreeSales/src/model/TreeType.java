@@ -88,6 +88,57 @@ public class TreeType extends EntityBase
             throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
         }
     }
+    
+    public TreeType(String barcodePrefix, int pref) throws InvalidPrimaryKeyException
+    {
+	super(myTableName);
+        setDependencies();
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeType", myLocale);
+        MessageFormat formatter = new MessageFormat("", myLocale);
+        
+         String query = String.format(
+                "SELECT * FROM %s WHERE (ID = %s)",
+                myTableName,
+                barcodePrefix);
+ 
+        Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+
+	// You must get one Tree Type at least
+	if (allDataRetrieved != null)
+	{
+            int size = allDataRetrieved.size();
+                if (size != 1)
+		{
+                    formatter.applyPattern(myMessages.getString("multipleTTFoundMsg"));
+                    throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
+		}
+                else
+		{
+                    // copy all the retrieved data into persistent state
+                    Properties retrievedTreeTypeData = allDataRetrieved.elementAt(0);
+                    persistentState = new Properties();
+                    
+                    Enumeration allKeys = retrievedTreeTypeData.propertyNames();
+                    while (allKeys.hasMoreElements() == true)
+                    {
+                        String nextKey = (String)allKeys.nextElement();
+                        String nextValue = retrievedTreeTypeData.getProperty(nextKey);
+
+                        if (nextValue != null)
+                        {
+                                persistentState.setProperty(nextKey, nextValue);
+                        }
+                    }
+                }
+	}
+        else
+        {
+            formatter.applyPattern(myMessages.getString("TTNotFound"));
+            throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
+        }
+    }
     //--------------------------------------------------------------------------
     TreeType(Properties props) 
     {

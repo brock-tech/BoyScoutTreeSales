@@ -44,7 +44,6 @@ public class EditTreeTransactionView extends BaseView {
 
     public EditTreeTransactionView(IModel model) {
         super(model, "EditTreeTransactionView");
-        
         myModel.subscribe("UpdateStatusMessage", this);
         myModel.subscribe("TreeToDisplay", this);
         
