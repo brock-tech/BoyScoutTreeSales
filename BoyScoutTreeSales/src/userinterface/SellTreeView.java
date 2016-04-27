@@ -281,13 +281,7 @@ public class SellTreeView extends BaseView {
             transactionTypeField.requestFocus();
             return false;
         }
-        
-        value = barcodeField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errBarcodeNull"));
-            barcodeField.requestFocus();
-            return false;
-        }
+
         value = transactionAmountField.getText();
         if ((value == null) || "".equals(value)) {
             displayErrorMessage(myResources.getProperty("errTransactionAmountNull"));
@@ -332,6 +326,13 @@ public class SellTreeView extends BaseView {
         }
         return true;
     }   
+    
+    protected boolean valiateSession()
+    {
+        String sessionNumber = (String)sessionIDField.getText();
+        Properties session = new Properties();
+        return true;
+    }      
     
     @Override
     public void updateState(String key, Object value) {
