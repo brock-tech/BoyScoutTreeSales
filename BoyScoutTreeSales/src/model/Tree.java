@@ -182,16 +182,20 @@ public class Tree extends EntityBase {
     
     public boolean isAvailable() {
         String status = persistentState.getProperty("Status");
-        return status.equals("Available");
+        System.out.println("available here");
+        if(status.equals("Available"))
+            return true;
+        
+        return false;
     }
     
     public void setSold() {
         // Set date of last update to today's date.
         LocalDateTime currentDate = LocalDateTime.now();
         String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        persistentState.setProperty("DateStatusUpdated", dateLastUpdate);
-        
+        persistentState.setProperty("DateStatusUpdated", dateLastUpdate);    
         persistentState.setProperty("Status", "Sold");
+        System.out.println("jere");
     }
     
     /**

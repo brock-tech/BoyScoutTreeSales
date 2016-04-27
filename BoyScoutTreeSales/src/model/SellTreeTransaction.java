@@ -120,7 +120,6 @@ public class SellTreeTransaction extends Transaction {
   private void processTransaction(Properties p) {
     updateStatusMessage = "";
     transactionErrorMessage = "";
-    Tree treeSold = null;
     //Existing Transaction
     try {
       String saleID = p.getProperty("ID");
@@ -134,19 +133,29 @@ public class SellTreeTransaction extends Transaction {
       Sale sale = new Sale(p);
       sale.insert();
       updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
-                  p.getProperty("ID"));
+                  p.getProperty("CustomerName"));
       transactionErrorMessage = updateStatusMessage;
     }
     try{
-         treeSold = new Tree(p.getProperty("BarCode"));
-        updateStatusMessage = String.format(myMessages.getString("treeBarcodeNotFound"),
+         Tree treeSold = new Tree(p.getProperty("Barcode"));
+            if(treeSold.isAvailable())
+            {
+                treeSold.setSold();
+                updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
+                  p.getProperty("CustomerName"));
+                  transactionErrorMessage = updateStatusMessage;
+            }
+            else {
+                updateStatusMessage = String.format(myMessages.getString("treeNotAvailable"),
                   p.getProperty("Barcode"));
-      transactionErrorMessage = updateStatusMessage;
+                  transactionErrorMessage = updateStatusMessage;
+            }
     }
     catch(InvalidPrimaryKeyException exc)
     {
-        if(treeSold != null)
-            treeSold.setSold();
+      updateStatusMessage = String.format(myMessages.getString("treeBarcodeNotFound"),
+                  p.getProperty("Barcode"));
+      transactionErrorMessage = updateStatusMessage;
     }
   }
 }
