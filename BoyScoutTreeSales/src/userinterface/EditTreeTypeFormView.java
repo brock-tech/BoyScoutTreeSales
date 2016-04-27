@@ -46,13 +46,13 @@ public class EditTreeTypeFormView extends BaseView {
     protected Button cancelButton;
     protected TableView<TreeTypeTableModel> tableOfTreeTypes;
     
-    public EditTreeTypeFormView(IModel model) {
+    public EditTreeTypeFormView(IModel model) 
+    {
         super(model, "EditTreeTypeTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);
         myModel.subscribe("TreeTypes", this);
-        myModel.subscribe("ClearList", this);
-        myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("ClearList", this);  
     }
 
     @Override
@@ -74,7 +74,14 @@ public class EditTreeTypeFormView extends BaseView {
         welcomeText.getStyleClass().add("information-text");
         content.getChildren().add(welcomeText);
         
+        
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         IFormItemStrategy formItemBuilder;
+        
+        
         Pane formItem;
         try {
             formItemBuilder = (IFormItemStrategy)Class.forName(
@@ -125,7 +132,7 @@ public class EditTreeTypeFormView extends BaseView {
                 new PropertyValueFactory("BarcodePrefix"));
         
         tableOfTreeTypes.getColumns().addAll(
-                idColumn, 
+                //idColumn, 
                 typeColumn, 
                 costColumn,
                 barcodeColumn
@@ -143,11 +150,6 @@ public class EditTreeTypeFormView extends BaseView {
         editButton.setOnAction(actionHandler);
         editButton.setPrefWidth(100);
         buttonContainer.getChildren().add(editButton);
-        
-        removeButton = new Button(myResources.getProperty("removeButton"));
-        removeButton.setOnAction(actionHandler);
-        removeButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(removeButton);
         
         cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(actionHandler);
@@ -191,22 +193,13 @@ public class EditTreeTypeFormView extends BaseView {
             searchTerms.setProperty("BarcodePrefix", barcodeSearch.getText());
             myModel.stateChangeRequest("SearchTreeTypes", searchTerms);
         }
-        else if (source == removeButton) {
-            TreeTypeTableModel itemSelected = tableOfTreeTypes.getSelectionModel().getSelectedItem();
-            if (itemSelected == null) {
-                displayErrorMessage(myResources.getProperty("errNoSelection"));
-            }
-            else {
-                myModel.stateChangeRequest("RemoveTreeType", itemSelected.getTreeTypeID());
-                displayMessage(myResources.getProperty("deleteSuccess"));
-            }
-        }
         else if (source == editButton) {
             TreeTypeTableModel itemSelected = tableOfTreeTypes.getSelectionModel().getSelectedItem();
             if (itemSelected == null) {
                 displayErrorMessage(myResources.getProperty("errNoSelection"));
             }
             else {
+                System.out.println("itemSelected " + itemSelected.getTreeTypeID());
                 myModel.stateChangeRequest("EditTreeType", itemSelected.getTreeTypeID());
             }
         }

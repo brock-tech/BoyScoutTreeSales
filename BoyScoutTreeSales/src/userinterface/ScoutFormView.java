@@ -66,10 +66,10 @@ public class ScoutFormView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
-        Text welcomeText = new Text(myResources.getProperty("title"));
-        welcomeText.setTextAlignment(TextAlignment.CENTER);
-        welcomeText.getStyleClass().add("information-text");
-        content.getChildren().add(welcomeText);
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
