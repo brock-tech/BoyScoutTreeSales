@@ -37,13 +37,8 @@ public abstract class BaseView extends View {
     
     protected MessageView statusLog;
     
-    /**
-     * 
-     * @param model
-     * @param classname
-     */
     //----------------------------------------------------------
-    protected BaseView(IModel model, String classname) {
+    protected BaseView(IModel model, String classname, double prefWidth) {
         super(model, classname);
         
         myLocale = SystemLocale.getInstance();
@@ -57,8 +52,8 @@ public abstract class BaseView extends View {
             /* Resource file not found or no additional resources needed */ 
         }
         
-        VBox container = new VBox(10);
-        container.setPrefWidth(DEFAULT_WIDTH);
+        VBox container = new VBox(20);
+        container.setPrefWidth(prefWidth);
         container.getStyleClass().add("body");
         
         container.getChildren().add(createHeader());
@@ -68,6 +63,10 @@ public abstract class BaseView extends View {
         getChildren().add(container);
         
         myModel.subscribe("TransactionError", this);
+    }
+    
+    protected BaseView(IModel model, String classname) {
+        this(model, classname, DEFAULT_WIDTH);
     }
     
     /**
@@ -102,8 +101,6 @@ public abstract class BaseView extends View {
         
         Text titleText = new Text(myResources.getProperty("titleText"));
         titleText.getStyleClass().add("header-text");
-        titleText.setFont(Font.font("SansSerif", FontWeight.BOLD, 20.0));
-        titleText.setFill(Color.web("GREEN"));
         titleText.setTextAlignment(TextAlignment.CENTER);
         
         titleContainer.getChildren().add(titleText);

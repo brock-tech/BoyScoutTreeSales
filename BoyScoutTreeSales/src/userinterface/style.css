@@ -8,6 +8,7 @@
 
 .header {
     -fx-background-color: #DBDB58;
+    -fx-padding: 25px;
 }
 
 .header-text {
@@ -18,10 +19,11 @@
 
 .footer {
     -fx-background-color: #DBDB58;
+    -fx-padding: 10px;
 }
 
 .footer-text {
-    -fx-fill: gray;
+    -fx-fill: #0f191e;
     -fx-font: 12px "SansSerif";
 }
 
@@ -29,6 +31,7 @@
 /*    -fx-fill: #663300; */
     -fx-font: 17px "Helvetica Bold";
     -fx-font-weight: bold;
+    -fx-padding: 100px;
 }
 
 .button {
@@ -36,7 +39,7 @@
     -fx-padding: 10;
     -fx-background-color: #8FB258;
     -fx-font-weight: bold;
-    -fx-text-fill: #192B33;
+    -fx-text-fill: #0f191e;
 
     -fx-border-radius: 0;
     -fx-background-radius: 0;
@@ -54,4 +57,16 @@
 .exit-text {
 	
     /*-fx-font: 20px "Helvetica Bold";*/
+}
+
+.table {
+    -fx-padding: 0px 25px 0px 25px;
+}
+
+.pane {
+    -fx-padding: 0px 0px 10px 210px;
+}
+
+.pane1 {
+    -fx-padding: 0px 0px 10px 245px;
 }

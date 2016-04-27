@@ -13,13 +13,9 @@ import impresario.IModel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -40,10 +36,10 @@ public class TreeLotCoordinatorView extends BaseView {
         super(model, "TreeLotCoordinatorView");
         
         myModel.subscribe("TransactionError", this);
-        myModel.subscribe("SessionStatus", this);
+        myModel.subscribe("OpenSessionId", this);
         
         // Get session status to determine the shift buttton text
-        updateState("SessionStatus", myModel.getState("SessionStatus"));
+        updateState("OpenSessionId", myModel.getState("OpenSessionId"));
     }
     
     /** */
@@ -57,7 +53,7 @@ public class TreeLotCoordinatorView extends BaseView {
             }
         };
         
-        VBox formContent = new VBox(10);
+        VBox formContent = new VBox(20);
         formContent.setPrefWidth(DEFAULT_WIDTH);
         formContent.setAlignment(Pos.CENTER);
         formContent.getStyleClass().add("formContent");
@@ -104,7 +100,12 @@ public class TreeLotCoordinatorView extends BaseView {
             myModel.stateChangeRequest("SellTree", null);
         }
         else if (eventSource.equals(shiftButton)) {
-            myModel.stateChangeRequest("ManageShift", null);
+            if (sellTreeButton.isDisable()) {
+                myModel.stateChangeRequest("OpenSession", null);
+            }
+            else {
+                myModel.stateChangeRequest("CloseSession", null);
+            }
         }
         else if (eventSource.equals(manageButton)) {
             myModel.stateChangeRequest("Administration", null);
@@ -118,12 +119,14 @@ public class TreeLotCoordinatorView extends BaseView {
         if (key.equals("TransactionError")) {
             statusLog.displayErrorMessage((String)value);
         }
-        else if (key.equals("SessionStatus")) {
+        else if (key.equals("OpenSessionId")) {
             // Set button label based on the current session status
-            if (value.equals("Open")) {
+            if (!value.equals("")) {
+                sellTreeButton.setDisable(false);
                 shiftButton.setText(myResources.getProperty("shiftButtonTextClose"));
             }
             else {
+                sellTreeButton.setDisable(true);
                 shiftButton.setText(myResources.getProperty("shiftButtonTextOpen"));
             }
         }
