@@ -32,6 +32,7 @@
     -fx-font: 17px "Helvetica Bold";
     -fx-font-weight: bold;
     -fx-padding: 100px;
+    -fx-underline: true;
 }
 
 .button {
