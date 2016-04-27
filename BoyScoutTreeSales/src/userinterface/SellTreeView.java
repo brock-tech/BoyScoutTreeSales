@@ -250,13 +250,13 @@ public class SellTreeView extends BaseView {
              newSaleData.setProperty("TransactionDate", transactionDateField.getText());
              newSaleData.setProperty("TransactionTime", transactionTimeField.getText());
   
-             DateFormat dateFormat = new SimpleDateFormat(myResources.getProperty("currentDateFormat"));
+             /*DateFormat dateFormat = new SimpleDateFormat(myResources.getProperty("currentDateFormat"));
              //get current date time with Date()
              //yyyy/MM/dd HH:mm:ss
 	     Date date = new Date();
              newSaleData.setProperty("DateStatusUpdated", dateFormat.format(date));
 
-             //System.out.println("barcode " + barcodePrefixField.getText() );
+             //System.out.println("barcode " + barcodePrefixField.getText() );*/
              myModel.stateChangeRequest("Submit", newSaleData);
              displayMessage((String)myModel.getState("UpdateStatusMessage"));
          }

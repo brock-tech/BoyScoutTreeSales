@@ -21,6 +21,7 @@ import userinterface.ViewFactory;
  */
 public class SellTreeTransaction extends Transaction {
   String updateStatusMessage;
+  protected Tree selectedTree;
 
   public SellTreeTransaction() {
     super();
@@ -42,17 +43,32 @@ public class SellTreeTransaction extends Transaction {
 
   @Override
   protected Scene createView() {
-    Scene currentScene = myViews.get("SellTreeTransactionView");
+    Scene currentScene = myViews.get("EnterTreeBarcodeView");
 
     if(currentScene == null) {
-      View newView = ViewFactory.createView("SellTreeTransactionView", this);
+      View newView = ViewFactory.createView("EnterTreeBarcodeView", this);
       currentScene = new Scene(newView);
-      myViews.put("SellTreeTransactionView", currentScene);
+      myViews.put("EnterTreeBarcodeView", currentScene);
     }
 
     currentScene.getStylesheets().add("userinterface/style.css");
     return currentScene;
   }
+  
+  
+    private void createAndShowSaleView() {
+        Scene currentScene = (Scene) myViews.get("SellTreeTransactionView");
+        if (currentScene == null) {
+            View newView = ViewFactory.createView("SellTreeTransactionView", this);
+            currentScene = new Scene(newView);
+            
+            currentScene.getStylesheets().add("userinterface/style.css");
+            
+            myViews.put("SellTreeTransactionView", currentScene);
+        }
+        
+        swapToView(currentScene);
+    }
 
   @Override
   public Object getState(String key) {
@@ -72,12 +88,26 @@ public class SellTreeTransaction extends Transaction {
       case "DoYourJob":
         doYourJob();
         break;
+    case "SubmitBarcode":
+           processBarcode((String)value);
+           break;
       case "Submit":
         processTransaction((Properties)value);
         break;
     }
     myRegistry.updateSubscribers(key, this);
   }
+  
+  
+      protected void processBarcode(String bc) {
+        try {
+            selectedTree = new Tree(bc);
+            createAndShowSaleView();
+        } catch (InvalidPrimaryKeyException ex) {
+            transactionErrorMessage = "Error: No Tree exists under that Bar Code!";
+        }
+    }
+      
 
   private void processTransaction(Properties p) {
     updateStatusMessage = "";
@@ -108,10 +138,7 @@ public class SellTreeTransaction extends Transaction {
     catch(InvalidPrimaryKeyException exc)
     {
         if(treeSold != null)
-        {
-            if(treeSold.isAvailable())
-                    treeSold.setSold();
-        }
+            treeSold.delete();
     }
   }
 }
