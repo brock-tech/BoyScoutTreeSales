@@ -7,45 +7,40 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
+
 package userinterface;
 
 import impresario.IModel;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Vector;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import model.Sale;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
  * @author mike
  */
-public class CloseSessionTransactionView extends BaseView {
-    protected TextField EndTime;
-    protected TextField TotalCheckTransactionAmount;
-    protected TextField EndingCash;
-    protected Button CloseButton;
-    protected Button cancelButton;
+public class CloseSessionTransactionView extends BaseView {    
+    protected Button confirmButton;
+    protected Button denyButton;
 
     public CloseSessionTransactionView(IModel model) {
-        super(model, "CloseShiftTransactionView");
-        
-        myModel.subscribe("UpdateStatusMessage", this);
+        super(model, "CloseSessionTransactionView");
     }
-
+    
     @Override
     protected Node createContent() {
         EventHandler<ActionEvent> submitHandler = new EventHandler<ActionEvent>() {
@@ -55,98 +50,112 @@ public class CloseSessionTransactionView extends BaseView {
             }
         };
         
-        VBox content = new VBox(25);
-        content.setFillWidth(true);
-        content.setAlignment(Pos.CENTER);
+        IModel session = (IModel) myModel.getState("SessionToClose");
         
-        IFormItemStrategy formItemBuilder;
-        Pane formItem;
-        try {
-            formItemBuilder = (IFormItemStrategy)Class.forName(
-                    "userinterface.TopAlignFormItem"
-            ).newInstance();
-        }
-        catch (Exception cnfe) {
-            System.err.printf("Form Item Strategy error: " + cnfe.getMessage());
-            return content;
-        }
         
-        GridPane formGrid = new GridPane();
-        formGrid.setHgap(10);
-        formGrid.setVgap(10);
-        formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
-                
-        TotalCheckTransactionAmount = new TextField();
-        TotalCheckTransactionAmount.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("totalCheckTransactionAmount"),
-                TotalCheckTransactionAmount
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 0);
+        Text promptText = new Text(myResources.getProperty("promptText"));
+        promptText.setTextAlignment(TextAlignment.CENTER);
         
-        EndingCash = new TextField();
-        EndingCash.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("endCash"),
-                EndingCash
-        );
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 1);
-
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        HBox promptContainer = new HBox();
+        promptContainer.setAlignment(Pos.CENTER);
+        promptContainer.getChildren().add(promptText);
         
-        EndTime = new TextField(currentDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        EndTime.setOnAction(submitHandler);
-
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("endTime"),
-                EndTime
-        );
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 2);
-
+        
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(50d);
+        col1.setHalignment(HPos.RIGHT);
+        
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(50d);
+        col2.setHalignment(HPos.LEFT);
+        
+        grid.getColumnConstraints().addAll(col1, col2);
+        
+        LocalDate startDate = LocalDate.parse(
+                (String)session.getState("StartDate"),
+                DateTimeFormatter.ISO_LOCAL_DATE);
+        String dateFormat = myResources.getProperty("dateFormat");
+        Label dateLabel = new Label(myResources.getProperty("startDate"));
+        Label dateValueLabel = new Label(startDate.format(
+                DateTimeFormatter.ofPattern(dateFormat)));
+        grid.add(dateLabel, 0, 0);
+        grid.add(dateValueLabel, 1, 0);
+        
+        LocalTime startTime = LocalTime.parse(
+                (String)session.getState("StartTime"),
+                DateTimeFormatter.ISO_LOCAL_TIME);
+        String timeFormat = myResources.getProperty("timeFormat");
+        Label startTimeLabel = new Label(myResources.getProperty("startTime"));
+        Label startTimeValueLabel = new Label(
+                startTime.format(DateTimeFormatter.ofPattern(timeFormat)));
+        grid.add(startTimeLabel, 0, 1);
+        grid.add(startTimeValueLabel, 1, 1);
+        
+        LocalTime endTime = LocalTime.parse(
+                (String)session.getState("EndTime"),
+                DateTimeFormatter.ISO_LOCAL_TIME);
+        Label endTimeLabel = new Label(myResources.getProperty("endTime"));
+        Label endTimeValueLabel = new Label(
+                endTime.format(DateTimeFormatter.ofPattern(timeFormat)));
+        grid.add(endTimeLabel, 0, 2);
+        grid.add(endTimeValueLabel, 1, 2);
+        
+        String cashFormat = myResources.getProperty("cashFormat");
+        Label startCashLabel = new Label(myResources.getProperty("startCash"));
+        Label startCashValueLabel = new Label(String.format(cashFormat,
+                (String)session.getState("StartingCash")));
+        grid.add(startCashLabel, 0, 3);
+        grid.add(startCashValueLabel, 1, 3);
+        
+        Label endCashLabel = new Label(myResources.getProperty("endCash"));
+        Label endCashValueLabel = new Label(String.format(cashFormat,
+                (String)session.getState("EndingCash")));
+        grid.add(endCashLabel, 0, 4);
+        grid.add(endCashValueLabel, 1, 4);
+        
+        Label checkTotalLabel = new Label(myResources.getProperty("checkTotal"));
+        Label checkTotalValueLabel = new Label(String.format(cashFormat,
+                (String)session.getState("TotalCheckTransactionsAmount")));
+        grid.add(checkTotalLabel, 0, 5);
+        grid.add(checkTotalValueLabel, 1, 5);
+        
+        confirmButton = new Button(myResources.getProperty("confirm"));
+        confirmButton.setOnAction(submitHandler);
+        confirmButton.setPrefWidth(100);
+        
+        denyButton = new Button(myResources.getProperty("deny"));
+        denyButton.setOnAction(submitHandler);
+        denyButton.setPrefWidth(100);
+        
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
+        buttonContainer.getChildren().addAll(confirmButton, denyButton);
         
-        CloseButton = new Button(myResources.getProperty("closeButton"));
-        CloseButton.setOnAction(submitHandler);
-        CloseButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(CloseButton);
-                
-        cancelButton = new Button(myResources.getProperty("cancelButton"));
-        cancelButton.setOnAction(submitHandler);
-        cancelButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(cancelButton);
-        
-        content.getChildren().add(formGrid);
-        content.getChildren().add(buttonContainer);
+        VBox content = new VBox(10);
+        content.setFillWidth(true);
+        content.setAlignment(Pos.CENTER);
+        content.getChildren().addAll(promptContainer, grid, buttonContainer);
         
         return content;
     }
     
-    private void processAction(Event event) {
+    private void processAction(ActionEvent event) {
         Object source = event.getSource();
-        Properties props = new Properties();
-        
-        clearErrorMessage();
-        props.setProperty("SessionId", "1");
-        if (source == CloseButton) {
-            myModel.stateChangeRequest("searchTransactions", props);
-            float check = (float)myModel.getState("checkAmount");
-            float cash = (float)myModel.getState("cashAmount");
-            TotalCheckTransactionAmount.setText(Float.toString(check));
-            EndingCash.setText(Float.toString(cash));
+        if (source == confirmButton) {
+            myModel.stateChangeRequest("Confirm", null);
         }
-        
-        else if (event.getSource() == cancelButton) {
-            myModel.stateChangeRequest("Cancel", "");
+        else if (source == denyButton) {
+            myModel.stateChangeRequest("Cancel", null);
         }
-    } 
-
-    @Override
-    public void updateState(String key, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
+    public void updateState(String key, Object value) {
+        
+    }
 }

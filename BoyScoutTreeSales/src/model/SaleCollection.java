@@ -10,30 +10,90 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
-import impresario.IView;
+import exception.InvalidPrimaryKeyException;
 import java.util.Properties;
 import java.util.Vector;
 
 /**
- * 
+ *
+ * @author mike
  */
-public class SaleCollection extends EntityBase implements IView {
+public class SaleCollection extends EntityBase {
     private static final String myTableName = "Transaction";
     
-    private Vector<Sale> transactions;
-    
+    Vector<Sale> sales;
+
     public SaleCollection() {
         super(myTableName);
         
-        transactions = new Vector<>();
+        sales = new Vector<>();
+    }
+    
+    private int findIndexToAdd(Sale s) {
+        int low = 0;
+        int high = sales.size()-1;
+        int middle;
+        
+        while (low <= high) {
+            middle = (low + high) / 2;
+            Sale midSale = sales.elementAt(middle);
+
+            int result = Sale.compare(s, midSale);
+
+            if (result == 0) {
+                return middle;
+            } else if (result < 0) {
+                high = middle - 1;
+            } else {
+                low = middle + 1;
+            }
+        }
+        return low;
+    }
+    
+    private void addSale(Sale s) {
+        int index = findIndexToAdd(s);
+        sales.insertElementAt(s, index);
     }
 
     @Override
     public Object getState(String key) {
-        if (key.equals("Transactions")) {
-            return transactions;
+        if (key.equals("Sales")) {
+            return sales;
         }
         return null;
+    }
+    
+    public Sale retrieve(String id) {
+        Sale retValue = null;
+        for (Sale s : sales) {
+            String nextScoutId = (String)s.getState("ID");
+            if (id.equals(nextScoutId)) {
+                retValue = s;
+                break;
+            }
+        }
+        return retValue;
+    }
+    
+    public void lookupSalesForSession(String sessionId) 
+            throws InvalidPrimaryKeyException {
+        String query = String.format("SELECT * FROM %1$s WHERE (SessionID = %2$s)",
+                myTableName, sessionId);
+        
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        
+        if ((allDataRetrieved == null) || allDataRetrieved.isEmpty()) {
+                throw new InvalidPrimaryKeyException(
+                    String.format("No Transactions found for Session %1$s",
+                    sessionId));
+        }
+        
+        sales = new Vector<>();
+        for (Object entry : allDataRetrieved) {
+            Sale newSale = new Sale((Properties)entry);
+            addSale(newSale);
+        }
     }
 
     @Override
@@ -41,32 +101,6 @@ public class SaleCollection extends EntityBase implements IView {
         myRegistry.updateSubscribers(key, this);
     }
 
-    @Override
-    public void updateState(String key, Object value) {
-        stateChangeRequest(key, value);
-    }
-    
-    public void lookupTransactionBySessionId(String sessionId) 
-            throws InvalidPrimaryKeyException {
-        
-        String query = "SELECT TransactionType, TransactionAmount, PaymentMethod FROM "+myTableName
-                +" WHERE SessionId = " + sessionId + ";";
-        
-        Vector allDataRetrieved = getSelectQueryResult(query);
-        
-        if (allDataRetrieved != null) {
-            transactions = new Vector<>();
-            for (Object nextTransactionData : allDataRetrieved) {
-                Sale nextTransaction = new Sale((Properties)nextTransactionData);
-                transactions.add(nextTransaction);
-            }
-        }
-        else {
-            throw new InvalidPrimaryKeyException(
-                    String.format("No Transactions found with SessionId = '%s'", sessionId));
-        }
-    }
-    
     @Override
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {

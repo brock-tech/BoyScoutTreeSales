@@ -9,8 +9,9 @@
 //********************************************************************
 package model;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import impresario.IModel;
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Properties;
 import java.util.Vector;
 import javafx.scene.Scene;
@@ -22,38 +23,88 @@ import userinterface.ViewFactory;
  * @author mike
  */
 public class CloseSessionTransaction extends Transaction {
+
+    String sessionId;
+    Session sessionToClose;
     
-    protected SaleCollection saleCollection;
-    protected float totalCash;
-    protected float totalCheck;
-    
-    public CloseSessionTransaction() {
+    public CloseSessionTransaction(IModel tlc) {
         super();
+        
+        sessionId = (String) tlc.getState("OpenSessionId");
     }
 
     @Override
     protected void setDependencies() {
-  //      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Properties dependencies = new Properties();
+        
+        dependencies.put("DoYourJob", "TransactionError");
+        dependencies.put("Confirm", "OpenSessionId,CancelTransaction,TransactionError");
+        dependencies.put("Cancel", "CancelTransaction");
+        
+        myRegistry.setDependencies(dependencies);
     }
 
     @Override
     protected void getMessagesBundle() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("CloseShiftTransactionView");
+        Scene currentScene = myViews.get("CloseSessionTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("CloseShiftTransactionView", this);
+            View newView = ViewFactory.createView("CloseSessionTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("CloseShiftTransactionView", currentScene);
+            myViews.put("CloseSessionTransactionView", currentScene);
         }
         
         currentScene.getStylesheets().add("userinterface/style.css");
         
         return currentScene;
+    }
+    
+    @Override
+    public void doYourJob() {
+        BigDecimal checkTotal, cashTotal, startingCash, endingCash;
+        
+        try {
+            sessionToClose = new Session(sessionId);
+            
+            SaleCollection sc = new SaleCollection();
+            try {
+                sc.lookupSalesForSession(sessionId);
+            } catch (Exception e) { }
+            
+            Vector<Sale> allSales = (Vector<Sale>) sc.getState("Sales");
+            checkTotal = new BigDecimal(0);
+            cashTotal = new BigDecimal(0);
+            
+            for (Sale sale : allSales) {
+                BigDecimal transAmount = sale.getTransactionAmount();
+                String saleType = (String) sale.getState("PaymentMethod");
+                
+                if (saleType.equals("check"))
+                    checkTotal = checkTotal.add(transAmount);
+                
+                else if (saleType.equals("cash"))
+                    cashTotal = cashTotal.add(transAmount);
+            }
+            
+            sessionToClose.setTotalCheckTransactionsAmount(checkTotal);
+            
+            startingCash = sessionToClose.getStartingCash();
+            endingCash = startingCash.add(cashTotal);
+            sessionToClose.setEndingCash(endingCash);
+            
+            sessionToClose.setEndTime(LocalTime.now());
+            
+            swapToView(createView());
+            
+        } catch (Exception exc) {
+            transactionErrorMessage = exc.getMessage();
+            stateChangeRequest("Cancel", null);
+        }
     }
 
     @Override
@@ -62,21 +113,13 @@ public class CloseSessionTransaction extends Transaction {
             case "DoYourJob":
                 doYourJob();
                 break;
-            case "Submit":
-                break;
-            case "searchTransactions":
-                searchTransactions((Properties)value);
-                totalAmount();
-            case "Cancel":
-                swapToView(createView());
+    
+            case "Confirm":
+                sessionToClose.update();
+                transactionErrorMessage = (String) sessionToClose.getState("UpdateStatusMessage");
                 break;
         }
-        
         myRegistry.updateSubscribers(key, this);
-    }
-    
-    void closeSession(Properties p) {
-        
     }
 
     @Override
@@ -84,40 +127,10 @@ public class CloseSessionTransaction extends Transaction {
         switch (key) {
             case "TransactionError":
                 return transactionErrorMessage;
-        //    case "UpdateStatusMessage":
-        //        return updateStatusMessage;
-            case "checkAmount":
-                return totalCheck;
-            case "cashAmount":
-                return totalCash;
-            default:
-                return null;
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
+            case "SessionToClose":
+                return sessionToClose;
         }
-    }
-    
-    protected void searchTransactions(Properties props) {
-        String sessionId = props.getProperty("SessionId");
-        
-        saleCollection = new SaleCollection();
-        
-        try {
-            saleCollection.lookupTransactionBySessionId(sessionId);
-        } catch (Exception e) {
-            transactionErrorMessage = e.getMessage();
-        }
-    }
-    
-    protected void totalAmount(){
-        Vector entryList = (Vector)saleCollection.getState("Transactions");
-        Enumeration entries = entryList.elements();            
-        while (entries.hasMoreElements()) {
-            Sale nextSale = (Sale)entries.nextElement();
-            Vector<String> view = nextSale.getEntryListView();
-            if (view.elementAt(2).equalsIgnoreCase("check"))
-                totalCheck += Float.parseFloat(view.elementAt(4));
-            else if (view.elementAt(2).equalsIgnoreCase("cash"))
-                totalCash += Float.parseFloat(view.elementAt(4));
-        }
+        return null;
     }
 }

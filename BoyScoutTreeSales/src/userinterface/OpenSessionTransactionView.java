@@ -29,13 +29,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import static userinterface.BaseView.DEFAULT_WIDTH;
 
 /**
  *
  * @author mike
  */
 public class OpenSessionTransactionView extends BaseView {    
+    private static final double MY_WIDTH = 500;
+    
     protected DatePicker dateField;
     protected TimeEntry startTimeField;
     protected TextField startCashField;
@@ -45,7 +46,7 @@ public class OpenSessionTransactionView extends BaseView {
     protected Button cancelButton;
 
     public OpenSessionTransactionView(IModel model) {
-        super(model, "OpenSessionTransactionView");
+        super(model, "OpenSessionTransactionView", 500);
         
         myModel.subscribe("UpdateStatusMessage", this);
     }
@@ -61,7 +62,7 @@ public class OpenSessionTransactionView extends BaseView {
         
         LocalDateTime currentDateTime = (LocalDateTime)myModel.getState("CurrentDateTime");
         
-        VBox content = new VBox(25);
+        VBox content = new VBox(10);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
@@ -77,15 +78,14 @@ public class OpenSessionTransactionView extends BaseView {
             return content;
         }
         
-        HBox titleContainer = new HBox(10);
-        titleContainer.setPrefSize(DEFAULT_WIDTH, 40.0);
-        titleContainer.setAlignment(Pos.CENTER);
+        HBox promptContainer = new HBox();
+        promptContainer.setAlignment(Pos.CENTER);
         
-        Text titleText = new Text(myResources.getProperty("titleText"));
-        titleText.setTextAlignment(TextAlignment.CENTER);
+        Text promptText = new Text(myResources.getProperty("promptText"));
+        promptText.setTextAlignment(TextAlignment.CENTER);
         
-        titleContainer.getChildren().add(titleText);
-        content.getChildren().add(titleContainer);
+        promptContainer.getChildren().add(promptText);
+        content.getChildren().add(promptContainer);
         
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -117,6 +117,7 @@ public class OpenSessionTransactionView extends BaseView {
         formGrid.add(formItem, 0, 1);
         
         HBox startCashContainer = new HBox(5);
+        startCashContainer.setPadding(new Insets(5));
         startCashContainer.setAlignment(Pos.CENTER_LEFT);
         Text cashSymbol = new Text(myResources.getProperty("currency"));
         startCashField = new TextField();
@@ -134,7 +135,7 @@ public class OpenSessionTransactionView extends BaseView {
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("notes"),
                 notesField);
-        formItem.setPrefWidth(500);
+        formItem.setPrefWidth(MY_WIDTH);
         formGrid.add(formItem, 0, 4);
         
         submitButton = new Button(myResources.getProperty("submit"));
@@ -195,6 +196,11 @@ public class OpenSessionTransactionView extends BaseView {
             displayErrorMessage(myResources.getProperty("errCashInvalid"));
             startCashField.requestFocus();
             return false;
+        }
+        
+        String notes = notesField.getText();
+        if ((notes == null) || notes.equals("")) {
+            notesField.setText("<empty>");
         }
         return true;
     }

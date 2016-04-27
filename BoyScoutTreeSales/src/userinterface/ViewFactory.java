@@ -28,8 +28,10 @@ public class ViewFactory {
              
             case "EditTreeTypeTransactionView":
                 return new EditTreeTypeFormView(model);   
+                
             case "TreeTypeDataView":
                 return new AddTreeTypeFormView(model);
+                
             case "EditTreeTransactionView":
                 return new EditTreeTransactionView(model);
             
@@ -50,6 +52,12 @@ public class ViewFactory {
                 
             case "OpenShiftFormView":
                 return new OpenShiftFormView(model);
+                
+            case "CloseSessionTransactionView":
+                return new CloseSessionTransactionView(model);
+
+            case "SellTreeTransactionView":
+                return new SellTreeView(model);
                 
             default:
                 return null;
