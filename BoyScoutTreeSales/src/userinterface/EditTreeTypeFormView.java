@@ -29,6 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.TreeType;
 import model.TreeTypeTableModel;
 import static userinterface.BaseView.DEFAULT_WIDTH;
@@ -44,13 +46,13 @@ public class EditTreeTypeFormView extends BaseView {
     protected Button cancelButton;
     protected TableView<TreeTypeTableModel> tableOfTreeTypes;
     
-    public EditTreeTypeFormView(IModel model) {
+    public EditTreeTypeFormView(IModel model) 
+    {
         super(model, "EditTreeTypeTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);
         myModel.subscribe("TreeTypes", this);
-        myModel.subscribe("ClearList", this);
-        myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("ClearList", this);  
     }
 
     @Override
@@ -65,8 +67,21 @@ public class EditTreeTypeFormView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("table");
         
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
+        
+        
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         IFormItemStrategy formItemBuilder;
+        
+        
         Pane formItem;
         try {
             formItemBuilder = (IFormItemStrategy)Class.forName(
@@ -77,7 +92,7 @@ public class EditTreeTypeFormView extends BaseView {
             return content;
         }
         
-        HBox searchContainer = new HBox(10);
+        HBox searchContainer = new HBox(20);
         searchContainer.setAlignment(Pos.CENTER);
         
         barcodeSearch = new TextField();
@@ -117,7 +132,7 @@ public class EditTreeTypeFormView extends BaseView {
                 new PropertyValueFactory("BarcodePrefix"));
         
         tableOfTreeTypes.getColumns().addAll(
-                idColumn, 
+                //idColumn, 
                 typeColumn, 
                 costColumn,
                 barcodeColumn
@@ -128,18 +143,13 @@ public class EditTreeTypeFormView extends BaseView {
         tableScrollPane.setContent(tableOfTreeTypes);
         content.getChildren().add(tableScrollPane);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         editButton = new Button(myResources.getProperty("editButton"));
         editButton.setOnAction(actionHandler);
         editButton.setPrefWidth(100);
         buttonContainer.getChildren().add(editButton);
-        
-        removeButton = new Button(myResources.getProperty("removeButton"));
-        removeButton.setOnAction(actionHandler);
-        removeButton.setPrefWidth(100);
-        buttonContainer.getChildren().add(removeButton);
         
         cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(actionHandler);
@@ -183,22 +193,13 @@ public class EditTreeTypeFormView extends BaseView {
             searchTerms.setProperty("BarcodePrefix", barcodeSearch.getText());
             myModel.stateChangeRequest("SearchTreeTypes", searchTerms);
         }
-        else if (source == removeButton) {
-            TreeTypeTableModel itemSelected = tableOfTreeTypes.getSelectionModel().getSelectedItem();
-            if (itemSelected == null) {
-                displayErrorMessage(myResources.getProperty("errNoSelection"));
-            }
-            else {
-                myModel.stateChangeRequest("RemoveTreeType", itemSelected.getTreeTypeID());
-                displayMessage(myResources.getProperty("deleteSuccess"));
-            }
-        }
         else if (source == editButton) {
             TreeTypeTableModel itemSelected = tableOfTreeTypes.getSelectionModel().getSelectedItem();
             if (itemSelected == null) {
                 displayErrorMessage(myResources.getProperty("errNoSelection"));
             }
             else {
+                System.out.println("itemSelected " + itemSelected.getTreeTypeID());
                 myModel.stateChangeRequest("EditTreeType", itemSelected.getTreeTypeID());
             }
         }

@@ -11,6 +11,7 @@ package model;
 
 import exception.InvalidPrimaryKeyException;
 import impresario.IView;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -68,9 +69,18 @@ public class ScoutCollection extends EntityBase implements IView {
         return low;
     }
     
-    private void addScout(Scout s) {
+    public void addScout(Scout s) {
         int index = findIndexToAdd(s);
         scouts.insertElementAt(s, index);
+    }
+    
+    public void removeScout(String id) {
+        Iterator<Scout> i = scouts.iterator();
+        while (i.hasNext()) {
+            if (i.next().getState("ID").equals(id)) {
+                i.remove();
+            }
+        }
     }
     
     public Scout retrieve(String id) {

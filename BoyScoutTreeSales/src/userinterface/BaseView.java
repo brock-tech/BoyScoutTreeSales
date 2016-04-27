@@ -57,7 +57,7 @@ public abstract class BaseView extends View {
             /* Resource file not found or no additional resources needed */ 
         }
         
-        VBox container = new VBox(10);
+        VBox container = new VBox(20);
         container.setPrefWidth(DEFAULT_WIDTH);
         container.getStyleClass().add("body");
         
@@ -102,8 +102,6 @@ public abstract class BaseView extends View {
         
         Text titleText = new Text(myResources.getProperty("titleText"));
         titleText.getStyleClass().add("header-text");
-        titleText.setFont(Font.font("SansSerif", FontWeight.BOLD, 20.0));
-        titleText.setFill(Color.web("GREEN"));
         titleText.setTextAlignment(TextAlignment.CENTER);
         
         titleContainer.getChildren().add(titleText);

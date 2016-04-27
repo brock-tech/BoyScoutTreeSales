@@ -33,14 +33,14 @@ import model.Sale;
  *
  * @author mike
  */
-public class CloseShiftTransactionView extends BaseView {
+public class CloseSessionTransactionView extends BaseView {
     protected TextField EndTime;
     protected TextField TotalCheckTransactionAmount;
     protected TextField EndingCash;
     protected Button CloseButton;
     protected Button cancelButton;
 
-    public CloseShiftTransactionView(IModel model) {
+    public CloseSessionTransactionView(IModel model) {
         super(model, "CloseShiftTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);

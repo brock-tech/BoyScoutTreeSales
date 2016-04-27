@@ -10,6 +10,7 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IModel;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
@@ -25,7 +26,7 @@ public class AddTreeTransaction extends Transaction {
     
     public AddTreeTransaction(){
         super();
-    }   
+    }
     
      @Override
     protected void setDependencies() {

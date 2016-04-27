@@ -21,13 +21,13 @@ import userinterface.ViewFactory;
  *
  * @author mike
  */
-public class CloseShiftTransaction extends Transaction {
+public class CloseSessionTransaction extends Transaction {
     
     protected SaleCollection saleCollection;
     protected float totalCash;
     protected float totalCheck;
     
-    public CloseShiftTransaction() {
+    public CloseSessionTransaction() {
         super();
     }
 
