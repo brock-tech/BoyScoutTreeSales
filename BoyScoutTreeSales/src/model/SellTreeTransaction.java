@@ -108,7 +108,10 @@ public class SellTreeTransaction extends Transaction {
     catch(InvalidPrimaryKeyException exc)
     {
         if(treeSold != null)
-            treeSold.delete();
+        {
+            if(treeSold.isAvailable())
+                    treeSold.setSold();
+        }
     }
   }
 }
