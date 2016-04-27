@@ -36,12 +36,12 @@ public class OpenShiftTransaction extends Transaction {
 
     @Override
     protected Scene createView() {
-        Scene currentScene = myViews.get("OpenShiftTransactionView");
+        Scene currentScene = myViews.get("CloseShiftTransactionView");
         
         if (currentScene == null) {
-            View newView = ViewFactory.createView("OpenShiftTransactionView", this);
+            View newView = ViewFactory.createView("CloseShiftTransactionView", this);
             currentScene = new Scene(newView);
-            myViews.put("OpenShiftTransactionView", currentScene);
+            myViews.put("CloseShiftTransactionView", currentScene);
         }
         
         currentScene.getStylesheets().add("userinterface/style.css");

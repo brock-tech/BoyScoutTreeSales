@@ -35,6 +35,9 @@ public class ViewFactory {
             case "EditScoutTransactionView":
                 return new EditScoutTransactionView(model);
             
+            case "CloseShiftTransactionView":
+                return new CloseShiftTransactionView(model);
+                
             case "ScoutDataView":
                 return new ScoutFormView(model);
                 

@@ -29,6 +29,8 @@ public class TransactionFactory {
                 return new EditTreeTransaction();
             case "RemoveTree":
                 return new RemoveTreeTransaction();
+            case "CloseShift":
+                return new CloseShiftTransaction();
             default: return null;
         }
     }

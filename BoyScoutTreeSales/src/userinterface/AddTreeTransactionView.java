@@ -155,7 +155,7 @@ public class AddTreeTransactionView extends BaseView {
                 //LocalDateTime currentDate = LocalDateTime.now();
                 //String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                 //p.setProperty("DateStatusUpdated", dateLastUpdate);
-                p.setProperty("SalePrice", "0");
+                //p.setProperty("SalePrice", "0");
                 
                 myModel.stateChangeRequest("Submit", p);
             }

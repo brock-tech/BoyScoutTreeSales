@@ -104,7 +104,7 @@ public class TreeLotCoordinatorView extends BaseView {
             myModel.stateChangeRequest("SellTree", null);
         }
         else if (eventSource.equals(shiftButton)) {
-            myModel.stateChangeRequest("ManageShift", null);
+            myModel.stateChangeRequest("CloseShift", null);
         }
         else if (eventSource.equals(manageButton)) {
             myModel.stateChangeRequest("Administration", null);
