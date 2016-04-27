@@ -33,14 +33,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import model.EditTreeTypeTransaction;
-import model.TreeTypeCollection;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -113,6 +113,16 @@ public class SellTreeView extends BaseView {
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 1);
         
+         
+        barcodeField = new TextField();
+        barcodeField.setOnAction(submitHandler);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("barcodeField"),
+                barcodeField
+        );
+        formItem.setPrefWidth(300);
+        formGrid.add(formItem, 0, 2);
+        
         transactionTypeField = new TextField();
         transactionTypeField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
@@ -120,7 +130,7 @@ public class SellTreeView extends BaseView {
                 transactionTypeField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 2);
+        formGrid.add(formItem, 0, 3);
         
         paymentMethodField = new TextField();
         paymentMethodField.setOnAction(submitHandler);
@@ -129,7 +139,7 @@ public class SellTreeView extends BaseView {
                 paymentMethodField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 3);
+        formGrid.add(formItem, 0, 4);
         
         customerNameField = new TextField();
         customerNameField.setOnAction(submitHandler);
@@ -138,16 +148,17 @@ public class SellTreeView extends BaseView {
                 customerNameField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 4);
+        formGrid.add(formItem, 0, 5);
         
         customerPhoneField = new TextField();
         customerPhoneField.setOnAction(submitHandler);
+        customerPhoneField.setPromptText(myResources.getProperty("phoneNumPrompt"));
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("customerPhoneField"),
                 customerPhoneField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 5);
+        formGrid.add(formItem, 0, 6);
         
         customerEmailField = new TextField();
         customerEmailField.setOnAction(submitHandler);
@@ -156,16 +167,17 @@ public class SellTreeView extends BaseView {
                 customerEmailField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 6);
+        formGrid.add(formItem, 0, 7);
         
         transactionDateField = new TextField();
         transactionDateField.setOnAction(submitHandler);
+        transactionDateField.setPromptText(myResources.getProperty("datePrompt"));
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("transactionDateField"),
                 transactionDateField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 7);
+        formGrid.add(formItem, 0, 8);
         
         transactionTimeField = new TextField();
         transactionTimeField.setOnAction(submitHandler);
@@ -174,19 +186,8 @@ public class SellTreeView extends BaseView {
                 transactionTimeField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 8);
+        formGrid.add(formItem, 0, 9);
        
-        /*
-        dateStatusUpdatedField = new TextField();
-        dateStatusUpdatedField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("dateStatusUpdatedField"),
-                dateStatusUpdatedField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 9);*/
-        
-        
          HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
         
@@ -230,18 +231,22 @@ public class SellTreeView extends BaseView {
              newSaleData.setProperty("TransactionType", transactionTypeField.getText());
              newSaleData.setProperty("Barcode", barcodeField.getText());
              
-             newSaleData.setProperty("TransactionAmount", idField.getText());
+             newSaleData.setProperty("TransactionAmount", transactionAmountField.getText());
              newSaleData.setProperty("SessionID", sessionIDField.getText());
              newSaleData.setProperty("PaymentMethod", paymentMethodField.getText());
 
-             newSaleData.setProperty("CustomerName", idField.getText());
+             newSaleData.setProperty("CustomerName", customerNameField.getText());
              newSaleData.setProperty("CustomerPhone", customerPhoneField.getText());
              newSaleData.setProperty("CustomerEmail", customerEmailField.getText());
 
              newSaleData.setProperty("TransactionDate", transactionDateField.getText());
              newSaleData.setProperty("TransactionTime", transactionTimeField.getText());
-             newSaleData.setProperty("DateStatusUpdatedPrefix", dateStatusUpdatedField.getText());
-
+  
+             DateFormat dateFormat = new SimpleDateFormat(myResources.getProperty("currentDateFormat"));
+             //get current date time with Date()
+             //yyyy/MM/dd HH:mm:ss
+	     Date date = new Date();
+             newSaleData.setProperty("DateStatusUpdated", dateFormat.format(date));
 
              //System.out.println("barcode " + barcodePrefixField.getText() );
              myModel.stateChangeRequest("Submit", newSaleData);
@@ -291,7 +296,7 @@ public class SellTreeView extends BaseView {
             return false;
         }
         value = customerPhoneField.getText();
-        if ((value == null) || "".equals(value)) {
+        if (!value.matches(myResources.getProperty("phoneNumFormat"))) {
             displayErrorMessage(myResources.getProperty("errPhoneNull"));
             customerPhoneField.requestFocus();
             return false;
@@ -303,7 +308,7 @@ public class SellTreeView extends BaseView {
             return false;
         }
         value = transactionDateField.getText();
-        if ((value == null) || "".equals(value)) {
+        if (!value.matches(myResources.getProperty("dateFormat"))) {
             displayErrorMessage(myResources.getProperty("errTransactionDateNull"));
             transactionDateField.requestFocus();
             return false;
