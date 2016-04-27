@@ -63,18 +63,18 @@ public class OpenShiftLookupView extends BaseView {
             }
         };
         
-        VBox content = new VBox(25);
+        VBox content = new VBox(10);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(5, 20, 5, 20));
         
-        Text titleText = new Text(myResources.getProperty("subtitleText"));
-        titleText.setTextAlignment(TextAlignment.CENTER);
+        Text promptText = new Text(myResources.getProperty("promptText"));
+        promptText.setTextAlignment(TextAlignment.CENTER);
         
-        HBox titleContainer = new HBox(10);
-        titleContainer.setPrefSize(DEFAULT_WIDTH, 40.0);
-        titleContainer.setAlignment(Pos.CENTER);
-        titleContainer.getChildren().add(titleText);
+        HBox promptContainer = new HBox();
+        promptContainer.setPrefWidth(DEFAULT_WIDTH);
+        promptContainer.setAlignment(Pos.CENTER);
+        promptContainer.getChildren().add(promptText);
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
@@ -106,7 +106,7 @@ public class OpenShiftLookupView extends BaseView {
         doneButton.setPrefWidth(100);
         buttonContainer.getChildren().add(doneButton);
         
-        content.getChildren().addAll(titleContainer, lookupTable, scoutsList, buttonContainer);
+        content.getChildren().addAll(promptContainer, lookupTable, scoutsList, buttonContainer);
         
         return content;
     }

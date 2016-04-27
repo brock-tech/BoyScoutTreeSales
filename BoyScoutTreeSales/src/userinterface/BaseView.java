@@ -37,13 +37,8 @@ public abstract class BaseView extends View {
     
     protected MessageView statusLog;
     
-    /**
-     * 
-     * @param model
-     * @param classname
-     */
     //----------------------------------------------------------
-    protected BaseView(IModel model, String classname) {
+    protected BaseView(IModel model, String classname, double prefWidth) {
         super(model, classname);
         
         myLocale = SystemLocale.getInstance();
@@ -58,7 +53,7 @@ public abstract class BaseView extends View {
         }
         
         VBox container = new VBox(20);
-        container.setPrefWidth(DEFAULT_WIDTH);
+        container.setPrefWidth(prefWidth);
         container.getStyleClass().add("body");
         
         container.getChildren().add(createHeader());
@@ -68,6 +63,10 @@ public abstract class BaseView extends View {
         getChildren().add(container);
         
         myModel.subscribe("TransactionError", this);
+    }
+    
+    protected BaseView(IModel model, String classname) {
+        this(model, classname, DEFAULT_WIDTH);
     }
     
     /**

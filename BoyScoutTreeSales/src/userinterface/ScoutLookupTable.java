@@ -152,7 +152,7 @@ public class ScoutLookupTable extends Group {
         );
         
         ScrollPane tableScrollPane = new ScrollPane();
-        tableScrollPane.setPrefSize(DEFAULT_WIDTH, 300);
+        tableScrollPane.setPrefSize(DEFAULT_WIDTH, 200);
         tableScrollPane.setContent(tableOfScouts);
         
         VBox content = new VBox(25);
