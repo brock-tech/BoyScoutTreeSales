@@ -50,7 +50,7 @@ public class SelectAdminActionView extends BaseView {
             }
         };
         
-        VBox formContent = new VBox(10);
+        VBox formContent = new VBox(0);
         formContent.setPrefWidth(600.0);
         formContent.setAlignment(Pos.CENTER);
         
@@ -62,8 +62,8 @@ public class SelectAdminActionView extends BaseView {
         GridPane grid = new GridPane();
         grid.setPrefWidth(600.0);
         grid.setAlignment(Pos.CENTER);
-        grid.setVgap(10);
-        grid.setHgap(10);
+        grid.setVgap(20);
+        grid.setHgap(20);
         grid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
         
         addScoutButton = new Button(myResources.getProperty("addScoutButtonText"));
