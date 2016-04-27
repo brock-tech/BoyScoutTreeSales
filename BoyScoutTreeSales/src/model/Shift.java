@@ -9,15 +9,13 @@
 //********************************************************************
 package model;
 
-import exception.InvalidPrimaryKeyException;
+//import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
+//import java.util.Vector;
 import userinterface.SystemLocale;
 
 /**
@@ -32,6 +30,7 @@ public class Shift extends EntityBase {
     private final Locale myLocale;
     private final ResourceBundle myMessages;
     
+    /*
     public Shift(String scoutId, String sessionId) throws InvalidPrimaryKeyException {
         super(myTableName);
         
@@ -70,12 +69,13 @@ public class Shift extends EntityBase {
             throw new InvalidPrimaryKeyException("");
         }
     }
+    */
 
     public Shift(Properties props) {
         super(myTableName);
         
         myLocale = SystemLocale.getInstance();
-        myMessages = null;// ResourceBundle.getBundle("model.i18n.Shift", myLocale);
+        myMessages =  ResourceBundle.getBundle("model.i18n.Shift", myLocale);
         
         persistentState = new Properties();
 
@@ -115,19 +115,13 @@ public class Shift extends EntityBase {
         } 
         else { // Insert New
             try {
-                Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ID", scoutId.toString());
+                Integer shiftId = insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("ID", shiftId.toString());
                 
-//                updateStatusMessage = String.format(myLocale,
-//                        myMessages.getString("insertSuccessMsg"),
-//                        persistentState.getProperty("FirstName"),
-//                        persistentState.getProperty("LastName"));
+                updateStatusMessage = myMessages.getString("insertSuccessMsg");
 
             } catch (SQLException ex) {
-//                updateStatusMessage = String.format(myLocale,
-//                        myMessages.getString("insertErrorMsg"),
-//                        persistentState.getProperty("FirstName"),
-//                        persistentState.getProperty("LastName"));
+                updateStatusMessage = myMessages.getString("insertErrorMsg");
             }
         }
     }

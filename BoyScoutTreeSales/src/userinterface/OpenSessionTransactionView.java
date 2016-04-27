@@ -159,17 +159,18 @@ public class OpenSessionTransactionView extends BaseView {
         Object source = event.getSource();
         
         if (source == submitButton) {
-//            if (validate()) {
+            if (validate()) {
                 Properties p = new Properties();
-//                p.setProperty("StartDate", dateField.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
-//                p.setProperty("StartTime", startTimeField.getTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
-//                p.setProperty("EndTime", "<empty>");
-//                p.setProperty("StartingCash", startCashField.getText());
-//                p.setProperty("EndingCash", "<empty>");
-//                p.setProperty("TotalCheckTransactionsAmount", "<empty>");
-//                p.setProperty("Notes", notesField.getText());
+                p.setProperty("StartDate", dateField.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                p.setProperty("StartTime", startTimeField.getTime().format(
+                        DateTimeFormatter.ofPattern("HH:mm")));
+                p.setProperty("EndTime", "<empty>");
+                p.setProperty("StartingCash", startCashField.getText());
+                p.setProperty("EndingCash", "<empty>");
+                p.setProperty("TotalCheckTransactionsAmount", "<empty>");
+                p.setProperty("Notes", notesField.getText());
                 myModel.stateChangeRequest("SubmitSession", p);
-//            }
+            }
         }
         else if (source == cancelButton) {
             myModel.stateChangeRequest("Done", null);
@@ -185,6 +186,11 @@ public class OpenSessionTransactionView extends BaseView {
         
         startCashField.setText(startCashField.getText().trim());
         String cashInput = startCashField.getText();
+        if (cashInput == null || cashInput.equals("")) {
+            displayErrorMessage(myResources.getProperty("errCashNull"));
+            startCashField.requestFocus();
+            return false;
+        }
         if (!cashInput.matches(myResources.getProperty("cashFormat"))) {
             displayErrorMessage(myResources.getProperty("errCashInvalid"));
             startCashField.requestFocus();

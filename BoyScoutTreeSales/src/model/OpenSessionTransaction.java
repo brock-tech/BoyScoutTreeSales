@@ -37,7 +37,7 @@ public class OpenSessionTransaction extends Transaction {
         Properties dependencies = new Properties();
         
         dependencies.put("SubmitSession", "OpenSessionId,TransactionError,UpdateStatusMessage");
-        dependencies.put("SearchScouts", "SearchResults,TransactionError,UpdateStatusMessage");
+        dependencies.put("SearchScouts", "SearchResults");
         dependencies.put("SelectScout", "SelectedScout,TransactionError,UpdateStatusMessage");
         dependencies.put("SubmitShift", "ScoutsOnShift,TransactionError,UpdateStatusMessage");
         dependencies.put("Done", "CancelTransaction");
@@ -138,16 +138,19 @@ public class OpenSessionTransaction extends Transaction {
     }
     
     void createNewSession(Properties p) {
-//        Session newSession = new Session(p);
-//        newSession.update();
-//        
-//        sessionId = (String) newSession.getState("ID");
-//        updateStatusMessage = (String) newSession.getState("UpdateStatusMessage");
-//        transactionErrorMessage = updateStatusMessage;
-//        
-//        if ((sessionId != null) && (!"".equals(sessionId))) {
+        updateStatusMessage = "";
+        transactionErrorMessage = "";
+        
+        Session newSession = new Session(p);
+        newSession.update();
+        
+        sessionId = (String) newSession.getState("ID");
+        updateStatusMessage = (String) newSession.getState("UpdateStatusMessage");
+        transactionErrorMessage = updateStatusMessage;
+        
+        if ((sessionId != null) && (!"".equals(sessionId))) {
             createAndShowNewShiftView();          
-//        }
+        }
     }
     
     private void searchScouts(Properties searchTerms) {
@@ -159,24 +162,28 @@ public class OpenSessionTransaction extends Transaction {
         try {
             scoutSearchResults.lookupScoutsByName(firstName, lastName);
         } catch (Exception e) {
-            transactionErrorMessage = e.getMessage();
+            updateStatusMessage = e.getMessage();
+            transactionErrorMessage = updateStatusMessage;
         }
     }
     
-    void submitShift(Properties p) {
+    void submitShift(Properties p) {     
+        updateStatusMessage = "";
+        transactionErrorMessage = "";
+        
         p.setProperty("SessionID", sessionId);
         p.setProperty("ScoutID", selectedScoutId);
         
-//        Shift newShift = new Shift(p);
-//        newShift.update();
-//        updateStatusMessage = (String) newShift.getState("UpdateStatusMessage");
-//        transactionErrorMessage = updateStatusMessage;
-//        
-//        String shiftId = (String) newShift.getState("ID");
-//        if ((sessionId != null) && (!"".equals(sessionId))) {
+        Shift newShift = new Shift(p);
+        newShift.update();
+        updateStatusMessage = (String) newShift.getState("UpdateStatusMessage");
+        transactionErrorMessage = updateStatusMessage;
+        
+        String shiftId = (String) newShift.getState("ID");
+        if ((sessionId != null) && (!"".equals(sessionId))) {
             scoutsOnShift.addScout(scoutSearchResults.retrieve(selectedScoutId));
             createAndShowNewShiftView();
-//        }
+        }
     }
     
 

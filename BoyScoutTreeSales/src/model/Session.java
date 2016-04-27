@@ -11,9 +11,6 @@ package model;
 
 import exception.InvalidPrimaryKeyException;
 import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -40,7 +37,7 @@ public class Session extends EntityBase {
         setDependencies();
         
         myLocale = SystemLocale.getInstance();
-        myMessages = null;// ResourceBundle.getBundle("model.i18n.Session", myLocale);
+        myMessages = ResourceBundle.getBundle("model.i18n.Session", myLocale);
         
         String query = String.format("SELECT * FROM %s WHERE (ID = '%s')", myTableName, id);
         
@@ -51,7 +48,8 @@ public class Session extends EntityBase {
 
             // There should be exactly one session. Any more will be an error.
             if (size != 1) {
-                throw new InvalidPrimaryKeyException(""); // TODO: Add message
+                throw new InvalidPrimaryKeyException(String.format(
+                    myMessages.getString("multipleSessionFoundMsg"), id)); // TODO: Add message
             }
             else {
                 // Copy all retrived data into persistent state.
@@ -70,7 +68,8 @@ public class Session extends EntityBase {
             }
         } 
         else {
-            throw new InvalidPrimaryKeyException(""); // TODO: Add message
+            throw new InvalidPrimaryKeyException(String.format(
+                    myMessages.getString("noSessionFoundMsg"), id));
         }
     } 
     
@@ -126,10 +125,10 @@ public class Session extends EntityBase {
 
                 updatePersistentState(mySchema, persistentState, whereClause);
 
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("updateSuccessMsg");
 
             } catch (SQLException ex) {
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("updateErrorMsg"); 
             }
         } 
         else { // Insert New
@@ -137,10 +136,10 @@ public class Session extends EntityBase {
                 Integer id = insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", id.toString());
                 
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("insertSuccessMsg");
 
             } catch (SQLException ex) {
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("insertErrorMsg"); // @todo: Add message
             }
         }
     }
@@ -173,7 +172,8 @@ public class Session extends EntityBase {
 
             // There should be exactly one session. Any more will be an error.
             if (size != 1) {
-                throw new InvalidPrimaryKeyException(""); // TODO: Add message
+                throw new InvalidPrimaryKeyException(
+                        session.myMessages.getString("noOpenSessionFound"));
             }
             else {
                 // Copy all retrived data into persistent state.
@@ -192,7 +192,8 @@ public class Session extends EntityBase {
             }
         } 
         else {
-            throw new InvalidPrimaryKeyException(""); // TODO: Add message
+            throw new InvalidPrimaryKeyException(
+                    session.myMessages.getString("multipleOpenSessionsFound"));
         }
         
         return session;

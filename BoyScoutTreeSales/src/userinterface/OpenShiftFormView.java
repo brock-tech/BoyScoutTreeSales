@@ -162,8 +162,10 @@ public class OpenShiftFormView extends BaseView {
         if (source == submitButton) {
             if (validate()) {
                 Properties p = new Properties();
-                p.setProperty("StartTime", startTimeField.getTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
-                p.setProperty("EndTime", endTimeField.getTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
+                p.setProperty("StartTime", startTimeField.getTime().format(
+                        DateTimeFormatter.ofPattern("HH:mm")));
+                p.setProperty("EndTime", endTimeField.getTime().format(
+                        DateTimeFormatter.ofPattern("HH:mm")));
                 p.setProperty("CompanionName", companionNameField.getText());
                 p.setProperty("CompanionHours", companionHoursField.getValue().toString());
                 myModel.stateChangeRequest("SubmitShift", p);
