@@ -29,6 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.Scout;
 
 /**
@@ -36,12 +38,13 @@ import model.Scout;
  * @author mike
  */
 public class EditScoutTransactionView extends BaseView {
-    protected TextField firstNameSearchField;
-    protected TextField lastNameSearchField;    
+    //protected TextField firstNameSearchField;
+    //protected TextField lastNameSearchField;    
     protected Button editButton;
     protected Button removeButton;
     protected Button cancelButton;
-    protected TableView<ScoutTableModel> tableOfScouts;
+    //protected TableView<ScoutTableModel> tableOfScouts;
+    protected ScoutLookupTable lookupTable;
     
     public EditScoutTransactionView(IModel model) {
         super(model, "EditScoutTransactionView");
@@ -63,8 +66,21 @@ public class EditScoutTransactionView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("table");
         
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
+        
+        
+         Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         IFormItemStrategy formItemBuilder;
+
+        
         Pane formItem;
         try {
             formItemBuilder = (IFormItemStrategy)Class.forName(
@@ -75,102 +91,10 @@ public class EditScoutTransactionView extends BaseView {
             return content;
         }
         
-        HBox searchContainer = new HBox(10);
-        searchContainer.setAlignment(Pos.CENTER);
+        lookupTable = new ScoutLookupTable();
+        lookupTable.setOnAction(actionHandler);
         
-        firstNameSearchField = new TextField();
-        firstNameSearchField.setOnAction(actionHandler);
-        firstNameSearchField.setPromptText(myResources.getProperty("searchPrompt"));
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("firstName"), firstNameSearchField);
-        formItem.setPrefWidth(DEFAULT_WIDTH / 2);
-        searchContainer.getChildren().add(formItem);
-        
-        lastNameSearchField = new TextField();
-        lastNameSearchField.setOnAction(actionHandler);
-        lastNameSearchField.setPromptText(myResources.getProperty("searchPrompt"));
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("lastName"), lastNameSearchField);
-        formItem.setPrefWidth(DEFAULT_WIDTH / 2);
-        searchContainer.getChildren().add(formItem);
-        
-        content.getChildren().add(searchContainer);
-        
-        tableOfScouts = new TableView<>();
-        tableOfScouts.getSelectionModel();
-        tableOfScouts.setEditable(false);
-        
-        
-        TableColumn idColumn = new TableColumn(myResources.getProperty("id"));
-        idColumn.setMinWidth(20);
-        idColumn.setCellValueFactory(
-                new PropertyValueFactory("id"));
-        idColumn.setVisible(false);
-        
-        TableColumn firstNameColumn = new TableColumn(myResources.getProperty("firstName"));
-        firstNameColumn.setMinWidth(125);
-        firstNameColumn.setCellValueFactory(
-                new PropertyValueFactory("firstName"));
-        
-        TableColumn middleNameColumn = new TableColumn(myResources.getProperty("middleName"));
-        middleNameColumn.setMinWidth(125);
-        middleNameColumn.setCellValueFactory(
-                new PropertyValueFactory("middleName"));
-        
-        TableColumn lastNameColumn = new TableColumn(myResources.getProperty("lastName"));
-        lastNameColumn.setMinWidth(125);
-        lastNameColumn.setCellValueFactory(
-                new PropertyValueFactory("lastName"));
-        
-        TableColumn memberIdColumn = new TableColumn(myResources.getProperty("memberId"));
-        memberIdColumn.setMinWidth(125);
-        memberIdColumn.setCellValueFactory(
-                new PropertyValueFactory("memberId"));
-        
-        TableColumn dateOfBirthColumn = new TableColumn(myResources.getProperty("dateOfBirth"));
-        dateOfBirthColumn.setMinWidth(125);
-        dateOfBirthColumn.setCellValueFactory(
-                new PropertyValueFactory("dateOfBirth"));
-        
-        TableColumn phoneNumberColumn = new TableColumn(myResources.getProperty("phoneNumber"));
-        phoneNumberColumn.setMinWidth(200);
-        phoneNumberColumn.setCellValueFactory(
-                new PropertyValueFactory("phoneNumber"));
-        
-        TableColumn emailColumn = new TableColumn(myResources.getProperty("email"));
-        emailColumn.setMinWidth(300);
-        emailColumn.setCellValueFactory(
-                new PropertyValueFactory("email"));
-        
-        TableColumn statusColumn = new TableColumn(myResources.getProperty("status"));
-        statusColumn.setMinWidth(100);
-        statusColumn.setCellValueFactory(
-                new PropertyValueFactory("status"));
-        
-        TableColumn dateUpdateColumn = new TableColumn(myResources.getProperty("dateStatusUpdated"));
-        dateUpdateColumn.setMinWidth(150);
-        dateUpdateColumn.setCellValueFactory(
-                new PropertyValueFactory("dateStatusUpdated"));
-        
-        tableOfScouts.getColumns().addAll(
-                idColumn, 
-                firstNameColumn, 
-                middleNameColumn,
-                lastNameColumn,
-                memberIdColumn,
-                dateOfBirthColumn,
-                phoneNumberColumn,
-                emailColumn,
-                statusColumn,
-                dateUpdateColumn
-        );
-        
-        ScrollPane tableScrollPane = new ScrollPane();
-        tableScrollPane.setPrefSize(DEFAULT_WIDTH, 300);
-        tableScrollPane.setContent(tableOfScouts);
-        content.getChildren().add(tableScrollPane);
-        
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         editButton = new Button(myResources.getProperty("editButton"));
@@ -188,28 +112,9 @@ public class EditScoutTransactionView extends BaseView {
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
         
-        content.getChildren().add(buttonContainer);
+        content.getChildren().addAll(lookupTable, buttonContainer);
         
         return content;
-    }
-    
-    protected void getEntryTableModelValues() {
-        ObservableList<ScoutTableModel> tableData = FXCollections.observableArrayList();
-        try {
-            Vector entryList = (Vector) myModel.getState("Scouts");
-            Enumeration entries = entryList.elements();
-            
-            while (entries.hasMoreElements()) {
-                Scout nextScout = (Scout)entries.nextElement();
-                
-                ScoutTableModel scoutEntry = new ScoutTableModel(nextScout.getTableListView());
-                tableData.add(scoutEntry);
-            }
-            tableOfScouts.setItems(tableData);
-            
-        } catch (Exception e) {
-            // TODO: Handle exceptions
-        }
     }
     
     protected void processAction(Event event) {
@@ -217,14 +122,11 @@ public class EditScoutTransactionView extends BaseView {
         if (source == cancelButton) {
             myModel.stateChangeRequest("Back", null);
         }
-        else if (source == firstNameSearchField || source == lastNameSearchField) {
-            Properties searchTerms = new Properties();
-            searchTerms.setProperty("FirstName", firstNameSearchField.getText());
-            searchTerms.setProperty("LastName", lastNameSearchField.getText());
-            myModel.stateChangeRequest("SearchScouts", searchTerms);
+        else if (source == lookupTable) {
+            myModel.stateChangeRequest("SearchScouts", lookupTable.getSearchTerms());
         }
         else if (source == removeButton) {
-            ScoutTableModel itemSelected = tableOfScouts.getSelectionModel().getSelectedItem();
+            ScoutTableModel itemSelected = lookupTable.getSelectedItem();
             if (itemSelected == null) {
                 displayErrorMessage(myResources.getProperty("errNoScoutSelected"));
             }
@@ -233,7 +135,7 @@ public class EditScoutTransactionView extends BaseView {
             }
         }
         else if (source == editButton) {
-            ScoutTableModel itemSelected = tableOfScouts.getSelectionModel().getSelectedItem();
+            ScoutTableModel itemSelected = lookupTable.getSelectedItem();
             if (itemSelected == null) {
                 displayErrorMessage(myResources.getProperty("errNoScoutSelected"));
             }
@@ -249,7 +151,8 @@ public class EditScoutTransactionView extends BaseView {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
             
         } else if (key.equals("Scouts")) {
-            getEntryTableModelValues();
+            Vector scouts = (Vector)value;
+            lookupTable.setItems(scouts);
         }
     }
     

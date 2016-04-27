@@ -27,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.Tree;
 
 /**
@@ -42,7 +44,6 @@ public class EditTreeTransactionView extends BaseView {
 
     public EditTreeTransactionView(IModel model) {
         super(model, "EditTreeTransactionView");
-        
         myModel.subscribe("UpdateStatusMessage", this);
         myModel.subscribe("TreeToDisplay", this);
         
@@ -64,6 +65,11 @@ public class EditTreeTransactionView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+        
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);

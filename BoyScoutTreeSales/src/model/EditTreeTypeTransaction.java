@@ -39,7 +39,6 @@ public class EditTreeTypeTransaction extends Transaction {
     protected void setDependencies() {
         Properties dependencies = new Properties();
         dependencies.put("SearchTreeTypes", "TreeTypes,TransactionError");
-        dependencies.put("RemoveTreeType", "TreeTypes,TransactionError,UpdateStatusMessage");
         dependencies.put("EditTreeType", "TreeTypeToDisplay");
         dependencies.put("Submit", "TreeTypes,TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
@@ -68,7 +67,7 @@ public class EditTreeTypeTransaction extends Transaction {
     }
     
     private void createAndShowTreeTypeView() {
-        Scene currentScene = myViews.get("TreeTypeFormView");
+        Scene currentScene = myViews.get("TreeTypeDataView");
         
         if (currentScene == null) {
             View newView = ViewFactory.createView("TreeTypeDataView", this);
@@ -91,9 +90,6 @@ public class EditTreeTypeTransaction extends Transaction {
                 break;
             case "EditTreeType":
                 editTreeType((String)value);
-                break;
-            case "RemoveTreeType":
-                removeTreeType((String) value);
                 break;
             case "Submit":
                 updateSelectedTreeType((Properties)value);
@@ -153,7 +149,7 @@ public class EditTreeTypeTransaction extends Transaction {
     
     protected void editTreeType(String treeTypeId) {
         selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
-        
+        System.out.println("Collection retrieved " + treeTypeCollection.retrieve(treeTypeId));
         createAndShowTreeTypeView();
     }
     

@@ -42,6 +42,8 @@ public class TreeLotCoordinator implements IModel, IView {
     private final Stage myStage;
 
     private String transactionErrorMessage = "";
+    
+    private String openSessionId = "";
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
@@ -64,13 +66,20 @@ public class TreeLotCoordinator implements IModel, IView {
             String country = config.getProperty("country");
             SystemLocale.setLocale(language, country);
         }
-        catch (Exception e) {
+        catch (Exception exc) {
             System.out.println("BoyScoutTreeSales: Failed to determine locale. Using default (en_US).");
-            
             SystemLocale.setLocale("en", "US");
         }
         myLocale = SystemLocale.getInstance();
         myMessages = ResourceBundle.getBundle("model.i18n.TreeLotCoordinator", myLocale);
+        
+        // Load any existing open session
+        try {
+            IModel openSession = Session.findOpenSession();
+            openSessionId = (String)openSession.getState("ID");
+        } catch (Exception exc) {
+            openSessionId = "";
+        }
         
         setDependencies();
 
@@ -83,43 +92,17 @@ public class TreeLotCoordinator implements IModel, IView {
         myRegistry.setDependencies(dependencies);
     }
     
-    private void createAndShowMyView() {
-        Scene nextScene = (Scene) myViews.get("TreeLotCoordinatorView");
-
-        if (nextScene == null) {
-            View newView = ViewFactory.createView("TreeLotCoordinatorView", this);
-            nextScene = new Scene(newView);
-            nextScene.getStylesheets().add("userinterface/style.css");
-            myViews.put("TreeLotCoordinatorView", nextScene);
-        }
+    private void getCurrentSession() {
         
-        switchToScene(nextScene);
     }
     
-    private void createAndShowAdminView() {
-        Scene nextScene = (Scene) myViews.get("SelectAdminActionView");
-
-        if (nextScene == null) {
-            View newView = ViewFactory.createView("SelectAdminActionView", this);
-            nextScene = new Scene(newView);
-            nextScene.getStylesheets().add("userinterface/style.css");
-            myViews.put("SelectAdminActionView", nextScene);
-        }
-        
-        switchToScene(nextScene);
-    }
-
-    public void switchToScene(Scene nextScene) {
-        myStage.setScene(nextScene);
-        myStage.sizeToScene();
-
-        WindowPosition.placeCenter(myStage);
-    } 
-
     @Override
     public Object getState(String key) {
         if (key.equals("TransactionError")) {
             return transactionErrorMessage;
+        }
+        else if (key.equals("OpenSessionId")) {
+            return openSessionId;
         }
         
         return "";
@@ -140,8 +123,8 @@ public class TreeLotCoordinator implements IModel, IView {
                 break;
                 
             case "SellTree":
-            case "OpenShift":
-            case "CloseShift":
+            case "OpenSession":
+            case "CloseSession":
             case "RegisterScout":
             case "EditScout":
             case "AddTree":
@@ -152,7 +135,8 @@ public class TreeLotCoordinator implements IModel, IView {
                 doTransaction(key);
                 break;
                 
-            case "SessionStatus": 
+            case "OpenSessionId": 
+                openSessionId = (String)value;
                 break;
                 
             case "TransactionError":
@@ -174,7 +158,7 @@ public class TreeLotCoordinator implements IModel, IView {
     
     
     public void doTransaction(String transType) {
-        Transaction trans = TransactionFactory.createTransaction(transType);
+        Transaction trans = TransactionFactory.createTransaction(transType, this);
         
         if (trans != null) {
             trans.subscribe("CancelTransaction", this);
@@ -190,7 +174,44 @@ public class TreeLotCoordinator implements IModel, IView {
             System.out.println("FATAL ERROR: '"+transType+"' is not a valid transaction!");
         }
     }
+    
+    public void swapToView(Scene nextScene) {
+        if (nextScene == null) {
+            System.err.println("TreeLotCoordinator.swapToView(): Missing view for display");
+        }
+        else {
+            myStage.setScene(nextScene);
+            myStage.sizeToScene();
 
+            WindowPosition.placeCenter(myStage);
+        }
+    } 
+    
+    private void createAndShowMyView() {
+        Scene nextScene = (Scene) myViews.get("TreeLotCoordinatorView");
+
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("TreeLotCoordinatorView", this);
+            nextScene = new Scene(newView);
+            nextScene.getStylesheets().add("userinterface/style.css");
+            myViews.put("TreeLotCoordinatorView", nextScene);
+        }
+        
+        swapToView(nextScene);
+    }
+    
+    private void createAndShowAdminView() {
+        Scene nextScene = (Scene) myViews.get("SelectAdminActionView");
+
+        if (nextScene == null) {
+            View newView = ViewFactory.createView("SelectAdminActionView", this);
+            nextScene = new Scene(newView);
+            nextScene.getStylesheets().add("userinterface/style.css");
+            myViews.put("SelectAdminActionView", nextScene);
+        }
+        
+        swapToView(nextScene);
+    }
     
     @Override
     public void unSubscribe(String key, IView subscribe) {

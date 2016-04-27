@@ -39,6 +39,7 @@ public class EnterTreeBarcodeView extends BaseView {
         VBox content = new VBox(25);
         content.setPrefWidth(400);
         content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("table");
         
         EventHandler<ActionEvent> submitHandler = new EventHandler<ActionEvent>() {
             @Override

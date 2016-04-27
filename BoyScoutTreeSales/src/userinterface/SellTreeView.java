@@ -334,8 +334,15 @@ public class SellTreeView extends BaseView {
             return false;
         }
         return true;
-    }
-
+    }   
+    
+    protected boolean valiateSession()
+    {
+        String sessionNumber = (String)sessionIDField.getText();
+        Properties session = new Properties();
+        return true;
+    }      
+    
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {

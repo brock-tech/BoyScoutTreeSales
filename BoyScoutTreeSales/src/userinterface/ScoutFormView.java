@@ -26,6 +26,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -64,6 +66,11 @@ public class ScoutFormView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
+        
         IFormItemStrategy formItemBuilder;
         Pane formItem;
         try {
@@ -79,7 +86,8 @@ public class ScoutFormView extends BaseView {
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
-        formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        formGrid.getStyleClass().addAll("pane","grid");
+       // formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
         
         firstNameField = new TextField();
         firstNameField.setOnAction(submitHandler);
@@ -158,7 +166,7 @@ public class ScoutFormView extends BaseView {
 //        formItem.setPrefWidth(150);
 //        formGrid.add(formItem, 0, 7);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         submitButton = new Button(myResources.getProperty("submitButton"));
