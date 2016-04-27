@@ -49,7 +49,6 @@ import model.Tree;
  */
 public class SellTreeView extends BaseView {
     
-    protected TextField idField;
     protected TextField sessionIDField;
     protected TextField transactionTypeField;
     protected TextField barcodeField;
@@ -60,7 +59,7 @@ public class SellTreeView extends BaseView {
     protected TextField customerEmailField;
     protected TextField transactionDateField;
     protected TextField transactionTimeField;
-    
+    protected String sessionID;
     protected Button submitButton;
 //    protected Button clearFormButton;
     protected Button cancelButton;
@@ -72,6 +71,8 @@ public class SellTreeView extends BaseView {
       
         myModel.subscribe("UpdateStatusMessage", this);
          myModel.subscribe("SaleToDisplay", this);
+        sessionID = (String)myModel.getState("Session");
+        System.out.println("session " + sessionID);
     }
 
     @Override
@@ -325,24 +326,19 @@ public class SellTreeView extends BaseView {
             return false;
         }
         return true;
-    }   
-    
-    protected boolean valiateSession()
-    {
-        String sessionNumber = (String)sessionIDField.getText();
-        Properties session = new Properties();
-        return true;
-    }      
+    }       
     
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)myModel.getState("UpdateStatusMessage"));
+
         }
         else if (key.equals("SaleToDisplay")) {
              Tree selectedTree = (Tree)value;
             if (selectedTree != null) {
                 barcodeField.setText((String) selectedTree.getState("BarCode"));
+               sessionIDField.setText(sessionID);
             }
         }
     }

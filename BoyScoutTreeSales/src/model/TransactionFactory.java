@@ -34,7 +34,7 @@ public class TransactionFactory {
             case "OpenSession":
                 return new OpenSessionTransaction();
             case "SellTree":
-                return new SellTreeTransaction();
+                return new SellTreeTransaction(tlc);
 
             default: return null;
         }

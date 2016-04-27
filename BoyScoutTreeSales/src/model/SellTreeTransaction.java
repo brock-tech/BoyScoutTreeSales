@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
+import impresario.IModel;
 
 /**
  *
@@ -22,11 +23,13 @@ import userinterface.ViewFactory;
 public class SellTreeTransaction extends Transaction {
   String updateStatusMessage;
   protected Tree selectedTree;
-
-  public SellTreeTransaction() {
-    super();
+    String sessionID;
+  public SellTreeTransaction(IModel tlc)
+  {
+      super();
+      sessionID = (String)tlc.getState("OpenSessionId");
   }
-
+  
   @Override
   protected void setDependencies() {
     Properties dependencies = new Properties();
@@ -80,6 +83,8 @@ public class SellTreeTransaction extends Transaction {
         return updateStatusMessage;
         case "SaleToDisplay":
                 return selectedTree;  
+        case "Session":
+            return sessionID;
       default:
         return null;
     }
