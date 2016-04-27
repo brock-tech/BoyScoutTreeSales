@@ -1,0 +1,91 @@
+<<<<<<< HEAD
+[3/6/16 12:10 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/6/16 12:12 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/9/16 4:43 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/10/16 12:44 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/10/16 12:46 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/10/16 12:47 PM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>
+[3/29/16 10:33 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+[4/5/16 11:55 AM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:00 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:01 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:04 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:17 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:21 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:22 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:28 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/5/16 12:29 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 1:42 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:02 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:03 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:05 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 2:05 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+=======
+[4/5/16 10:01 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:03 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:05 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:06 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:07 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:08 AM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Scout' doesn't exist>
+[4/5/16 10:12 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditScout' transaction type.>
+>>>>>>> master
+[4/7/16 3:19 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/7/16 3:23 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 3:25 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/7/16 3:27 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:07 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:08 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:11 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:12 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:14 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/9/16 5:14 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1146: Table 'spr16_csc429_cbutc1.Tree' doesn't exist>
+[4/11/16 2:31 PM]|Tree|updatePersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'test' in 'where clause'>
+[4/11/16 2:34 PM]|Tree|updatePersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'TEST' in 'where clause'>
+[4/11/16 2:36 PM]|Tree|updatePersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'test' in 'where clause'>
+[4/11/16 3:53 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 0: Data truncation: Incorrect date value: '04/11/2016' for column 'DateStatusUpdated' at row 1>
+[4/11/16 3:58 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 0: Data truncation: Incorrect date value: '04/11/2016' for column 'DateStatusUpdated' at row 1>
+[4/11/16 6:54 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'test' in 'field list'>
+[4/11/16 6:57 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1265: Data truncated for column 'SalePrice' at row 1>
+[4/11/16 7:15 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 7:15 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 7:15 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 8:45 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/11/16 8:47 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/12/16 10:11 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'EditTree' transaction type.>
+[4/12/16 10:19 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 10:34 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:02 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:05 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:07 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'SalePrice' in 'field list'>
+[4/12/16 11:08 AM]|EditTreeAction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'CName' in 'field list'>
+[4/13/16 6:52 PM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/13/16 7:06 PM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'where clause'>
+[4/13/16 7:06 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'aze' in 'field list'>
+[4/14/16 10:04 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:09 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:18 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/14/16 10:21 AM]|TreeType|deletePersistentState|Error|NOTAG|null<SQL Exception: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/26/16 10:26 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/26/16 10:39 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'CloseShift' transaction type.>
+[4/26/16 10:39 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'CloseShift' transaction type.>
+[4/26/16 10:39 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'SellTree' transaction type.>
+[4/26/16 10:39 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'CloseShift' transaction type.>
+[4/26/16 10:40 AM]|TreeLotCoordinator|TreeLotCoordinator|Error|NOTAG|null<Could not instantiate delegate for 'CloseShift' transaction type.>
+[4/27/16 3:40 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/27/16 3:40 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/27/16 3:40 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/27/16 3:41 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree_Type` (`ID`))>
+[4/27/16 3:46 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree` (`TreeType`))>
+[4/27/16 3:46 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree` (`TreeType`))>

@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
 import exception.InvalidPrimaryKeyException;
+import impresario.IModel;
 
 /**
  *

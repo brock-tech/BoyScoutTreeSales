@@ -10,6 +10,7 @@
 package userinterface;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -26,7 +27,7 @@ public class TopAlignFormItem implements IFormItemStrategy {
     public TopAlignFormItem() { }
 
     @Override
-    public Pane buildControl(String description, Control control) {
+    public Pane buildControl(String description, Node control) {
         VBox container = new VBox();
         container.setFillWidth(true);
         container.setAlignment(Pos.TOP_LEFT);

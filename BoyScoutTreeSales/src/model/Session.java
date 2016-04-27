@@ -10,9 +10,10 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.time.LocalDateTime;
+import java.text.DecimalFormat;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -33,6 +34,7 @@ public class Session extends EntityBase {
     private final Locale myLocale;
     private final ResourceBundle myMessages;
     
+    
     public Session(String id) throws InvalidPrimaryKeyException {
         super(myTableName);
         
@@ -50,17 +52,18 @@ public class Session extends EntityBase {
 
             // There should be exactly one session. Any more will be an error.
             if (size != 1) {
-                throw new InvalidPrimaryKeyException(""); // TODO: Add message
+                throw new InvalidPrimaryKeyException(String.format(
+                    myMessages.getString("multipleSessionFoundMsg"), id)); // TODO: Add message
             }
             else {
                 // Copy all retrived data into persistent state.
-                Properties retrievedScoutData = allDataRetrieved.elementAt(0);
+                Properties retrievedSessionData = allDataRetrieved.elementAt(0);
                 persistentState = new Properties();
 
-                Enumeration allKeys = retrievedScoutData.propertyNames();
+                Enumeration allKeys = retrievedSessionData.propertyNames();
                 while (allKeys.hasMoreElements()) {
                     String nextKey = (String) allKeys.nextElement();
-                    String nextValue = retrievedScoutData.getProperty(nextKey);
+                    String nextValue = retrievedSessionData.getProperty(nextKey);
 
                     if (nextValue != null) {
                         persistentState.setProperty(nextKey, nextValue);
@@ -69,7 +72,8 @@ public class Session extends EntityBase {
             }
         } 
         else {
-            throw new InvalidPrimaryKeyException(""); // TODO: Add message
+            throw new InvalidPrimaryKeyException(String.format(
+                    myMessages.getString("noSessionFoundMsg"), id));
         }
     } 
     
@@ -93,11 +97,21 @@ public class Session extends EntityBase {
         }
     }
     
+    private Session() {
+        super(myTableName);
+        
+        setDependencies();
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = null;// ResourceBundle.getBundle("model.i18n.Session", myLocale);
+    }
+    
     private void setDependencies() {
         dependencies = new Properties();
         
         myRegistry.setDependencies(dependencies);
     }
+    
     /** */
     //--------------------------------------------------------------------------
     public void update() {
@@ -115,21 +129,21 @@ public class Session extends EntityBase {
 
                 updatePersistentState(mySchema, persistentState, whereClause);
 
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("updateSuccessMsg");
 
             } catch (SQLException ex) {
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("updateErrorMsg"); 
             }
         } 
         else { // Insert New
             try {
-                Integer scoutId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ID", scoutId.toString());
+                Integer id = insertAutoIncrementalPersistentState(mySchema, persistentState);
+                persistentState.setProperty("ID", id.toString());
                 
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("insertSuccessMsg");
 
             } catch (SQLException ex) {
-                updateStatusMessage = ""; // @todo: Add message
+                updateStatusMessage = myMessages.getString("insertErrorMsg"); // @todo: Add message
             }
         }
     }
@@ -148,6 +162,77 @@ public class Session extends EntityBase {
             persistentState.setProperty(key, (String)value);
         
         myRegistry.updateSubscribers(key, this);
+    }
+    
+    public BigDecimal getStartingCash() {
+        String cashAmount = persistentState.getProperty("StartingCash");
+        return new BigDecimal(cashAmount);
+    }
+    
+    public void setEndingCash(BigDecimal amount) {
+        amount = amount.setScale(2, BigDecimal.ROUND_DOWN);
+        
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+        df.setGroupingUsed(false);
+        
+        persistentState.setProperty("EndingCash", df.format(amount));
+    }
+    
+    public void setTotalCheckTransactionsAmount(BigDecimal amount) {
+        amount = amount.setScale(2, BigDecimal.ROUND_DOWN);
+        
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+        df.setGroupingUsed(false);
+        
+        persistentState.setProperty("TotalCheckTransactionsAmount", df.format(amount));
+    }
+    
+    public void setEndTime(LocalTime time) {
+        persistentState.setProperty("EndTime", 
+                time.format(DateTimeFormatter.ofPattern("HH:mm")));
+    }
+    
+    public static Session findOpenSession() throws InvalidPrimaryKeyException {
+        String query = "SELECT * FROM "+myTableName+" WHERE (EndTime = '<empty>')";
+        
+        Session session = new Session();
+        
+        Vector<Properties> allDataRetrieved = session.getSelectQueryResult(query);
+        
+        if (allDataRetrieved != null) {
+            int size = allDataRetrieved.size();
+
+            // There should be exactly one session. Any more will be an error.
+            if (size != 1) {
+                throw new InvalidPrimaryKeyException(
+                        session.myMessages.getString("noOpenSessionFound"));
+            }
+            else {
+                // Copy all retrived data into persistent state.
+                Properties retrievedSessionData = allDataRetrieved.elementAt(0);
+                session.persistentState = new Properties();
+
+                Enumeration allKeys = retrievedSessionData.propertyNames();
+                while (allKeys.hasMoreElements()) {
+                    String nextKey = (String) allKeys.nextElement();
+                    String nextValue = retrievedSessionData.getProperty(nextKey);
+
+                    if (nextValue != null) {
+                        session.persistentState.setProperty(nextKey, nextValue);
+                    }
+                }
+            }
+        } 
+        else {
+            throw new InvalidPrimaryKeyException(
+                    session.myMessages.getString("multipleOpenSessionsFound"));
+        }
+        
+        return session;
     }
 
     @Override
