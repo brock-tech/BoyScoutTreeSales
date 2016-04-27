@@ -40,7 +40,7 @@ public class OpenSessionTransaction extends Transaction {
         dependencies.put("SearchScouts", "SearchResults");
         dependencies.put("SelectScout", "SelectedScout,TransactionError,UpdateStatusMessage");
         dependencies.put("SubmitShift", "ScoutsOnShift,TransactionError,UpdateStatusMessage");
-        dependencies.put("Done", "CancelTransaction");
+        dependencies.put("Done", "CancelTransaction,OpenSessionId");
         myRegistry.setDependencies(dependencies);
     }
 

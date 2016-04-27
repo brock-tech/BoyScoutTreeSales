@@ -10,6 +10,10 @@
 package model;
 
 import impresario.IModel;
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.util.Properties;
+import java.util.Vector;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -20,26 +24,23 @@ import userinterface.ViewFactory;
  */
 public class CloseSessionTransaction extends Transaction {
     String sessionId;
-    Session currentSession;
+    Session sessionToClose;
     
+    String updateStatusMessage;
     
     public CloseSessionTransaction(IModel tlc) {
         super();
         
-        sessionId = (String) tlc.getState("OpenSessionID");
-        
-        try {
-            currentSession = new Session(sessionId);
-        } catch (Exception exc) {
-            transactionErrorMessage = exc.getMessage();
-            tlc.stateChangeRequest("TransactionError", transactionErrorMessage);
-            tlc.stateChangeRequest("CancelTransaction", null);
-        }
+        sessionId = (String) tlc.getState("OpenSessionId");
     }
 
     @Override
     protected void setDependencies() {
+        Properties dependencies = new Properties();
         
+        dependencies.put("DoYourJob", "TransactionErrorMessage");
+        dependencies.put("Confirm", "OpenSessionId,CancelTransaction");
+        dependencies.put("Cancel", "CancelTransaction");
     }
 
     @Override
@@ -61,15 +62,81 @@ public class CloseSessionTransaction extends Transaction {
         
         return currentScene;
     }
-
+    
     @Override
-    public void stateChangeRequest(String key, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void doYourJob() {
+        BigDecimal checkTotal, cashTotal, startingCash, endingCash;
+        
+        try {
+            sessionToClose = new Session(sessionId);
+            
+            SaleCollection sc = new SaleCollection();
+            try {
+                sc.lookupSalesForSession(sessionId);
+            } catch (Exception e) { }
+            
+            Vector<Sale> allSales = (Vector<Sale>) sc.getState("Sales");
+            checkTotal = new BigDecimal(0);
+            cashTotal = new BigDecimal(0);
+            
+            for (Sale sale : allSales) {
+                BigDecimal transAmount = sale.getTransactionAmount();
+                String saleType = (String) sale.getState("PaymentMethod");
+                
+                if (saleType.equals("Check"))
+                    checkTotal.add(transAmount);
+                
+                else if (saleType.equals("Cash"))
+                    cashTotal.add(transAmount);
+            }
+            
+            sessionToClose.setTotalCheckTransactionsAmount(checkTotal);
+            
+            startingCash = sessionToClose.getStartingCash();
+            endingCash = startingCash.add(cashTotal);
+            sessionToClose.setEndingCash(endingCash);
+            
+            sessionToClose.setEndTime(LocalTime.now());
+            
+            swapToView(createView());
+            
+        } catch (Exception exc) {
+            transactionErrorMessage = exc.getMessage();
+            stateChangeRequest("Cancel", null);
+            return;
+        }
     }
 
     @Override
+    public void stateChangeRequest(String key, Object value) {
+        switch (key) {
+            case "DoYourJob":
+                doYourJob();
+                break;
+                
+            case "Confirm":
+                //sessionToClose.update();
+                updateStatusMessage = (String) sessionToClose.getState("UpdateStatusMessage");
+                break;
+        }
+        myRegistry.updateSubscribers(key, this);
+    }
+    
+    public void closeSession() {
+        
+    }
+    
+
+    @Override
     public Object getState(String key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (key) {
+            case "TransactionErrorMessage":
+                return transactionErrorMessage;
+                
+            case "UpdateStatusMessage":
+                return updateStatusMessage;
+        }
+        return null;
     }
     
 }

@@ -73,13 +73,7 @@ public class TreeLotCoordinator implements IModel, IView {
         myLocale = SystemLocale.getInstance();
         myMessages = ResourceBundle.getBundle("model.i18n.TreeLotCoordinator", myLocale);
         
-        // Load any existing open session
-        try {
-            IModel openSession = Session.findOpenSession();
-            openSessionId = (String)openSession.getState("ID");
-        } catch (Exception exc) {
-            openSessionId = "";
-        }
+        stateChangeRequest("OpenSessionId", "");
         
         setDependencies();
 
@@ -136,7 +130,13 @@ public class TreeLotCoordinator implements IModel, IView {
                 break;
                 
             case "OpenSessionId": 
-                openSessionId = (String)value;
+                // Load any existing open session
+                try {
+                    IModel openSession = Session.findOpenSession();
+                    openSessionId = (String)openSession.getState("ID");
+                } catch (Exception exc) {
+                    openSessionId = "";
+                }
                 break;
                 
             case "TransactionError":

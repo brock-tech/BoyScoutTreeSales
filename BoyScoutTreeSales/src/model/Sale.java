@@ -10,6 +10,7 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Enumeration;
@@ -91,7 +92,7 @@ public class Sale extends EntityBase {
         }
     }
 
-    public static int compare(Transaction t1, Transaction t2) {
+    public static int compare(Sale t1, Sale t2) {
         String id1 = (String)t1.getState("ID");
         String id2 = (String)t2.getState("ID");
         return id1.compareTo(id2);
@@ -181,6 +182,12 @@ public class Sale extends EntityBase {
     public boolean isAvailable() {
         String status = persistentState.getProperty("Status");
         return status.equals("Available");
+    }
+    
+    public BigDecimal getTransactionAmount() {
+        String amount = persistentState.getProperty("TransactionAmount");
+        BigDecimal parsedAmount = new BigDecimal(amount);
+        return parsedAmount;
     }
 
     /**

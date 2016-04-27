@@ -10,7 +10,11 @@
 package model;
 
 import exception.InvalidPrimaryKeyException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -158,6 +162,38 @@ public class Session extends EntityBase {
             persistentState.setProperty(key, (String)value);
         
         myRegistry.updateSubscribers(key, this);
+    }
+    
+    public BigDecimal getStartingCash() {
+        String cashAmount = persistentState.getProperty("StartingCash");
+        return new BigDecimal(cashAmount);
+    }
+    
+    public void setEndingCash(BigDecimal amount) {
+        amount = amount.setScale(2, BigDecimal.ROUND_DOWN);
+        
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+        df.setGroupingUsed(false);
+        
+        persistentState.setProperty("EndingCash", df.format(amount));
+    }
+    
+    public void setTotalCheckTransactionsAmount(BigDecimal amount) {
+        amount = amount.setScale(2, BigDecimal.ROUND_DOWN);
+        
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+        df.setGroupingUsed(false);
+        
+        persistentState.setProperty("TotalCheckTransactionsAmount", df.format(amount));
+    }
+    
+    public void setEndTime(LocalTime time) {
+        persistentState.setProperty("EndTime", 
+                time.format(DateTimeFormatter.ofPattern("HH:mm")));
     }
     
     public static Session findOpenSession() throws InvalidPrimaryKeyException {
