@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -40,6 +42,11 @@ public class EnterTreeBarcodeView extends BaseView {
         content.setPrefWidth(400);
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("table");
+        
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
         
         EventHandler<ActionEvent> submitHandler = new EventHandler<ActionEvent>() {
             @Override

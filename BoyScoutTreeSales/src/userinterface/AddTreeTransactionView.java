@@ -26,6 +26,8 @@ import javafx.scene.layout.VBox;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -65,10 +67,16 @@ public class AddTreeTransactionView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
+        Text welcomeText = new Text(myResources.getProperty("title"));
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        welcomeText.getStyleClass().add("information-text");
+        content.getChildren().add(welcomeText);
+        
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
-        formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        //formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        formGrid.getStyleClass().addAll("pane1","grid");
 
         barCodeField = new TextField();
         barCodeField.setOnAction(submitHandler);
@@ -114,7 +122,7 @@ public class AddTreeTransactionView extends BaseView {
         formGrid.add(formItem, 0, 4);
         */
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         submitButton = new Button(myResources.getProperty("submit"));
