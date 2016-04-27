@@ -67,12 +67,14 @@ public class EditScoutTransactionView extends BaseView {
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("table");
         
-        Text welcomeText = new Text(myResources.getProperty("title"));
-        welcomeText.setTextAlignment(TextAlignment.CENTER);
-        welcomeText.getStyleClass().add("information-text");
-        content.getChildren().add(welcomeText);
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
         
         IFormItemStrategy formItemBuilder;
+
+        
         Pane formItem;
         try {
             formItemBuilder = (IFormItemStrategy)Class.forName(

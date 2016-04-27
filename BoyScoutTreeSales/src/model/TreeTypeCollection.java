@@ -52,18 +52,19 @@ public class TreeTypeCollection extends EntityBase implements IView {
         treeTypes.insertElementAt(t, index);
     }
     
-    public TreeType retrieve(String barcodePrefix) {
+    public TreeType retrieve(String Id) {
         TreeType retValue = null;
         for (int cnt = 0; cnt < treeTypes.size(); cnt++) {
             TreeType nextType = treeTypes.elementAt(cnt);
-            String nextTypeId = (String)nextType.getState("BarcodePrefix");
-            if (nextTypeId.equals(barcodePrefix)) {
+            String nextTypeId = (String)nextType.getState("ID");
+            if (nextTypeId.equals(Id)) {
                 retValue = nextType;
                 break;
             }
         }
         return retValue;
-    }
+    }    
+
     
     private int findIndexToAdd(TreeType type) {
         int low = 0;
