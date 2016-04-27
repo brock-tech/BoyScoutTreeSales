@@ -33,6 +33,9 @@ public class TransactionFactory {
                 return new RemoveTreeTransaction();
             case "OpenSession":
                 return new OpenSessionTransaction();
+            case "SellTree":
+                return new SellTreeTransaction();
+
             default: return null;
         }
     }

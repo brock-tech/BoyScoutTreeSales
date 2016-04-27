@@ -47,6 +47,9 @@ public class ViewFactory {
                 
             case "OpenShiftFormView":
                 return new OpenShiftFormView(model);
+
+            case "SellTreeTransactionView":
+                return new SellTreeView(model);
                 
             default:
                 return null;
