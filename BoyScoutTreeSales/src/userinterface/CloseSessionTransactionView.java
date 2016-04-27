@@ -107,7 +107,7 @@ public class CloseSessionTransactionView extends BaseView {
         grid.add(startCashLabel, 0, 3);
         grid.add(startCashValueLabel, 1, 3);
         
-        Label endCashLabel = new Label(myResources.getProperty("startCash"));
+        Label endCashLabel = new Label(myResources.getProperty("endCash"));
         Label endCashValueLabel = new Label(String.format(cashFormat,
                 (String)session.getState("EndingCash")));
         grid.add(endCashLabel, 0, 4);

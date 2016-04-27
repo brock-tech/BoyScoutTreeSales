@@ -161,7 +161,9 @@ public class TreeLotCoordinator implements IModel, IView {
         Transaction trans = TransactionFactory.createTransaction(transType, this);
         
         if (trans != null) {
+            trans.subscribe("TransactionError", this);
             trans.subscribe("CancelTransaction", this);
+            trans.subscribe("OpenSessionId", this);
             trans.stateChangeRequest("DoYourJob", "");
         }
         else {

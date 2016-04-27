@@ -29,7 +29,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import static userinterface.BaseView.DEFAULT_WIDTH;
 
 /**
  *
@@ -197,6 +196,11 @@ public class OpenSessionTransactionView extends BaseView {
             displayErrorMessage(myResources.getProperty("errCashInvalid"));
             startCashField.requestFocus();
             return false;
+        }
+        
+        String notes = notesField.getText();
+        if ((notes == null) || notes.equals("")) {
+            notesField.setText("<empty>");
         }
         return true;
     }

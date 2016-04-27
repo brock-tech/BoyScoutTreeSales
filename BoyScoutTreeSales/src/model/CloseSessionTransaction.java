@@ -26,8 +26,6 @@ public class CloseSessionTransaction extends Transaction {
     String sessionId;
     Session sessionToClose;
     
-    String updateStatusMessage;
-    
     public CloseSessionTransaction(IModel tlc) {
         super();
         
@@ -38,9 +36,11 @@ public class CloseSessionTransaction extends Transaction {
     protected void setDependencies() {
         Properties dependencies = new Properties();
         
-        dependencies.put("DoYourJob", "TransactionErrorMessage");
-        dependencies.put("Confirm", "OpenSessionId,CancelTransaction");
+        dependencies.put("DoYourJob", "TransactionError");
+        dependencies.put("Confirm", "OpenSessionId,CancelTransaction,TransactionError");
         dependencies.put("Cancel", "CancelTransaction");
+        
+        myRegistry.setDependencies(dependencies);
     }
 
     @Override
@@ -83,11 +83,11 @@ public class CloseSessionTransaction extends Transaction {
                 BigDecimal transAmount = sale.getTransactionAmount();
                 String saleType = (String) sale.getState("PaymentMethod");
                 
-                if (saleType.equals("Check"))
-                    checkTotal.add(transAmount);
+                if (saleType.equals("check"))
+                    checkTotal = checkTotal.add(transAmount);
                 
-                else if (saleType.equals("Cash"))
-                    cashTotal.add(transAmount);
+                else if (saleType.equals("cash"))
+                    cashTotal = cashTotal.add(transAmount);
             }
             
             sessionToClose.setTotalCheckTransactionsAmount(checkTotal);
@@ -103,7 +103,6 @@ public class CloseSessionTransaction extends Transaction {
         } catch (Exception exc) {
             transactionErrorMessage = exc.getMessage();
             stateChangeRequest("Cancel", null);
-            return;
         }
     }
 
@@ -115,26 +114,21 @@ public class CloseSessionTransaction extends Transaction {
                 break;
                 
             case "Confirm":
-                //sessionToClose.update();
-                updateStatusMessage = (String) sessionToClose.getState("UpdateStatusMessage");
+                sessionToClose.update();
+                transactionErrorMessage = (String) sessionToClose.getState("UpdateStatusMessage");
                 break;
         }
         myRegistry.updateSubscribers(key, this);
     }
-    
-    public void closeSession() {
-        
-    }
-    
 
     @Override
     public Object getState(String key) {
         switch (key) {
-            case "TransactionErrorMessage":
+            case "TransactionError":
                 return transactionErrorMessage;
                 
-            case "UpdateStatusMessage":
-                return updateStatusMessage;
+            case "SessionToClose":
+                return sessionToClose;
         }
         return null;
     }
