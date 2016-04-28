@@ -64,17 +64,17 @@ public class TreeLotCoordinatorView extends BaseView {
         formContent.getChildren().add(welcomeText);
         
         sellTreeButton = new Button(myResources.getProperty("sellTreeButtonText"));
-        sellTreeButton.setPrefSize(200.0, 30.0);
+        sellTreeButton.setPrefSize(300.0, 30.0);
         sellTreeButton.setOnAction(buttonHandler);
         formContent.getChildren().add(sellTreeButton);
         
         shiftButton = new Button();
-        shiftButton.setPrefSize(200.0, 30.0);
+        shiftButton.setPrefSize(300.0, 30.0);
         shiftButton.setOnAction(buttonHandler);
         formContent.getChildren().add(shiftButton);
         
         manageButton = new Button(myResources.getProperty("manageButtonText"));
-        manageButton.setPrefSize(200.0, 30.0);
+        manageButton.setPrefSize(300.0, 30.0);
         manageButton.setOnAction(buttonHandler);
         formContent.getChildren().add(manageButton);
         

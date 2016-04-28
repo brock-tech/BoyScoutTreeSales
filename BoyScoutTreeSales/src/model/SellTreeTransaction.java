@@ -113,6 +113,7 @@ public class SellTreeTransaction extends Transaction {
             createAndShowSaleView();
         } catch (InvalidPrimaryKeyException ex) {
             transactionErrorMessage = "Error: No Tree exists under that Bar Code!";
+            updateStatusMessage = transactionErrorMessage;
         }
     }
       
