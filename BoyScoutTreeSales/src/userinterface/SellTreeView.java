@@ -45,6 +45,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import model.Tree;
 import model.TreeType;
 
@@ -98,21 +100,16 @@ public class SellTreeView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
 
+        Text title = new Text(myResources.getProperty("title"));
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.getStyleClass().add("information-text");
+        content.getChildren().add(title);
+        
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
         formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
-
-        /*
-        idField = new TextField();
-        idField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("idField"),
-                idField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 0);*/
-
+        
         sessionIDField = new TextField();
         sessionIDField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
@@ -132,23 +129,6 @@ public class SellTreeView extends BaseView {
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 1, 1);
 
-        transactionTypeField = new TextField();
-        transactionTypeField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("transactionTypeField"),
-                transactionTypeField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 2);
-        /*
-        paymentMethodField = new TextField();
-        paymentMethodField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("paymentMethodField"),
-                paymentMethodField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 2);*/
 
         customerNameField = new TextField();
         customerNameField.setOnAction(submitHandler);
@@ -157,7 +137,7 @@ public class SellTreeView extends BaseView {
                 customerNameField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 3);
+        formGrid.add(formItem, 0, 2);
 
         customerPhoneField = new TextField();
         customerPhoneField.setOnAction(submitHandler);
@@ -167,7 +147,7 @@ public class SellTreeView extends BaseView {
                 customerPhoneField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 3);
+        formGrid.add(formItem, 1, 2);
 
         customerEmailField = new TextField();
         customerEmailField.setOnAction(submitHandler);
@@ -176,7 +156,7 @@ public class SellTreeView extends BaseView {
                 customerEmailField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0,4);
+        formGrid.add(formItem, 0,3);
 
         transactionDateField = new TextField();
         transactionDateField.setOnAction(submitHandler);
@@ -186,7 +166,7 @@ public class SellTreeView extends BaseView {
                 transactionDateField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 4);
+        formGrid.add(formItem, 1, 3);
 
         transactionTimeField = new TextField();
         transactionTimeField.setOnAction(submitHandler);
@@ -195,7 +175,7 @@ public class SellTreeView extends BaseView {
                 transactionTimeField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 5);
+        formGrid.add(formItem, 0, 4);
 
         transactionAmountField = new TextField();
         transactionAmountField.setOnAction(submitHandler);
@@ -204,7 +184,7 @@ public class SellTreeView extends BaseView {
                 transactionAmountField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 5);
+        formGrid.add(formItem, 1, 4);
 
          HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -252,7 +232,8 @@ public class SellTreeView extends BaseView {
 
              newSaleData.setProperty("TransactionAmount", transactionAmountField.getText());
              newSaleData.setProperty("SessionID", sessionIDField.getText());
-             newSaleData.setProperty("PaymentMethod", paymentMethodField.getText());
+           
+             newSaleData.setProperty("PaymentMethod", "cash"); //hardcoded for testing purposes
 
              newSaleData.setProperty("CustomerName", customerNameField.getText());
              newSaleData.setProperty("CustomerPhone", customerPhoneField.getText());

@@ -109,10 +109,21 @@ public class SellTreeTransaction extends Transaction {
   
       protected void processBarcode(String bc) {
         try {
-            selectedTree = new Tree(bc);
-            createAndShowSaleView();
+            Tree desiredTree = new Tree(bc);
+             if(desiredTree.isAvailable())
+            {
+                selectedTree = new Tree(bc);
+                createAndShowSaleView();
+            }
+            else {
+                updateStatusMessage = String.format(myMessages.getString("treeNotAvailable"),
+                  bc);
+                  transactionErrorMessage = updateStatusMessage;
+            }
+            
         } catch (InvalidPrimaryKeyException ex) {
-            transactionErrorMessage = "Error: No Tree exists under that Bar Code!";
+            updateStatusMessage = String.format(myMessages.getString("treeBarcodeNotFound"));
+            transactionErrorMessage = updateStatusMessage;
         }
     }
       
@@ -128,7 +139,8 @@ public class SellTreeTransaction extends Transaction {
       updateStatusMessage = String.format(myMessages.getString("multipleTransFoundMsg"),
                   p.getProperty("ID"));
       transactionErrorMessage = updateStatusMessage;
-    } catch (InvalidPrimaryKeyException exc) {
+    } catch (InvalidPrimaryKeyException exc) 
+    {
       //Add new Transaction
       Sale sale = new Sale(p);
       sale.insert();
@@ -138,18 +150,13 @@ public class SellTreeTransaction extends Transaction {
     }
     try{
          Tree treeSold = new Tree(p.getProperty("Barcode"));
-            if(treeSold.isAvailable())
-            {
+           System.out.println("Instantiating tree with "  + p.getProperty("Barcode")); 
+           System.out.println("treeSold status " + treeSold.getState("Status"));
                 treeSold.setSold();
                 updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
-                  p.getProperty("CustomerName"));
-                  transactionErrorMessage = updateStatusMessage;
-            }
-            else {
-                updateStatusMessage = String.format(myMessages.getString("treeNotAvailable"),
-                  p.getProperty("Barcode"));
-                  transactionErrorMessage = updateStatusMessage;
-            }
+                p.getProperty("CustomerName"));
+                transactionErrorMessage = updateStatusMessage;
+
     }
     catch(InvalidPrimaryKeyException exc)
     {
