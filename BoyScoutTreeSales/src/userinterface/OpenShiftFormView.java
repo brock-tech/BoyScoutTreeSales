@@ -71,6 +71,7 @@ public class OpenShiftFormView extends BaseView {
         
         Text titleText = new Text(myResources.getProperty("subtitleText"));
         titleText.setTextAlignment(TextAlignment.CENTER);
+        titleText.getStyleClass().add("information-text");
         
         HBox titleContainer = new HBox(10);
         titleContainer.setPrefSize(DEFAULT_WIDTH, 40.0);
@@ -81,7 +82,8 @@ public class OpenShiftFormView extends BaseView {
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
-        formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        //formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        formGrid.getStyleClass().addAll("pane3","grid");
         
         IFormItemStrategy formItemBuilder;
         Pane formItem;
@@ -147,7 +149,8 @@ public class OpenShiftFormView extends BaseView {
         backButton.setOnAction(submitHandler);
         backButton.setPrefWidth(100);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
+        buttonContainer.getStyleClass().add("button_block");
         buttonContainer.setAlignment(Pos.CENTER);
         buttonContainer.getChildren().addAll(submitButton, backButton);
         formGrid.add(buttonContainer, 0, 6);

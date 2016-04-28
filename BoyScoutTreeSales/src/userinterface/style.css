@@ -71,3 +71,15 @@
 .pane1 {
     -fx-padding: 0px 0px 10px 245px;
 }
+
+.pane2 {
+    -fx-padding: 0px 0px 10px 90px;
+}
+
+.pane3 {
+    -fx-padding: 0px 0px 40px 150px;
+}
+
+.button_block {
+    -fx-padding: 40px 0px 0px 0px;
+}

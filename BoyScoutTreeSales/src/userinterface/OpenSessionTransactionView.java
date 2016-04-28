@@ -83,6 +83,7 @@ public class OpenSessionTransactionView extends BaseView {
         
         Text promptText = new Text(myResources.getProperty("promptText"));
         promptText.setTextAlignment(TextAlignment.CENTER);
+        promptText.getStyleClass().add("information-text");
         
         promptContainer.getChildren().add(promptText);
         content.getChildren().add(promptContainer);
@@ -146,7 +147,7 @@ public class OpenSessionTransactionView extends BaseView {
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         buttonContainer.getChildren().addAll(submitButton, cancelButton);
         formGrid.add(buttonContainer, 0, 5);

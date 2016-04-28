@@ -99,8 +99,9 @@ public class SellTreeView extends BaseView {
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
-        formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
-
+        //formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
+        formGrid.getStyleClass().addAll("pane2","grid");
+        
         /*
         idField = new TextField();
         idField.setOnAction(submitHandler);

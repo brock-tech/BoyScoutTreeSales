@@ -55,10 +55,12 @@ public class CloseSessionTransactionView extends BaseView {
         
         Text promptText = new Text(myResources.getProperty("promptText"));
         promptText.setTextAlignment(TextAlignment.CENTER);
+        promptText.getStyleClass().add("information-text");
         
         HBox promptContainer = new HBox();
         promptContainer.setAlignment(Pos.CENTER);
         promptContainer.getChildren().add(promptText);
+        
         
         
         GridPane grid = new GridPane();
@@ -132,7 +134,7 @@ public class CloseSessionTransactionView extends BaseView {
         denyButton.setOnAction(submitHandler);
         denyButton.setPrefWidth(100);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         buttonContainer.getChildren().addAll(confirmButton, denyButton);
         

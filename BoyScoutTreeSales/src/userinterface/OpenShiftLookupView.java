@@ -70,6 +70,7 @@ public class OpenShiftLookupView extends BaseView {
         
         Text promptText = new Text(myResources.getProperty("promptText"));
         promptText.setTextAlignment(TextAlignment.CENTER);
+        promptText.getStyleClass().add("information-text");
         
         HBox promptContainer = new HBox();
         promptContainer.setPrefWidth(DEFAULT_WIDTH);
@@ -93,17 +94,17 @@ public class OpenShiftLookupView extends BaseView {
         scoutsList = new ListView<>();
         scoutsList.setPrefSize(DEFAULT_WIDTH, 100);
         
-        HBox buttonContainer = new HBox(10);
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
         selectButton = new Button(myResources.getProperty("select"));
         selectButton.setOnAction(actionHandler);
-        selectButton.setPrefWidth(100);
+        selectButton.setPrefWidth(200);
         buttonContainer.getChildren().add(selectButton);
         
         doneButton = new Button(myResources.getProperty("done"));
         doneButton.setOnAction(actionHandler);
-        doneButton.setPrefWidth(100);
+        doneButton.setPrefWidth(200);
         buttonContainer.getChildren().add(doneButton);
         
         content.getChildren().addAll(promptContainer, lookupTable, scoutsList, buttonContainer);
