@@ -65,6 +65,8 @@ public class SellTreeView extends BaseView {
     protected TextField transactionDateField;
     protected TextField transactionTimeField;
     protected String sessionID;
+    protected Button checkButton;
+    protected Button cashButton;
     protected Button submitButton;
 //    protected Button clearFormButton;
     protected Button cancelButton;
@@ -138,7 +140,7 @@ public class SellTreeView extends BaseView {
         );
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 2);
-
+        /*
         paymentMethodField = new TextField();
         paymentMethodField.setOnAction(submitHandler);
         formItem = formItemBuilder.buildControl(
@@ -146,7 +148,7 @@ public class SellTreeView extends BaseView {
                 paymentMethodField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 2);
+        formGrid.add(formItem, 1, 2);*/
 
         customerNameField = new TextField();
         customerNameField.setOnAction(submitHandler);
@@ -245,7 +247,7 @@ public class SellTreeView extends BaseView {
 
              //newSaleData.setProperty("ID", idField.getText());
              newSaleData.setProperty("SessionID", sessionIDField.getText());
-             newSaleData.setProperty("TransactionType", transactionTypeField.getText());
+             newSaleData.setProperty("TransactionType", "Tree Sale");
              newSaleData.setProperty("Barcode", barcodeField.getText());
 
              newSaleData.setProperty("TransactionAmount", transactionAmountField.getText());
@@ -279,14 +281,6 @@ public class SellTreeView extends BaseView {
             sessionIDField.requestFocus();
             return false;
         }
-
-        value = transactionTypeField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errTransactionTypeNull"));
-            transactionTypeField.requestFocus();
-            return false;
-        }
-
         value = barcodeField.getText();
         if ((value == null) || "".equals(value)) {
             displayErrorMessage(myResources.getProperty("errBarcodeNull"));
@@ -297,12 +291,6 @@ public class SellTreeView extends BaseView {
         if ((value == null) || "".equals(value)) {
             displayErrorMessage(myResources.getProperty("errTransactionAmountNull"));
             transactionAmountField.requestFocus();
-            return false;
-        }
-        value = paymentMethodField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errPaymentMethodNull"));
-            paymentMethodField.requestFocus();
             return false;
         }
         value = customerNameField.getText();
@@ -321,12 +309,6 @@ public class SellTreeView extends BaseView {
         if ((value == null) || "".equals(value)) {
             displayErrorMessage(myResources.getProperty("errEmailNull"));
             customerEmailField.requestFocus();
-            return false;
-        }
-        value = transactionDateField.getText();
-        if (!value.matches(myResources.getProperty("dateFormat"))) {
-            displayErrorMessage(myResources.getProperty("errTransactionDateNull"));
-            transactionDateField.requestFocus();
             return false;
         }
         value = transactionTimeField.getText();
@@ -358,8 +340,9 @@ public class SellTreeView extends BaseView {
 
                LocalDateTime currentDate = LocalDateTime.now();
                String transactionTime = currentDate.format(DateTimeFormatter.ISO_TIME);
-               
+               String transactionDate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                transactionTimeField.setText(transactionTime);
+               transactionDateField.setText(transactionDate);
                barcodeField.setText((String) selectedTree.getState("BarCode"));
                sessionIDField.setText(sessionID);
                transactionAmountField.setText((String) selTree.getState("Cost"));
