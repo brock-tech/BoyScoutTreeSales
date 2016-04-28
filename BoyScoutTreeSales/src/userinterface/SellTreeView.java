@@ -204,7 +204,7 @@ public class SellTreeView extends BaseView {
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 1, 5);
 
-         HBox buttonContainer = new HBox(10);
+         HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
 
         submitButton = new Button(myResources.getProperty("submitButton"));
