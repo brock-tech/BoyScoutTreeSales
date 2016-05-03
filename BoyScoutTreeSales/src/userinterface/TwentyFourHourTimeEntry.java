@@ -11,10 +11,7 @@ package userinterface;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
@@ -23,7 +20,6 @@ import javafx.scene.layout.HBox;
  * @author mike
  */
 public class TwentyFourHourTimeEntry extends TimeEntry {
-    protected static final String TIME_FORMAT = "^(2[0-3]|[0-1]?[0-9]):[0-5][0-9]";
     
     TextField timeField;
     
@@ -48,11 +44,7 @@ public class TwentyFourHourTimeEntry extends TimeEntry {
     @Override
     public LocalTime getTime() {
         String timeInput = timeField.getText().trim();
-        if (timeInput.matches(TIME_FORMAT)) {
-            LocalTime parsedTime = LocalTime.parse(timeInput);
-            return parsedTime;
-        }
-        return null;
+        return LocalTime.parse(timeInput, DateTimeFormatter.ofPattern("H:mm"));
     }
 
     @Override
