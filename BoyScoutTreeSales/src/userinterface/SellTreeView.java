@@ -7,15 +7,6 @@
 // be reproduced, copied, or used in any shape or form without
 // the express written consent of The College at Brockport.
 //********************************************************************
-//*********************************************************************
-//  COPYRIGHT 2016
-//    College at Brockport, State University of New York.
-//    ALL RIGHTS RESERVED
-//
-// This file is the product of The College at Brockport and cannot
-// be reproduced, copied, or used in any shape or form without
-// the express written consent of The College at Brockport.
-//********************************************************************
 package userinterface;
 
 
@@ -53,7 +44,6 @@ import model.TreeType;
  * @author Andrew
  */
 public class SellTreeView extends BaseView {
-    protected TextField idField;
     protected TextField sessionIDField;
     protected TextField transactionTypeField;
     protected TextField barcodeField;
@@ -101,18 +91,7 @@ public class SellTreeView extends BaseView {
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
-        //formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
         formGrid.getStyleClass().addAll("pane2","grid");
-        
-        /*
-        idField = new TextField();
-        idField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("idField"),
-                idField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 0);*/
 
         sessionIDField = new TextField();
         sessionIDField.setOnAction(submitHandler);
