@@ -23,6 +23,7 @@ import userinterface.ViewFactory;
  */
 public class AddTreeTransaction extends Transaction {
     String updateStatusMessage;
+    String treeTypeId;
     
     public AddTreeTransaction(){
         super();
@@ -64,6 +65,8 @@ public class AddTreeTransaction extends Transaction {
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
                 return updateStatusMessage;
+            case "TreeTypeId":
+                return treeTypeId;
             default:
                 return null;
         }
@@ -78,11 +81,26 @@ public class AddTreeTransaction extends Transaction {
             case "Submit":
                 processTransaction((Properties)value);
                 break;
+            case "TreeType":
+                checkTreeType((String)value);
+                break;
         }
         
         myRegistry.updateSubscribers(key, this);
     }
     
+    private void checkTreeType(String barcode){
+        String CodePrefix = barcode.substring(0, 2);
+        Properties p = new Properties();
+        try{
+            TreeType type = new TreeType(CodePrefix);
+            p = (Properties)type.getState("getProperties");
+            treeTypeId = p.getProperty("ID");
+        }
+        catch (InvalidPrimaryKeyException e){
+            treeTypeId = null;
+        }   
+    }
     
     private void processTransaction(Properties p) {
         updateStatusMessage = "";

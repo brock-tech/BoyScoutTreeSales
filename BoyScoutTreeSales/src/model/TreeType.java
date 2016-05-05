@@ -228,7 +228,8 @@ public class TreeType extends EntityBase
     {
        if (key.equals("UpdateStatusMessage") == true)
 	return updateStatusMessage;
-
+       if (key.equals("getProperties") == true)
+           return persistentState;
         return persistentState.getProperty(key);
     }
     //--------------------------------------------------------------------------

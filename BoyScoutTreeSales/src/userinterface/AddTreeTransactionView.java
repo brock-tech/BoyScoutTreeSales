@@ -84,23 +84,6 @@ public class AddTreeTransactionView extends BaseView {
                 barCodeField);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
-        
-        /*
-        getTreeTypeField();
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("TreeType"),
-                treeType);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 1);
-        
-        salePrice = new TextField();
-        salePrice.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("SalePrice"),
-                salePrice);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 2);
-        */
 
         notesField = new TextArea();
         notesField.setPrefRowCount(5);
@@ -109,18 +92,6 @@ public class AddTreeTransactionView extends BaseView {
                 notesField);
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 1);
-        
-        /*
-        ObservableList<String> options = FXCollections.observableArrayList(
-            myResources.getProperty("Available"),
-            myResources.getProperty("Unavailable")
-        );
-        
-        statusBox = new ComboBox(options);
-        formItem = formItemBuilder.buildControl("Status:", statusBox);
-        formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 4);
-        */
         
         HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -147,24 +118,18 @@ public class AddTreeTransactionView extends BaseView {
         if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
-        else {
+        else {            
             if (validate()){                
                 Properties p = new Properties();
                 String barCode = barCodeField.getText();
                 p.setProperty("BarCode", barCode);
                 
-                String barCodePrefix = barCode.substring(0, 2);
-                p.setProperty("TreeType", barCodePrefix);
-                
-                p.setProperty("Notes", notesField.getText());
-                
+                p.setProperty("TreeType", (String)myModel.getState("TreeTypeId"));                
+                p.setProperty("Notes", notesField.getText());                
                 p.setProperty("Status", "Available");
-                
-                //LocalDateTime currentDate = LocalDateTime.now();
-                //String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-                //p.setProperty("DateStatusUpdated", dateLastUpdate);
-                //p.setProperty("SalePrice", "0");
-                
+                LocalDateTime currentDate = LocalDateTime.now();
+                String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                p.setProperty("DateStatusUpdated", dateLastUpdate);
                 myModel.stateChangeRequest("Submit", p);
             }
         }
@@ -183,6 +148,12 @@ public class AddTreeTransactionView extends BaseView {
             barCodeField.requestFocus();
             return false;
         }
+        myModel.stateChangeRequest("TreeType", treeBar);
+        if (myModel.getState("TreeTypeId") == null){
+            displayErrorMessage(myResources.getProperty("errBarCodePrefix"));
+            barCodeField.requestFocus();
+            return false;
+        }
         
         String notes = notesField.getText();
         if ((notes == null) || "".equals(notes)) {
@@ -197,46 +168,4 @@ public class AddTreeTransactionView extends BaseView {
             displayMessage((String)value);
         }
     }
-   
-    /*
-    protected void getTreeTypeField(){
-        //TreeTransaction treeTransaction = (TreeTransaction)myModel.getState("getTreeTransaction");
-        TreeTransaction treeTransaction = new TreeTransaction();
-        Vector treeTypeList = (Vector)treeTransaction.getState("getTreeType");
-        ArrayList newList = new ArrayList();
-        String str = new String();
-        
-        for(int i = 0; i < treeTypeList.size(); i++){
-            str = treeTypeList.get(i).toString().replace("{ID=","");
-            str = str.replace(",",".");
-            str = str.replace("TypeDescription=","");
-            str = str.replace("}", "");
-            newList.add(str);
-        }
- 
-        List<String> optionList = newList;
-        ObservableList<String> options = FXCollections.observableArrayList(optionList);
-        treeType = new ComboBox(options);
-    }
-    
-    protected int getIntTreeType(String str){
-        for (int i = 0; i < str.length(); i++){
-            if(str.charAt(i) == '.'){
-                return i;
-            }
-        }
-        return 1;
-    }
-    
-    protected void getData(){
-    }
-    
-    protected String getProp(String oldstring){
-        String str = new String();
-
-        str = oldstring.replace("{BarCode=", "");
-        str = oldstring.replace("}", "");
-        return str;
-    }
-    */
 }
