@@ -11,6 +11,7 @@ package model;
 
 import exception.InvalidPrimaryKeyException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
@@ -26,7 +27,7 @@ public class RemoveTreeTransaction extends EditTreeTransaction {
     
     @Override
     protected void getMessagesBundle() {
-        
+        myMessages = ResourceBundle.getBundle("model.i18n.TreeSaleTransaction", myLocale);
     }
     
     @Override
@@ -44,7 +45,7 @@ public class RemoveTreeTransaction extends EditTreeTransaction {
             updateStatusMessage = (String)selectedTree.getState("UpdateStatusMessage");
  
         } catch (InvalidPrimaryKeyException ex) {
-            updateStatusMessage = "Error: No Tree exists under that Bar Code!";
+            updateStatusMessage = myMessages.getString("treeNotFoundMsg");
         }
     }
     

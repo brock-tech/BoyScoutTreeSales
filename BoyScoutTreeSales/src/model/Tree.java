@@ -15,10 +15,12 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Locale;
 
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import userinterface.SystemLocale;
 
 /**
  * 
@@ -28,11 +30,15 @@ public class Tree extends EntityBase {
     protected Properties dependencies;
     private String updateStatusMessage = "";
     private ResourceBundle myMessages;
+    private final Locale myLocale;
 
     public Tree(String barcode) throws InvalidPrimaryKeyException {
         super(myTableName);
         
         setDependencies();
+        
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.Tree", myLocale);
         
         String query = String.format(
                 "SELECT * FROM %s WHERE barcode = %s", 
@@ -47,7 +53,7 @@ public class Tree extends EntityBase {
             // There should be exactly one book. Any more will be an error.
             if (size != 1) {
                 throw new InvalidPrimaryKeyException(
-                        String.format("Multiple Tree found with matching Bar Code : %s", barcode)
+                        String.format(myMessages.getString("multipleTreeFoundMsg"), barcode)
                 );
             }
             else {
@@ -68,7 +74,7 @@ public class Tree extends EntityBase {
         } 
         else {
             throw new InvalidPrimaryKeyException(
-                    String.format("No Tree found with Bar Code = %s ", barcode)
+                    String.format(myMessages.getString("treeNotFoundMsg"))
             );
         }
     }
@@ -80,6 +86,8 @@ public class Tree extends EntityBase {
         super(myTableName);
         setDependencies();
         
+        myLocale = SystemLocale.getInstance();
+        myMessages = ResourceBundle.getBundle("model.i18n.Tree", myLocale);
         persistentState = new Properties();
 
         Enumeration allKeys = props.propertyNames();

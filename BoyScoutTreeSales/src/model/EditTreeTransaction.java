@@ -133,7 +133,7 @@ public class EditTreeTransaction extends Transaction {
             selectedTree = new Tree(bc);
             createAndShowTreeView();
         } catch (InvalidPrimaryKeyException ex) {
-            transactionErrorMessage = "Error: No Tree exists under that Bar Code!";
+            transactionErrorMessage = myMessages.getString("treeNotFoundMsg");
         }
     }
     
