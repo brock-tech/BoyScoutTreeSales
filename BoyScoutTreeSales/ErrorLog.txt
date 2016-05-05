@@ -91,3 +91,4 @@
 [4/27/16 3:46 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1452: Cannot add or update a child row: a foreign key constraint fails (`spr16_csc429_cbutc1`.`Tree`, CONSTRAINT `Tree_ibfk_1` FOREIGN KEY (`TreeType`) REFERENCES `Tree` (`TreeType`))>
 [4/28/16 9:39 AM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1>
 [5/5/16 10:11 AM]|Tree|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '000' at line 1>
+[5/5/16 11:04 AM]|BoyScoutTreeSales|TreeLotCoordinator.<init>|Error|NOTAG|null<Unable to create TreeLotCoordinator object>

@@ -52,7 +52,7 @@ public class TreeLotCoordinatorView extends BaseView {
                 processAction(event);
             }
         };
-        
+
         VBox formContent = new VBox(20);
         formContent.setPrefWidth(DEFAULT_WIDTH);
         formContent.setAlignment(Pos.CENTER);

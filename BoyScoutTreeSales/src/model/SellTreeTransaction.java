@@ -128,11 +128,7 @@ public class SellTreeTransaction extends Transaction {
             
             createAndShowSaleView();
         } catch (InvalidPrimaryKeyException ex) {
-<<<<<<< HEAD
-            transactionErrorMessage = myMessages.getString("TreeNotFound");
-=======
-            transactionErrorMessage = ex.getMessage();
->>>>>>> af470ab8c7c65b9cb3162230e7c845e2e1e25181
+            transactionErrorMessage = myMessages.getString("treeNotFound");
             updateStatusMessage = transactionErrorMessage;
         }
     }
