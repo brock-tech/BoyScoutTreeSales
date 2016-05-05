@@ -241,10 +241,14 @@ public class TreeType extends EntityBase
     }
    //--------------------------------------------------------------------------
     @Override
-    public void stateChangeRequest(String key, Object value) 
-    {
-        myRegistry.updateSubscribers(key, this);
+    
+    public void stateChangeRequest(String key, Object value) {
+     if (persistentState.containsKey(key))
+         persistentState.setProperty(key, (String)value);
+
+     myRegistry.updateSubscribers(key, this);
     }
+    
     
     public void remove()
     {

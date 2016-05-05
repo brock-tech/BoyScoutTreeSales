@@ -37,9 +37,13 @@ public class TreeTypeCollection extends EntityBase implements IView {
     }
 
     @Override
-    public void stateChangeRequest(String key, Object value) {
+   public void stateChangeRequest(String key, Object value) {
+        if (persistentState.containsKey(key))
+            persistentState.setProperty(key, (String)value);
+        
         myRegistry.updateSubscribers(key, this);
     }
+    
 
     @Override
     public void updateState(String key, Object value) {
@@ -100,7 +104,7 @@ public class TreeTypeCollection extends EntityBase implements IView {
             System.out.println(allDataRetrieved.size() + " amount retrieved");
             for (Object nextTreeTypeData : allDataRetrieved) {
                 TreeType nextTreeType = new TreeType((Properties)nextTreeTypeData);
-                
+  
                 addTreeType(nextTreeType);
             }
         }

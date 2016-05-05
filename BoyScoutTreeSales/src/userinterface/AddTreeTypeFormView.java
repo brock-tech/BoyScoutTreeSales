@@ -156,6 +156,8 @@ public class AddTreeTypeFormView extends BaseView {
 
              //System.out.println("barcode " + barcodePrefixField.getText() );
              myModel.stateChangeRequest("Submit", newTreeTypeData);
+             
+             System.out.println("Barcode, type, cost " + barcodePrefixField.getText());
              displayMessage((String)myModel.getState("UpdateStatusMessage"));
          }
         }

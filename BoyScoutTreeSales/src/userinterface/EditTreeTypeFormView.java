@@ -110,12 +110,6 @@ public class EditTreeTypeFormView extends BaseView {
         tableOfTreeTypes.setEditable(false);
         
         
-        TableColumn idColumn = new TableColumn(myResources.getProperty("ID"));
-        idColumn.setMinWidth(20);
-        idColumn.setCellValueFactory(
-                new PropertyValueFactory("ID"));
-        idColumn.setVisible(false);
-        
         TableColumn typeColumn = new TableColumn(myResources.getProperty("TypeDescription"));
         typeColumn.setMinWidth(275);
         typeColumn.setCellValueFactory(
@@ -173,7 +167,7 @@ public class EditTreeTypeFormView extends BaseView {
                 TreeType nextTreeType = (TreeType)entries.nextElement();
                 
                 TreeTypeTableModel treeTypeEntry = new TreeTypeTableModel(nextTreeType.getTableListView());
-                System.out.println("model data " + treeTypeEntry.getBarcodePrefix());
+                System.out.println("model data " + treeTypeEntry.getTypeDescription());
                 tableData.add(treeTypeEntry);
             }
             tableOfTreeTypes.setItems(tableData);

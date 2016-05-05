@@ -37,7 +37,7 @@ public class TreeTypeTableModel
 	{
 		return BarcodePrefix.get();
 	}
-	public String getDescription() 
+	public String getTypeDescription() 
 	{
 		return TypeDescription.get();
 	}

@@ -106,7 +106,7 @@ public class AddTreeTypeTransaction extends Transaction {
                 String barcodePrefix = p.getProperty("BarcodePrefix");
                 
                 TreeType newTreeType = new TreeType(p);
-               // System.out.println("try here " + barcodePrefix);
+                System.out.println("try here " + barcodePrefix);
                 
                 newTreeType.update();
             updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 

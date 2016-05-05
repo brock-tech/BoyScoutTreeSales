@@ -125,7 +125,8 @@ public class EditTreeTypeTransaction extends Transaction {
         
         try {
             treeTypeCollection.lookupTreeTypesByBarcode(barcodePrefix);
-            System.out.println("barcode is " + barcodePrefix);
+            System.out.println("description " + "");
+            
         } catch (Exception e) {
             transactionErrorMessage = e.getMessage();
         }
@@ -159,13 +160,15 @@ public class EditTreeTypeTransaction extends Transaction {
         while (allKeys.hasMoreElements()) {
             String nextKey = (String) allKeys.nextElement();
             String nextValue = p.getProperty(nextKey);
-
+            //System.out.println("nv " + nextKey + nextValue);
             if (nextValue != null) {
                 selectedTreeType.stateChangeRequest(nextKey, nextValue);
             }
         }
         
+         System.out.println("boobs " + selectedTreeType.getState("BarcodePrefix"));
         selectedTreeType.update();
+        System.out.println("boo " + selectedTreeType.getState("BarcodePrefix"));
         updateStatusMessage = (String)selectedTreeType.getState("UpdateStatusMessage");
         transactionErrorMessage = updateStatusMessage;
         
