@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
 import impresario.IModel;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -108,7 +110,9 @@ public class SellTreeTransaction extends Transaction {
   
   
       protected void processBarcode(String bc) {
-        try {
+        updateStatusMessage = "";
+        transactionErrorMessage = updateStatusMessage;
+          try {
             Tree desiredTree = new Tree(bc);
              if(desiredTree.isAvailable())
             {
@@ -152,7 +156,12 @@ public class SellTreeTransaction extends Transaction {
          Tree treeSold = new Tree(p.getProperty("Barcode"));
            System.out.println("Instantiating tree with "  + p.getProperty("Barcode")); 
            System.out.println("treeSold status " + treeSold.getState("Status"));
-                treeSold.setSold();
+                //treeSold.setSold();
+            treeSold.stateChangeRequest("Status", "Sold");
+             LocalDateTime currentDate = LocalDateTime.now();
+        String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        treeSold.stateChangeRequest("DateStatusUpdated", dateLastUpdate);
+            System.out.println("tree Id" + treeSold.getState("ID"));
                 updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"),
                 p.getProperty("CustomerName"));
                 transactionErrorMessage = updateStatusMessage;

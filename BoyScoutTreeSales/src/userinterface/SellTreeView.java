@@ -312,8 +312,8 @@ public class SellTreeView extends BaseView {
              TreeType selTree = null;
             try {
                 selTree = new TreeType((String) selectedTree.getState("TreeType"),1);
-                System.out.println(selTree.getState("Cost"));
-                System.out.println(selectedTree.getState("TreeType"));
+                //System.out.println(selTree.getState("Cost"));
+                //System.out.println(selectedTree.getState("TreeType"));
             } catch (InvalidPrimaryKeyException ex) {
                 Logger.getLogger(SellTreeView.class.getName()).log(Level.SEVERE, null, ex);
             }

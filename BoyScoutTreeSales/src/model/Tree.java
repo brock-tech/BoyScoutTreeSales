@@ -182,7 +182,7 @@ public class Tree extends EntityBase {
     
     public boolean isAvailable() {
         String status = persistentState.getProperty("Status");
-        System.out.println("Status prior " + persistentState.getProperty("Status"));
+        //System.out.println("Status prior " + persistentState.getProperty("Status"));
         if(status.equals("Available"))
             return true;
         
@@ -196,8 +196,6 @@ public class Tree extends EntityBase {
         persistentState.setProperty("DateStatusUpdated", dateLastUpdate);    
         persistentState.setProperty("Status", "Sold");
         
-        stateChangeRequest("Status", "Sold");
-        stateChangeRequest("DateStatusUpdated", dateLastUpdate);
         System.out.println(persistentState.getProperty("Status"));
         System.out.println("jere");
     }
