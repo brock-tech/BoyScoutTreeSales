@@ -36,6 +36,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.HPos;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.text.Text;
 import model.Tree;
 import model.TreeType;
 
@@ -44,21 +52,23 @@ import model.TreeType;
  * @author Andrew
  */
 public class SellTreeView extends BaseView {
-    protected TextField sessionIDField;
-    protected TextField transactionTypeField;
-    protected TextField barcodeField;
-    protected TextField transactionAmountField;
-    protected TextField paymentMethodField;
+    protected Label barcodeDisplay;
+    protected Label itemDescDisplay;
+    protected Label costDisplay;
+    
+    protected TextField amountPaidField; // Has focus
     protected TextField customerNameField;
     protected TextField customerPhoneField;
     protected TextField customerEmailField;
-    protected TextField transactionDateField;
-    protected TextField transactionTimeField;
-    protected String sessionID;
-    protected Button checkButton;
-    protected Button cashButton;
+    
+    protected Label customerNamePrompt;
+    protected Label customerPhonePrompt;
+    protected Label customerEmailPrompt;
+    
+    protected RadioButton cashButton;
+    protected RadioButton checkButton;
+    
     protected Button submitButton;
-//    protected Button clearFormButton;
     protected Button cancelButton;
 
 
@@ -67,9 +77,8 @@ public class SellTreeView extends BaseView {
         super(model, "SellTreeView");
 
         myModel.subscribe("UpdateStatusMessage", this);
-         myModel.subscribe("SaleToDisplay", this);
-        sessionID = (String)myModel.getState("Session");
-        System.out.println("session " + sessionID);
+        myModel.subscribe("SelectedTree", this);
+        myModel.subscribe("SelectedTreeType", this);
     }
 
     @Override
@@ -87,88 +96,134 @@ public class SellTreeView extends BaseView {
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
-
+        
+        GridPane itemInfoGrid = new GridPane();
+        itemInfoGrid.setHgap(10);
+        itemInfoGrid.setVgap(10);
+        itemInfoGrid.getStyleClass().addAll("pane2","grid");
+        itemInfoGrid.setPrefWidth(DEFAULT_WIDTH);
+        
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setHalignment(HPos.RIGHT);
+        col1.setPercentWidth(40);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHalignment(HPos.LEFT);
+        itemInfoGrid.getColumnConstraints().addAll(col1, col2);
+        
+        Label barcodeLabel = new Label(myResources.getProperty("barcode"));
+        barcodeDisplay = new Label();
+        itemInfoGrid.add(barcodeLabel, 0, 0);
+        itemInfoGrid.add(barcodeDisplay, 1, 0);
+        
+        Label itemDescLabel = new Label(myResources.getProperty("itemDescription"));
+        itemDescDisplay = new Label();
+        itemInfoGrid.add(itemDescLabel, 0, 1);
+        itemInfoGrid.add(itemDescDisplay, 1, 1);
+        
+        Label costLabel = new Label(myResources.getProperty("cost"));
+        costDisplay = new Label();
+        itemInfoGrid.add(costLabel, 0, 2);
+        itemInfoGrid.add(costDisplay, 1, 2);
+        
+        content.getChildren().add(itemInfoGrid);
+        
+        
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
+        formGrid.setAlignment(Pos.CENTER);
         formGrid.getStyleClass().addAll("pane2","grid");
-
-        sessionIDField = new TextField();
-        sessionIDField.setOnAction(submitHandler);
+        
+        HBox paymentMethodContainer = new HBox(25);
+        paymentMethodContainer.setAlignment(Pos.CENTER_LEFT);
+        
+        ToggleGroup paymentTG = new ToggleGroup();
+        cashButton = new RadioButton(myResources.getProperty("cashButton"));
+        cashButton.setToggleGroup(paymentTG);
+        cashButton.setSelected(true);
+        
+        checkButton = new RadioButton(myResources.getProperty("checkButton"));
+        checkButton.setToggleGroup(paymentTG);
+        
+        paymentMethodContainer.getChildren().addAll(cashButton, checkButton);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("sessionIDField"),
-                sessionIDField
+                myResources.getProperty("paymentMethod"),
+                paymentMethodContainer
+        );
+        formGrid.add(formItem, 0, 0, 2, 1);
+        
+        
+        amountPaidField = new TextField();
+        amountPaidField.setOnAction(submitHandler);
+        Text currency = new Text(myResources.getProperty("currencySymbol"));
+        HBox amountPaidBox = new HBox(10);
+        amountPaidBox.setAlignment(Pos.CENTER_LEFT);
+        amountPaidBox.getChildren().addAll(currency, amountPaidField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("amountPaid"),
+                amountPaidBox
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 1);
-
-
-        barcodeField = new TextField();
-        barcodeField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("barcodeField"),
-                barcodeField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 1);
-
+        formGrid.add(formItem, 0, 1, 2, 1);
+        
+        
         customerNameField = new TextField();
         customerNameField.setOnAction(submitHandler);
+        customerNameField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                customerNamePrompt.setVisible(newValue);
+            }
+        });
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("customerNameField"),
                 customerNameField
         );
         formItem.setPrefWidth(300);
+        customerNamePrompt = new Label(myResources.getProperty("customerNamePrompt"));
+        customerNamePrompt.setVisible(false);
         formGrid.add(formItem, 0, 2);
+        formGrid.add(customerNamePrompt, 1, 2);
 
         customerPhoneField = new TextField();
         customerPhoneField.setOnAction(submitHandler);
-        customerPhoneField.setPromptText(myResources.getProperty("phoneNumPrompt"));
+        customerPhoneField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                customerPhonePrompt.setVisible(newValue);
+            }
+        });
+        customerPhonePrompt = new Label(myResources.getProperty("customerPhonePrompt"));
+        customerPhonePrompt.setVisible(false);
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("customerPhoneField"),
                 customerPhoneField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 2);
+        formGrid.add(formItem, 0, 3);
+        formGrid.add(customerPhonePrompt, 1, 3);
 
         customerEmailField = new TextField();
         customerEmailField.setOnAction(submitHandler);
+        customerEmailField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                customerEmailPrompt.setVisible(newValue);
+            }
+        });
+        customerEmailPrompt = new Label(myResources.getProperty("customerEmailPrompt"));
+        customerEmailPrompt.setVisible(false);
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("customerEmailField"),
                 customerEmailField
         );
         formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0,3);
-
-        transactionDateField = new TextField();
-        transactionDateField.setOnAction(submitHandler);
-        transactionDateField.setPromptText(myResources.getProperty("datePrompt"));
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("transactionDateField"),
-                transactionDateField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 3);
-
-        transactionTimeField = new TextField();
-        transactionTimeField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("transactionTimeField"),
-                transactionTimeField
-        );
-        formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 4);
+        formGrid.add(customerEmailPrompt, 1, 4);
 
-        transactionAmountField = new TextField();
-        transactionAmountField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("transactionAmountField"),
-                transactionAmountField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 1, 4);
-
-         HBox buttonContainer = new HBox(20);
+        content.getChildren().add(formGrid);
+        
+        HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
 
         submitButton = new Button(myResources.getProperty("submitButton"));
@@ -176,93 +231,61 @@ public class SellTreeView extends BaseView {
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
 
-//        clearFormButton = new Button("Clear Form");
-//        clearFormButton.setOnAction(submitHandler);
-//        clearFormButton.setPrefWidth(100);
-//        buttonContainer.getChildren().add(clearFormButton);
-
         cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);
 
-        content.getChildren().add(formGrid);
         content.getChildren().add(buttonContainer);
 
         return content;
     }
 
-    protected void processAction(Event event)
-    {
+    protected void processAction(Event event) {
         clearErrorMessage();
 
-        if (event.getSource() == cancelButton)
-        {
+        if (event.getSource() == cancelButton) {
             myModel.stateChangeRequest("Cancel", "");
         }
-        else
-        {      // Verify information in fields
-         if (validate())
-         {
-             // Submit data
-             Properties newSaleData = new Properties();
-
-             //newSaleData.setProperty("ID", idField.getText());
-             newSaleData.setProperty("SessionID", sessionIDField.getText());
-             newSaleData.setProperty("TransactionType", "Tree Sale");
-             newSaleData.setProperty("Barcode", barcodeField.getText());
-
-             newSaleData.setProperty("TransactionAmount", transactionAmountField.getText());
-             newSaleData.setProperty("SessionID", sessionIDField.getText());
-             newSaleData.setProperty("PaymentMethod", paymentMethodField.getText());
-
-             newSaleData.setProperty("CustomerName", customerNameField.getText());
-             newSaleData.setProperty("CustomerPhone", customerPhoneField.getText());
-             newSaleData.setProperty("CustomerEmail", customerEmailField.getText());
-
-             newSaleData.setProperty("TransactionDate", transactionDateField.getText());
-             newSaleData.setProperty("TransactionTime", transactionTimeField.getText());
-
-             LocalDateTime currentDate = LocalDateTime.now();
-             String dateLastUpdate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-             newSaleData.setProperty("DateStatusUpdated", dateLastUpdate);
-             
+        else // Verify information in fields
+        if (validate()) {
+            // Submit data
+            Properties newSaleData = new Properties();
             
-             //System.out.println("barcode " + barcodePrefixField.getText() );*/
-             myModel.stateChangeRequest("Submit", newSaleData);
-             displayMessage((String)myModel.getState("UpdateStatusMessage"));
-         }
+            if (cashButton.isSelected()) {
+                newSaleData.setProperty("PaymentMethod", "cash");
+            }
+            else {
+                newSaleData.setProperty("PaymentMethod", "check");
+            }
+            
+            newSaleData.setProperty("TransactionAmount", amountPaidField.getText());
+            newSaleData.setProperty("CustomerName", customerNameField.getText());
+            newSaleData.setProperty("CustomerPhone", customerPhoneField.getText());
+            newSaleData.setProperty("CustomerEmail", customerEmailField.getText());
+            
+            myModel.stateChangeRequest("Submit", newSaleData);
         }
     }
 
     protected boolean validate() {
         // Nothing can be null
-        String value = sessionIDField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errSessionNull"));
-            sessionIDField.requestFocus();
-            return false;
-        }
-        value = barcodeField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errBarcodeNull"));
-            barcodeField.requestFocus();
-            return false;
-        }
-        value = transactionAmountField.getText();
-        if ((value == null) || "".equals(value)) {
+        String value;
+        value = amountPaidField.getText();
+        if (!value.matches(myResources.getProperty("currencyPattern"))) {
             displayErrorMessage(myResources.getProperty("errTransactionAmountNull"));
-            transactionAmountField.requestFocus();
+            amountPaidField.requestFocus();
             return false;
         }
+        
         value = customerNameField.getText();
         if ((value == null) || "".equals(value)) {
             displayErrorMessage(myResources.getProperty("errNameNull"));
             customerNameField.requestFocus();
             return false;
         }
-        value = customerPhoneField.getText();
-        if (!value.matches(myResources.getProperty("phoneNumFormat"))) {
+        value = customerPhoneField.getText().trim();
+        if (!value.matches(myResources.getProperty("phoneNumPattern"))) {
             displayErrorMessage(myResources.getProperty("errPhoneNull"));
             customerPhoneField.requestFocus();
             return false;
@@ -273,43 +296,28 @@ public class SellTreeView extends BaseView {
             customerEmailField.requestFocus();
             return false;
         }
-        value = transactionTimeField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errTransactionTimeNull"));
-            transactionTimeField.requestFocus();
-            return false;
-        }
         return true;
     }       
     
     @Override
     public void updateState(String key, Object value) {
-        if (key.equals("UpdateStatusMessage")) {
-            displayMessage((String)myModel.getState("UpdateStatusMessage"));
-
-        }
-        else if (key.equals("SaleToDisplay")) {
-             Tree selectedTree = (Tree)value;
-             TreeType selTree = null;
-            try {
-                selTree = new TreeType((String) selectedTree.getState("TreeType"),1);
-                System.out.println(selTree.getState("Cost"));
-                System.out.println(selectedTree.getState("TreeType"));
-            } catch (InvalidPrimaryKeyException ex) {
-                Logger.getLogger(SellTreeView.class.getName()).log(Level.SEVERE, null, ex);
+        switch (key) {
+            case "UpdateStatusMessage":
+                displayMessage((String)myModel.getState("UpdateStatusMessage"));
+                
+            case "SelectedTree": {
+                IModel tree = (IModel)myModel.getState("SelectedTree");
+                barcodeDisplay.setText((String)tree.getState("BarCode"));
+                break;
             }
-            if (selectedTree != null) {
-
-               LocalDateTime currentDate = LocalDateTime.now();
-               String transactionTime = currentDate.format(DateTimeFormatter.ISO_TIME);
-               String transactionDate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-               transactionTimeField.setText(transactionTime);
-               transactionDateField.setText(transactionDate);
-               barcodeField.setText((String) selectedTree.getState("BarCode"));
-               sessionIDField.setText(sessionID);
-               transactionAmountField.setText((String) selTree.getState("Cost"));
-
-            }
+            
+            case "SelectedTreeType": 
+                IModel treeType = (IModel)myModel.getState("SelectedTreeType");
+                itemDescDisplay.setText((String)treeType.getState("TypeDescription"));
+                costDisplay.setText(String.format(myResources.getProperty("currencyMsgFormat"),
+                        (String)treeType.getState("Cost")));
+                amountPaidField.requestFocus();
+                break;
         }
     }
 
