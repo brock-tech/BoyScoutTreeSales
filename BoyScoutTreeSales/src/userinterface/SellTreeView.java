@@ -252,6 +252,13 @@ public class SellTreeView extends BaseView {
             // Submit data
             Properties newSaleData = new Properties();
             
+            if (cashButton.isSelected()) {
+                newSaleData.setProperty("PaymentMethod", "cash");
+            }
+            else {
+                newSaleData.setProperty("PaymentMethod", "check");
+            }
+            
             newSaleData.setProperty("TransactionAmount", amountPaidField.getText());
             newSaleData.setProperty("CustomerName", customerNameField.getText());
             newSaleData.setProperty("CustomerPhone", customerPhoneField.getText());
@@ -267,7 +274,7 @@ public class SellTreeView extends BaseView {
         value = amountPaidField.getText();
         if (!value.matches(myResources.getProperty("currencyPattern"))) {
             displayErrorMessage(myResources.getProperty("errTransactionAmountNull"));
-            customerNameField.requestFocus();
+            amountPaidField.requestFocus();
             return false;
         }
         
