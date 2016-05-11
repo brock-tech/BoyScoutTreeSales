@@ -66,7 +66,7 @@ public class EditTreeTransactionView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
-        Text title = new Text(myResources.getProperty("title"));
+        Text title = new Text(myResources.getProperty("promptText"));
         title.setTextAlignment(TextAlignment.CENTER);
         title.getStyleClass().add("information-text");
         content.getChildren().add(title);
@@ -107,12 +107,12 @@ public class EditTreeTransactionView extends BaseView {
         HBox buttonContainer = new HBox(10);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        submitButton = new Button(myResources.getProperty("submit"));
+        submitButton = new Button(myResources.getProperty("submitButton"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
         
-        cancelButton = new Button(myResources.getProperty("cancel"));
+        cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);

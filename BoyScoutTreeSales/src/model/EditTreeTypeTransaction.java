@@ -12,7 +12,6 @@ package model;
 import java.util.Enumeration;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -33,12 +32,20 @@ public class EditTreeTypeTransaction extends Transaction {
     
     public EditTreeTypeTransaction() {
         super();
+        
+        treeTypeCollection = new TreeTypeCollection();
+        
+        try {
+            treeTypeCollection.lookupAllTreeTypes();
+        } catch (Exception e) {
+            transactionErrorMessage = e.getMessage();
+        }
     }
 
     @Override
     protected void setDependencies() {
         Properties dependencies = new Properties();
-        dependencies.put("SearchTreeTypes", "TreeTypes,TransactionError");
+        //dependencies.put("SearchTreeTypes", "TreeTypes,TransactionError");
         dependencies.put("EditTreeType", "TreeTypeToDisplay");
         dependencies.put("Submit", "TreeTypes,TransactionError,UpdateStatusMessage");
         dependencies.put("Cancel", "CancelTransaction");
@@ -85,9 +92,9 @@ public class EditTreeTypeTransaction extends Transaction {
             case "DoYourJob":
                 doYourJob();
                 break;
-            case "SearchTreeTypes":
-                searchTreeTypes((Properties)value);
-                break;
+//            case "SearchTreeTypes":
+//                searchTreeTypes((Properties)value);
+//                break;
             case "EditTreeType":
                 editTreeType((String)value);
                 break;
@@ -118,34 +125,34 @@ public class EditTreeTypeTransaction extends Transaction {
         }
     }
     
-    protected void searchTreeTypes(Properties props) {
-        String barcodePrefix = props.getProperty("BarcodePrefix");
-        
-        treeTypeCollection = new TreeTypeCollection();
-        
-        try {
-            treeTypeCollection.lookupTreeTypesByBarcode(barcodePrefix);
-            System.out.println("barcode is " + barcodePrefix);
-        } catch (Exception e) {
-            transactionErrorMessage = e.getMessage();
-        }
-    }
+//    protected void searchTreeTypes(Properties props) {
+//        String barcodePrefix = props.getProperty("BarcodePrefix");
+//        
+//        treeTypeCollection = new TreeTypeCollection();
+//        
+//        try {
+//            treeTypeCollection.lookupAllTreeTypes();
+//            //System.out.println("barcode is " + barcodePrefix);
+//        } catch (Exception e) {
+//            transactionErrorMessage = e.getMessage();
+//        }
+//    }
     
-    protected void removeTreeType(String treeTypeId) {
-        selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
-        String barcodePrefix = (String)selectedTreeType.getState("BarcodePrefix");
-        
-        Alert confirmDialog = new Alert(AlertType.CONFIRMATION, String.format(
-                "Are you sure you want to remove '%s'?",
-                barcodePrefix));
-        Optional<ButtonType> result = confirmDialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            selectedTreeType.remove();
-        updateStatusMessage = (String)selectedTreeType.getState("deleteSuccessMsg");
-        transactionErrorMessage = updateStatusMessage;
-
-        }
-    }
+//    protected void removeTreeType(String treeTypeId) {
+//        selectedTreeType = treeTypeCollection.retrieve(treeTypeId);
+//        String barcodePrefix = (String)selectedTreeType.getState("BarcodePrefix");
+//        
+//        Alert confirmDialog = new Alert(AlertType.CONFIRMATION, String.format(
+//                "Are you sure you want to remove '%s'?",
+//                barcodePrefix));
+//        Optional<ButtonType> result = confirmDialog.showAndWait();
+//        if (result.isPresent() && result.get() == ButtonType.OK) {
+//            selectedTreeType.remove();
+//        updateStatusMessage = (String)selectedTreeType.getState("deleteSuccessMsg");
+//        transactionErrorMessage = updateStatusMessage;
+//
+//        }
+//    }
     
     protected void editTreeType(String treeTypeId) {
         selectedTreeType = treeTypeCollection.retrieve(treeTypeId);

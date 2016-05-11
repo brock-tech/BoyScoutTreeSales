@@ -10,12 +10,15 @@
 package userinterface;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
  * @author mike
  */
 public abstract class TimeEntry extends javafx.scene.Group {
+    protected final DateTimeFormatter standardFormat = 
+            DateTimeFormatter.ofPattern("H:mm");
     
     protected TimeEntry() {
         super();
@@ -23,6 +26,7 @@ public abstract class TimeEntry extends javafx.scene.Group {
     }
     
     protected abstract void createContent();
-    public abstract LocalTime getTime();
-    public abstract void setTime(LocalTime value);
+    public abstract String getTime();
+    public abstract void setTime(LocalTime time);
+    public abstract void setTime(String time);
 }

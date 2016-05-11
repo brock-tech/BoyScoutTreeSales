@@ -95,7 +95,7 @@ public class OpenSessionTransactionView extends BaseView {
         
         dateField = new DatePicker(currentDateTime.toLocalDate());
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("selectDate"),
+                myResources.getProperty("dateField"),
                 dateField
         );
         formItem.setPrefWidth(200);
@@ -103,47 +103,43 @@ public class OpenSessionTransactionView extends BaseView {
         
         try {
             startTimeField = (TimeEntry) Class.forName(
-                    myResources.getProperty("timeEntry")).newInstance();
+                    myResources.getProperty("timeEntryClass")).newInstance();
+            startTimeField.setTime(currentDateTime.toLocalTime());
+            formItem = formItemBuilder.buildControl(
+                    myResources.getProperty("startTimeField"),
+                    startTimeField
+            );
+            formItem.setPrefWidth(300);
+            formGrid.add(formItem, 0, 1);
+            
+            startCashField = new TextField();
+            startCashField.setPrefWidth(100);
+            IFormItemStrategy currencyItemBuilder = (IFormItemStrategy) Class.forName(
+                    myResources.getProperty("currencyFormItemClass")).newInstance();
+            formItem = currencyItemBuilder.buildControl(
+                    myResources.getProperty("startCashField"),
+                    startCashField);
+            formItem.setPrefWidth(200);
+            formGrid.add(formItem, 0, 2);
         }
         catch (Exception cnfe) {
             System.err.printf("Class load error: " + cnfe.getMessage());
             return content;
         }
-        startTimeField.setTime(currentDateTime.toLocalTime());
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("enterStartTime"),
-                startTimeField
-        );
-        formItem.setPrefWidth(300);
-        formGrid.add(formItem, 0, 1);
-        
-        HBox startCashContainer = new HBox(5);
-        startCashContainer.setPadding(new Insets(5));
-        startCashContainer.setAlignment(Pos.CENTER_LEFT);
-        Text cashSymbol = new Text(myResources.getProperty("currency"));
-        startCashField = new TextField();
-        startCashField.setPrefWidth(100);
-        startCashContainer.getChildren().addAll(cashSymbol, startCashField);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("enterStartCash"),
-                startCashContainer
-        );
-        formItem.setPrefWidth(200);
-        formGrid.add(formItem, 0, 2);
         
         notesField = new TextArea();
         notesField.setPrefRowCount(4);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("notes"),
+                myResources.getProperty("notesField"),
                 notesField);
         formItem.setPrefWidth(MY_WIDTH);
         formGrid.add(formItem, 0, 4);
         
-        submitButton = new Button(myResources.getProperty("submit"));
+        submitButton = new Button(myResources.getProperty("submitButton"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         
-        cancelButton = new Button(myResources.getProperty("cancel"));
+        cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         
@@ -164,8 +160,7 @@ public class OpenSessionTransactionView extends BaseView {
             if (validate()) {
                 Properties p = new Properties();
                 p.setProperty("StartDate", dateField.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE));
-                p.setProperty("StartTime", startTimeField.getTime().format(
-                        DateTimeFormatter.ofPattern("HH:mm")));
+                p.setProperty("StartTime", startTimeField.getTime());
                 p.setProperty("EndTime", "<empty>");
                 p.setProperty("StartingCash", startCashField.getText());
                 p.setProperty("EndingCash", "<empty>");
@@ -193,13 +188,14 @@ public class OpenSessionTransactionView extends BaseView {
             startCashField.requestFocus();
             return false;
         }
-        if (!cashInput.matches(myResources.getProperty("cashFormat"))) {
+        if (!cashInput.matches(myResources.getProperty("currencyPattern"))) {
             displayErrorMessage(myResources.getProperty("errCashInvalid"));
             startCashField.requestFocus();
             return false;
         }
         
         String notes = notesField.getText();
+        // Notes can be empty, but we need a placeholder
         if ((notes == null) || notes.equals("")) {
             notesField.setText("<empty>");
         }

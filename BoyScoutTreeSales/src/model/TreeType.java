@@ -38,7 +38,7 @@ public class TreeType extends EntityBase
     private ResourceBundle myMessages;
 
     //--------------------------------------------------------------------------
-    public TreeType(String barcodePrefix) throws InvalidPrimaryKeyException
+    public TreeType(String id) throws InvalidPrimaryKeyException
     {
 	super(myTableName);
         setDependencies();
@@ -47,10 +47,7 @@ public class TreeType extends EntityBase
         myMessages = ResourceBundle.getBundle("model.i18n.TreeType", myLocale);
         MessageFormat formatter = new MessageFormat("", myLocale);
         
-         String query = String.format(
-                "SELECT * FROM %s WHERE (BarcodePrefix = %s)",
-                myTableName,
-                barcodePrefix);
+        String query = String.format("SELECT * FROM %s WHERE (ID = %s)", myTableName, id);
  
         Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
@@ -61,7 +58,7 @@ public class TreeType extends EntityBase
                 if (size != 1)
 		{
                     formatter.applyPattern(myMessages.getString("multipleTTFoundMsg"));
-                    throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
+                    throw new InvalidPrimaryKeyException(formatter.format(new Object[] {id}));
 		}
                 else
 		{
@@ -85,10 +82,10 @@ public class TreeType extends EntityBase
         else
         {
             formatter.applyPattern(myMessages.getString("TTNotFound"));
-            throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
+            throw new InvalidPrimaryKeyException(formatter.format(new Object[] {id}));
         }
     }
-    
+    /*
     public TreeType(String barcodePrefix, int pref) throws InvalidPrimaryKeyException
     {
 	super(myTableName);
@@ -139,8 +136,9 @@ public class TreeType extends EntityBase
             throw new InvalidPrimaryKeyException(formatter.format(new Object[] {barcodePrefix}));
         }
     }
+*/
     //--------------------------------------------------------------------------
-    TreeType(Properties props) 
+    public TreeType(Properties props) 
     {
         super(myTableName);
         setDependencies();

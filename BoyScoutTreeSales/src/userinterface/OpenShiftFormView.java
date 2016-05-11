@@ -11,11 +11,9 @@ package userinterface;
 
 import impresario.IModel;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -69,7 +67,7 @@ public class OpenShiftFormView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
-        Text titleText = new Text(myResources.getProperty("subtitleText"));
+        Text titleText = new Text(myResources.getProperty("promptText"));
         titleText.setTextAlignment(TextAlignment.CENTER);
         titleText.getStyleClass().add("information-text");
         
@@ -99,53 +97,60 @@ public class OpenShiftFormView extends BaseView {
         
         scoutNameField = new TextField();
         scoutNameField.setEditable(false);
-        formItem = formItemBuilder.buildControl(myResources.getProperty("scoutName"), scoutNameField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("scoutNameField"), scoutNameField);
         formItem.setPrefWidth(500);
         formGrid.add(formItem, 0, 0);
         
         memberIdField = new TextField();
         memberIdField.setEditable(false);
-        formItem = formItemBuilder.buildControl(myResources.getProperty("memberId"), memberIdField);
+        formItem = formItemBuilder.buildControl(
+                myResources.getProperty("memberIdField"), memberIdField);
         formItem.setPrefWidth(500);
         formGrid.add(formItem, 0, 1);
         
         try {
             startTimeField = (TimeEntry) Class.forName(
-                    myResources.getProperty("timeEntry")).newInstance();
+                    myResources.getProperty("timeEntryClass")).newInstance();
+            startTimeField.setTime(currentDateTime.toLocalTime());
+            formItem = formItemBuilder.buildControl(
+                    myResources.getProperty("startTimeField"), startTimeField);
+            formGrid.add(formItem, 0, 2);
+            
             endTimeField = (TimeEntry) Class.forName(
-                    myResources.getProperty("timeEntry")).newInstance();
+                    myResources.getProperty("timeEntryClass")).newInstance();
+            endTimeField.setTime(currentDateTime.toLocalTime().plusHours(SHIFT_HOURS));
+            formItem = formItemBuilder.buildControl(
+                    myResources.getProperty("endTimeField"), endTimeField);
+            formGrid.add(formItem, 0, 3);
         } catch (Exception cnfe) {
             System.err.printf("Class load error: " + cnfe.getMessage());
             return content;
         }
         
-        startTimeField.setTime(currentDateTime.toLocalTime());
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("startTime"), startTimeField);
-        formGrid.add(formItem, 0, 2);
         
-        endTimeField.setTime(currentDateTime.toLocalTime().plusHours(SHIFT_HOURS));
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("endTime"), endTimeField);
-        formGrid.add(formItem, 0, 3);
+        
+        
         
         companionNameField = new TextField();
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("companionName"), companionNameField);
+                myResources.getProperty("companionNameField"),
+                companionNameField);
         formItem.setPrefWidth(500);
         formGrid.add(formItem, 0, 4);
         
         companionHoursField = new Spinner(0, 24, SHIFT_HOURS);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("companionHours"), companionHoursField);
+                myResources.getProperty("companionHoursField"), 
+                companionHoursField);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 5);
         
-        submitButton = new Button(myResources.getProperty("submit"));
+        submitButton = new Button(myResources.getProperty("submitButton"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         
-        backButton = new Button(myResources.getProperty("back"));
+        backButton = new Button(myResources.getProperty("cancelButton"));
         backButton.setOnAction(submitHandler);
         backButton.setPrefWidth(100);
         
@@ -165,10 +170,8 @@ public class OpenShiftFormView extends BaseView {
         if (source == submitButton) {
             if (validate()) {
                 Properties p = new Properties();
-                p.setProperty("StartTime", startTimeField.getTime().format(
-                        DateTimeFormatter.ofPattern("HH:mm")));
-                p.setProperty("EndTime", endTimeField.getTime().format(
-                        DateTimeFormatter.ofPattern("HH:mm")));
+                p.setProperty("StartTime", startTimeField.getTime());
+                p.setProperty("EndTime", endTimeField.getTime());
                 p.setProperty("CompanionName", companionNameField.getText());
                 p.setProperty("CompanionHours", companionHoursField.getValue().toString());
                 myModel.stateChangeRequest("SubmitShift", p);

@@ -10,17 +10,11 @@
 package userinterface;
 
 
-import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
-import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.Properties;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -29,13 +23,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
@@ -43,9 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.text.Text;
-import model.Tree;
-import model.TreeType;
 
 /**
  *
@@ -63,7 +47,6 @@ public class SellTreeView extends BaseView {
     
     protected Label customerNamePrompt;
     protected Label customerPhonePrompt;
-    protected Label customerEmailPrompt;
     
     protected RadioButton cashButton;
     protected RadioButton checkButton;
@@ -89,13 +72,23 @@ public class SellTreeView extends BaseView {
                 processAction(event);
             }
         };
-
-        IFormItemStrategy formItemBuilder = FormItemFactory.getFormItem("TopAlignFormItem");
-        Pane formItem;
-
+        
         VBox content = new VBox(25);
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
+
+        IFormItemStrategy formItemBuilder, currencyItemBuilder;
+        Pane formItem;
+        try {
+            formItemBuilder = (IFormItemStrategy)Class.forName(
+                    "userinterface.TopAlignFormItem").newInstance();
+            currencyItemBuilder = (IFormItemStrategy)Class.forName(
+                    "userinterface.TopAlignStandardCurrencyItem").newInstance();
+        }
+        catch (Exception cnfe) {
+            System.err.printf("Form Item Strategy error: " + cnfe.getMessage());
+            return content;
+        }
         
         GridPane itemInfoGrid = new GridPane();
         itemInfoGrid.setHgap(10);
@@ -155,13 +148,9 @@ public class SellTreeView extends BaseView {
         
         amountPaidField = new TextField();
         amountPaidField.setOnAction(submitHandler);
-        Text currency = new Text(myResources.getProperty("currencySymbol"));
-        HBox amountPaidBox = new HBox(10);
-        amountPaidBox.setAlignment(Pos.CENTER_LEFT);
-        amountPaidBox.getChildren().addAll(currency, amountPaidField);
-        formItem = formItemBuilder.buildControl(
-                myResources.getProperty("amountPaid"),
-                amountPaidBox
+        formItem = currencyItemBuilder.buildControl(
+                myResources.getProperty("amountPaidField"),
+                amountPaidField
         );
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 1, 2, 1);
@@ -205,21 +194,12 @@ public class SellTreeView extends BaseView {
 
         customerEmailField = new TextField();
         customerEmailField.setOnAction(submitHandler);
-        customerEmailField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                customerEmailPrompt.setVisible(newValue);
-            }
-        });
-        customerEmailPrompt = new Label(myResources.getProperty("customerEmailPrompt"));
-        customerEmailPrompt.setVisible(false);
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("customerEmailField"),
                 customerEmailField
         );
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 4);
-        formGrid.add(customerEmailPrompt, 1, 4);
 
         content.getChildren().add(formGrid);
         

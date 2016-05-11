@@ -97,12 +97,12 @@ public class OpenShiftLookupView extends BaseView {
         HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        selectButton = new Button(myResources.getProperty("select"));
+        selectButton = new Button(myResources.getProperty("selectButton"));
         selectButton.setOnAction(actionHandler);
         selectButton.setPrefWidth(200);
         buttonContainer.getChildren().add(selectButton);
         
-        doneButton = new Button(myResources.getProperty("done"));
+        doneButton = new Button(myResources.getProperty("doneButton"));
         doneButton.setOnAction(actionHandler);
         doneButton.setPrefWidth(200);
         buttonContainer.getChildren().add(doneButton);
