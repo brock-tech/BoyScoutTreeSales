@@ -63,7 +63,7 @@ public class EnterTreeBarcodeView extends BaseView {
                 barcodeField);
         formItem.setPrefWidth(400);
         
-        cancelButton = new Button(myResources.getProperty("cancel"));
+        cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setPrefWidth(100);
         cancelButton.setOnAction(submitHandler);
         
@@ -80,7 +80,8 @@ public class EnterTreeBarcodeView extends BaseView {
         else if (sender == barcodeField) {
             if (validate()) {
                 myModel.stateChangeRequest("SubmitBarcode", barcodeField.getText());
-            } 
+                barcodeField.clear();
+            }
         }
     }
     
@@ -92,6 +93,9 @@ public class EnterTreeBarcodeView extends BaseView {
     public void updateState(String key, Object value) {
         if (key.equals("UpdateStatusMessage")) {
             displayMessage((String)value);
+        }
+        else if (key.equals("")) {
+            
         }
     }
     

@@ -122,9 +122,9 @@ public class SellTreeTransaction extends Transaction {
                         "Error: That tree has already been sold!");
             }
             
-            String bcPrefix = (String)selectedTree.getState("TreeType");
+            String typeId = (String)selectedTree.getState("TreeType");
             
-            selectedTreeType = new TreeType(bcPrefix);
+            selectedTreeType = new TreeType(typeId);
             
             createAndShowSaleView();
         } catch (InvalidPrimaryKeyException ex) {

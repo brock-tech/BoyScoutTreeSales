@@ -48,7 +48,8 @@ public class ScoutLookupTable extends Group {
     
     public ScoutLookupTable() {
         myLocale = SystemLocale.getInstance();
-        myResources = ResourceBundle.getBundle("userinterface.i18n.EditScoutTransactionView", myLocale);
+        myResources = ResourceBundle.getBundle(
+                "userinterface.i18n.ScoutLookupTable", myLocale);
         
         createContent();
     }
@@ -77,67 +78,79 @@ public class ScoutLookupTable extends Group {
         firstNameSearchField.setPromptText(myResources.getString("searchPrompt"));
         firstNameSearchField.setOnAction(eventPasser);
         Pane firstNameFormItem = formItemBuilder.buildControl(
-                myResources.getString("firstName"), firstNameSearchField);
+                myResources.getString("firstNameSearchField"),
+                firstNameSearchField);
         firstNameFormItem.setPrefWidth(DEFAULT_WIDTH / 2);
         
         lastNameSearchField = new TextField();
         lastNameSearchField.setOnAction(eventPasser);
         lastNameSearchField.setPromptText(myResources.getString("searchPrompt"));
         Pane lastNameFormItem = formItemBuilder.buildControl(
-                myResources.getString("lastName"), lastNameSearchField);
+                myResources.getString("lastNameSearchField"),
+                lastNameSearchField);
         lastNameFormItem.setPrefWidth(DEFAULT_WIDTH / 2);
         
         HBox searchContainer = new HBox(10);
         searchContainer.setAlignment(Pos.CENTER);
         searchContainer.getChildren().addAll(firstNameFormItem, lastNameFormItem);
         
-        TableColumn idColumn = new TableColumn(myResources.getString("id"));
+        TableColumn idColumn = new TableColumn(
+                myResources.getString("idColumn"));
         idColumn.setMinWidth(20);
         idColumn.setCellValueFactory(
                 new PropertyValueFactory("id"));
         idColumn.setVisible(false);
         
-        TableColumn firstNameColumn = new TableColumn(myResources.getString("firstName"));
+        TableColumn firstNameColumn = new TableColumn(
+                myResources.getString("firstNameColumn"));
         firstNameColumn.setMinWidth(125);
         firstNameColumn.setCellValueFactory(
                 new PropertyValueFactory("firstName"));
         
-        TableColumn middleNameColumn = new TableColumn(myResources.getString("middleName"));
+        TableColumn middleNameColumn = new TableColumn(
+                myResources.getString("middleNameColumn"));
         middleNameColumn.setMinWidth(125);
         middleNameColumn.setCellValueFactory(
                 new PropertyValueFactory("middleName"));
         
-        TableColumn lastNameColumn = new TableColumn(myResources.getString("lastName"));
+        TableColumn lastNameColumn = new TableColumn(
+                myResources.getString("lastNameColumn"));
         lastNameColumn.setMinWidth(125);
         lastNameColumn.setCellValueFactory(
                 new PropertyValueFactory("lastName"));
         
-        TableColumn memberIdColumn = new TableColumn(myResources.getString("memberId"));
+        TableColumn memberIdColumn = new TableColumn(
+                myResources.getString("memberIdColumn"));
         memberIdColumn.setMinWidth(125);
         memberIdColumn.setCellValueFactory(
                 new PropertyValueFactory("memberId"));
         
-        TableColumn dateOfBirthColumn = new TableColumn(myResources.getString("dateOfBirth"));
+        TableColumn dateOfBirthColumn = new TableColumn(
+                myResources.getString("dateOfBirthColumn"));
         dateOfBirthColumn.setMinWidth(125);
         dateOfBirthColumn.setCellValueFactory(
                 new PropertyValueFactory("dateOfBirth"));
         
-        TableColumn phoneNumberColumn = new TableColumn(myResources.getString("phoneNumber"));
+        TableColumn phoneNumberColumn = new TableColumn(
+                myResources.getString("phoneNumberColumn"));
         phoneNumberColumn.setMinWidth(200);
         phoneNumberColumn.setCellValueFactory(
                 new PropertyValueFactory("phoneNumber"));
         
-        TableColumn emailColumn = new TableColumn(myResources.getString("email"));
+        TableColumn emailColumn = new TableColumn(
+                myResources.getString("emailColumn"));
         emailColumn.setMinWidth(300);
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory("email"));
         
-        TableColumn statusColumn = new TableColumn(myResources.getString("status"));
+        TableColumn statusColumn = new TableColumn(
+                myResources.getString("statusColumn"));
         statusColumn.setMinWidth(100);
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory("status"));
         
-        TableColumn dateUpdateColumn = new TableColumn(myResources.getString("dateStatusUpdated"));
+        TableColumn dateUpdateColumn = new TableColumn(
+                myResources.getString("dateUpdateColumn"));
         dateUpdateColumn.setMinWidth(150);
         dateUpdateColumn.setCellValueFactory(
                 new PropertyValueFactory("dateStatusUpdated"));

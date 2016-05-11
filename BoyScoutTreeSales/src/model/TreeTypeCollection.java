@@ -87,7 +87,24 @@ public class TreeTypeCollection extends EntityBase implements IView {
         }
         return low;
     }
-
+    
+    public void lookupAllTreeTypes() throws InvalidPrimaryKeyException {
+        String query = "SELECT * FROM "+myTableName;
+        Vector allDataRetrieved = getSelectQueryResult(query);
+        
+        if (allDataRetrieved != null) {
+            treeTypes = new Vector<>();
+            //System.out.println(allDataRetrieved.size() + " amount retrieved");
+            for (Object nextTreeTypeData : allDataRetrieved) {
+                TreeType nextTreeType = new TreeType((Properties)nextTreeTypeData);
+                addTreeType(nextTreeType);
+            }
+        }
+        else {
+            throw new InvalidPrimaryKeyException("No Tree Types found");
+        }
+    }
+/*
     public void lookupTreeTypesByBarcode(String barcodePrefix) 
             throws InvalidPrimaryKeyException {
         
@@ -111,7 +128,7 @@ public class TreeTypeCollection extends EntityBase implements IView {
                     barcodePrefix));
         }
     }
-    
+*/    
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {
             mySchema = getSchemaInfo(myTableName);

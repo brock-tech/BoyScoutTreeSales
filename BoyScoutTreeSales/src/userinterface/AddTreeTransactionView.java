@@ -14,7 +14,6 @@ import java.util.Properties;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -67,7 +66,7 @@ public class AddTreeTransactionView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
-        Text title = new Text(myResources.getProperty("title"));
+        Text title = new Text(myResources.getProperty("promptTitle"));
         title.setTextAlignment(TextAlignment.CENTER);
         title.getStyleClass().add("information-text");
         content.getChildren().add(title);
@@ -80,7 +79,7 @@ public class AddTreeTransactionView extends BaseView {
 
         barCodeField = new TextField();
         barCodeField.setOnAction(submitHandler);
-        formItem = formItemBuilder.buildControl(myResources.getProperty("treeBarCode"), 
+        formItem = formItemBuilder.buildControl(myResources.getProperty("barCodeField"), 
                 barCodeField);
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 0);
@@ -88,7 +87,7 @@ public class AddTreeTransactionView extends BaseView {
         notesField = new TextArea();
         notesField.setPrefRowCount(5);
         formItem = formItemBuilder.buildControl(
-                myResources.getProperty("notes"),
+                myResources.getProperty("notesField"),
                 notesField);
         formItem.setPrefWidth(300);
         formGrid.add(formItem, 0, 1);
@@ -96,12 +95,12 @@ public class AddTreeTransactionView extends BaseView {
         HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
         
-        submitButton = new Button(myResources.getProperty("submit"));
+        submitButton = new Button(myResources.getProperty("submitButton"));
         submitButton.setOnAction(submitHandler);
         submitButton.setPrefWidth(100);
         buttonContainer.getChildren().add(submitButton);
         
-        cancelButton = new Button(myResources.getProperty("cancel"));
+        cancelButton = new Button(myResources.getProperty("cancelButton"));
         cancelButton.setOnAction(submitHandler);
         cancelButton.setPrefWidth(100);
         buttonContainer.getChildren().add(cancelButton);

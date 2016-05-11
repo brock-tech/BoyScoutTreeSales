@@ -42,14 +42,26 @@ public class TwentyFourHourTimeEntry extends TimeEntry {
     }
 
     @Override
-    public LocalTime getTime() {
+    public String getTime() {
         String timeInput = timeField.getText().trim();
-        return LocalTime.parse(timeInput, DateTimeFormatter.ofPattern("H:mm"));
+        try {
+            LocalTime convTime = LocalTime.parse(timeInput, standardFormat);
+            
+            return convTime.format(standardFormat);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
     public void setTime(LocalTime value) {
-        String time = value.format(DateTimeFormatter.ofPattern("H:mm"));
+        timeField.setText(value.format(standardFormat));
+    }
+    
+    
+
+    @Override
+    public void setTime(String time) {
         timeField.setText(time);
     }
     

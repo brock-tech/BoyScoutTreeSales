@@ -33,7 +33,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import model.TreeType;
 import model.TreeTypeTableModel;
-import static userinterface.BaseView.DEFAULT_WIDTH;
 
 /**
  *
@@ -51,8 +50,10 @@ public class EditTreeTypeFormView extends BaseView {
         super(model, "EditTreeTypeTransactionView");
         
         myModel.subscribe("UpdateStatusMessage", this);
-        myModel.subscribe("TreeTypes", this);
-        myModel.subscribe("ClearList", this);  
+//        myModel.subscribe("TreeTypes", this);
+//        myModel.subscribe("ClearList", this);  
+
+        getEntryTableModelValues();
     }
 
     @Override
@@ -89,6 +90,7 @@ public class EditTreeTypeFormView extends BaseView {
         HBox searchContainer = new HBox(20);
         searchContainer.setAlignment(Pos.CENTER);
         
+        /*
         barcodeSearch = new TextField();
         barcodeSearch.setOnAction(actionHandler);
         barcodeSearch.setPromptText(myResources.getProperty("searchPrompt"));
@@ -98,7 +100,8 @@ public class EditTreeTypeFormView extends BaseView {
         searchContainer.getChildren().add(formItem);
         
         content.getChildren().add(searchContainer);
-        
+        */
+
         tableOfTreeTypes = new TableView<>();
         tableOfTreeTypes.getSelectionModel();
         tableOfTreeTypes.setEditable(false);
@@ -111,17 +114,17 @@ public class EditTreeTypeFormView extends BaseView {
         idColumn.setVisible(false);
         
         TableColumn typeColumn = new TableColumn(myResources.getProperty("TypeDescription"));
-        typeColumn.setMinWidth(275);
+        typeColumn.setMinWidth(500);
         typeColumn.setCellValueFactory(
                 new PropertyValueFactory("TypeDescription"));
         
         TableColumn costColumn = new TableColumn(myResources.getProperty("Cost"));
-        costColumn.setMinWidth(250);
+        costColumn.setMinWidth(100);
         costColumn.setCellValueFactory(
                 new PropertyValueFactory("Cost"));
         
         TableColumn barcodeColumn = new TableColumn(myResources.getProperty("BarcodePrefix"));
-        barcodeColumn.setMinWidth(250);
+        barcodeColumn.setMinWidth(150);
         barcodeColumn.setCellValueFactory(
                 new PropertyValueFactory("BarcodePrefix"));
         
@@ -193,8 +196,8 @@ public class EditTreeTypeFormView extends BaseView {
                 displayErrorMessage(myResources.getProperty("errNoSelection"));
             }
             else {
-                System.out.println("itemSelected " + itemSelected.getTreeTypeID());
-                myModel.stateChangeRequest("EditTreeType", itemSelected.getTreeTypeID());
+                System.out.println("itemSelected " + itemSelected.getID());
+                myModel.stateChangeRequest("EditTreeType", itemSelected.getID());
             }
         }
     }

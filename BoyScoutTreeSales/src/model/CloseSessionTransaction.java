@@ -38,7 +38,7 @@ public class CloseSessionTransaction extends Transaction {
         Properties dependencies = new Properties();
         
         dependencies.put("DoYourJob", "TransactionError");
-        dependencies.put("Confirm", "OpenSessionId,CancelTransaction,TransactionError");
+        dependencies.put("Confirm", "OpenSessionId,TransactionError,CancelTransaction");
         dependencies.put("Cancel", "CancelTransaction");
         
         myRegistry.setDependencies(dependencies);
@@ -115,6 +115,13 @@ public class CloseSessionTransaction extends Transaction {
                 break;
     
             case "Confirm":
+                Properties p = (Properties)value;
+                sessionToClose.stateChangeRequest("EndTime", p.getProperty("EndTime"));
+                sessionToClose.stateChangeRequest("EndingCash", p.getProperty("EndingCash"));
+                sessionToClose.stateChangeRequest("TotalCheckTransactionsAmount",
+                        p.getProperty("TotalCheckTransactionsAmount"));
+                sessionToClose.stateChangeRequest("Notes", p.getProperty("Notes"));
+                
                 sessionToClose.update();
                 transactionErrorMessage = (String) sessionToClose.getState("UpdateStatusMessage");
                 break;

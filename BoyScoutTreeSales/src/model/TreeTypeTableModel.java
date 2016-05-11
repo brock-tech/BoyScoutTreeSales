@@ -29,7 +29,7 @@ public class TreeTypeTableModel
 		Cost =  new SimpleStringProperty(treeTypeData.elementAt(2));
 	}
 //------------------------Getters---------------------------------------------------
-	public String getTreeTypeID() 
+	public String getID() 
 	{
 		return ID.get();
 	}
@@ -37,7 +37,7 @@ public class TreeTypeTableModel
 	{
 		return BarcodePrefix.get();
 	}
-	public String getDescription() 
+	public String getTypeDescription() 
 	{
 		return TypeDescription.get();
 	}
@@ -45,24 +45,6 @@ public class TreeTypeTableModel
 	{
 		return Cost.get();
 	}
-	
-	public void setTreeTypeID(String c) 
-	{
-		ID.set(c);
-	}
-	public void setBarcodePrefix(String sc) 
-	{
-		BarcodePrefix.set(sc);
-	}
-	public void setDescription(String z)
-	{
-		TypeDescription.set(z);
-	}
-	public void setCost(String e) 
-	{
-		Cost.set(e);
-	}
-
 }
 
 

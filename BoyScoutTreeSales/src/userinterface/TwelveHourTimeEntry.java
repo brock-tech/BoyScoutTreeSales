@@ -26,10 +26,14 @@ import javafx.scene.layout.HBox;
  * @author mike
  */
 public class TwelveHourTimeEntry extends TimeEntry {
-    protected static final String TIME_FORMAT = "^(0?[1-9]|1[0-2]):[0-6][0-9]";
+    protected final DateTimeFormatter displayFormat = DateTimeFormatter.ofPattern("h:mm a");
     
     protected TextField timeField;
     protected ComboBox amPmSelectBox;
+    
+    public TwelveHourTimeEntry() {
+        super();
+    }
 
     @Override
     protected void createContent() {
@@ -55,24 +59,34 @@ public class TwelveHourTimeEntry extends TimeEntry {
     }
     
     @Override
-    public LocalTime getTime() {
-        String timeInput = timeField.getText().trim();
-        if (timeInput.matches(TIME_FORMAT)) {
-            timeInput += " " + (String) amPmSelectBox.getValue();
-            LocalTime parsedTime = LocalTime.parse(
-                    timeInput, DateTimeFormatter.ofPattern("h:mm a"));
-            return parsedTime;
+    public String getTime() {
+        String timeInput = String.format("%1$s %2$s",
+                timeField.getText().trim(),
+                (String)amPmSelectBox.getValue());
+        try {
+            LocalTime convertedTime = LocalTime.parse(timeInput, displayFormat);
+            
+            return convertedTime.format(standardFormat);
+            
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     @Override
-    public void setTime(LocalTime value) {
-        String time = value.format(DateTimeFormatter.ofPattern("h:mm"));
-        String amPm = value.format(DateTimeFormatter.ofPattern("a"));
+    public void setTime(LocalTime time) {
+        String[] values = time.format(displayFormat).split(" ");
         
-        timeField.setText(time);
-        amPmSelectBox.setValue(amPm);
+        timeField.setText(values[0]);
+        amPmSelectBox.setValue(values[1]);
+    }
+    
+    public void setTime(String time) {
+        String convTime = LocalTime.parse(time, standardFormat).format(displayFormat);
+        String[] values = convTime.split(" ");
+        
+        timeField.setText(values[0]);
+        amPmSelectBox.setValue(values[1]);
     }
     
     @Override

@@ -10,17 +10,19 @@
 package userinterface;
 
 import impresario.IModel;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -28,6 +30,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.StringConverter;
 
 /**
  *
@@ -38,11 +41,12 @@ public class ScoutFormView extends BaseView {
     protected TextField firstNameField;
     protected TextField middleNameField;
     protected TextField lastNameField;
-    protected TextField dobField;
+    protected DatePicker dobField;
     protected TextField phoneNumField;
     protected TextField emailField;
     protected TextField memberIdField;
-    //protected ComboBox statusBox;
+    protected Label phoneNumPrompt;
+    
     protected Button submitButton;
     protected Button cancelButton;
 
@@ -66,7 +70,7 @@ public class ScoutFormView extends BaseView {
         content.setFillWidth(true);
         content.setAlignment(Pos.CENTER);
         
-        Text title = new Text(myResources.getProperty("title"));
+        Text title = new Text(myResources.getProperty("promptText"));
         title.setTextAlignment(TextAlignment.CENTER);
         title.getStyleClass().add("information-text");
         content.getChildren().add(title);
@@ -87,7 +91,6 @@ public class ScoutFormView extends BaseView {
         formGrid.setHgap(10);
         formGrid.setVgap(10);
         formGrid.getStyleClass().addAll("pane","grid");
-       // formGrid.setPadding(new Insets(25.0, 25.0, 25.0, 25.0));
         
         firstNameField = new TextField();
         firstNameField.setOnAction(submitHandler);
@@ -96,7 +99,7 @@ public class ScoutFormView extends BaseView {
                 firstNameField
         );
         formItem.setPrefWidth(200);
-        formGrid.add(formItem, 0, 0);
+        formGrid.add(formItem, 0, 0, 2, 1);
         
         middleNameField = new TextField();
         middleNameField.setOnAction(submitHandler);
@@ -105,7 +108,7 @@ public class ScoutFormView extends BaseView {
                 middleNameField
         );
         formItem.setPrefWidth(200);
-        formGrid.add(formItem, 0, 1);
+        formGrid.add(formItem, 0, 1, 2, 1);
         
         lastNameField = new TextField();
         lastNameField.setOnAction(submitHandler);
@@ -114,7 +117,7 @@ public class ScoutFormView extends BaseView {
                 lastNameField
         );
         formItem.setPrefWidth(350);
-        formGrid.add(formItem, 0, 2);
+        formGrid.add(formItem, 0, 2, 2, 1);
         
         memberIdField = new TextField();
         memberIdField.setOnAction(submitHandler);
@@ -122,11 +125,24 @@ public class ScoutFormView extends BaseView {
                 memberIdField
         );
         formItem.setPrefWidth(150);
-        formGrid.add(formItem, 0, 3);
+        formGrid.add(formItem, 0, 3, 2, 1);
         
-        dobField = new TextField();
-        dobField.setOnAction(submitHandler);
-        dobField.setPromptText(myResources.getProperty("datePrompt"));
+        dobField = new DatePicker();
+        dobField.setValue(LocalDate.now().minusYears(10));
+        dobField.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                return (date != null) ? 
+                        DateTimeFormatter.ofPattern(myResources.getProperty("dateFormat")).format(date) : "";
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty())
+                    return LocalDate.parse(string, 
+                            DateTimeFormatter.ofPattern(myResources.getProperty("dateFormat")));
+                else return null;
+            }
+        });
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("dobField"),
                 dobField
@@ -134,15 +150,25 @@ public class ScoutFormView extends BaseView {
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 4);
         
+        
         phoneNumField = new TextField();
+        phoneNumField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                phoneNumPrompt.setVisible(newValue);
+            }
+        });
         phoneNumField.setOnAction(submitHandler);
-        phoneNumField.setPromptText(myResources.getProperty("phoneNumPrompt"));
         formItem = formItemBuilder.buildControl(
                 myResources.getProperty("phoneNumField"),
                 phoneNumField
         );
         formItem.setPrefWidth(150);
         formGrid.add(formItem, 0, 5);
+        
+        phoneNumPrompt = new Label(myResources.getProperty("phoneNumPrompt"));
+        phoneNumPrompt.setVisible(false);
+        formGrid.add(phoneNumPrompt, 1, 5);
         
         emailField = new TextField();
         emailField.setOnAction(submitHandler);
@@ -151,20 +177,7 @@ public class ScoutFormView extends BaseView {
                 emailField
         );
         formItem.setPrefWidth(350);
-        formGrid.add(formItem, 0, 6);
-        
-        ObservableList<String> statusOptions = FXCollections.observableArrayList(
-                "Active",
-                "Inactive"
-        );
-//        statusBox = new ComboBox(statusOptions);
-//        statusBox.setValue("Active");
-//        formItem = formItemBuilder.buildControl(
-//                myResources.getProperty("statusBox"),
-//                statusBox
-//        );
-//        formItem.setPrefWidth(150);
-//        formGrid.add(formItem, 0, 7);
+        formGrid.add(formItem, 0, 6, 2, 1);
         
         HBox buttonContainer = new HBox(20);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -197,12 +210,20 @@ public class ScoutFormView extends BaseView {
                 // Submit data
                 Properties newScoutData = new Properties();
                 newScoutData.setProperty("FirstName", firstNameField.getText());
+                
                 newScoutData.setProperty("MiddleName", middleNameField.getText());
+                
                 newScoutData.setProperty("LastName", lastNameField.getText());
+                
                 newScoutData.setProperty("MemberID", memberIdField.getText());
-                newScoutData.setProperty("DateOfBirth", dobField.getText());
+                
+                newScoutData.setProperty("DateOfBirth", dobField.getValue().format(
+                        DateTimeFormatter.ISO_DATE));
+                
                 newScoutData.setProperty("PhoneNumber", phoneNumField.getText());
+                
                 newScoutData.setProperty("Email", emailField.getText());
+                
                 newScoutData.setProperty("Status", "Active");
                 
                 myModel.stateChangeRequest("Submit", newScoutData);
@@ -241,13 +262,8 @@ public class ScoutFormView extends BaseView {
         }
         
         // Date of Birth is not null, and must match format
-        value = dobField.getText();
-        if ((value == null) || "".equals(value)) {
-            displayErrorMessage(myResources.getProperty("errDOBNull"));
-            dobField.requestFocus();
-            return false;
-        }
-        if (!value.matches(myResources.getProperty("dateFormat"))) {
+        LocalDate date = dobField.getValue();
+        if (date.isAfter(LocalDate.now().minusYears(8))) {
             displayErrorMessage(myResources.getProperty("errDOBFormat"));
             dobField.requestFocus();
             return false;
@@ -260,7 +276,7 @@ public class ScoutFormView extends BaseView {
             phoneNumField.requestFocus();
             return false;
         }
-        if (!value.matches(myResources.getProperty("phoneNumFormat"))) {
+        if (!value.matches(myResources.getProperty("phoneNumPattern"))) {
             displayErrorMessage(myResources.getProperty("errPhoneNumFormat"));
             phoneNumField.requestFocus();
             return false;
@@ -289,10 +305,10 @@ public class ScoutFormView extends BaseView {
                 middleNameField.setText((String) selectedScout.getState("MiddleName"));
                 lastNameField.setText((String) selectedScout.getState("LastName"));
                 memberIdField.setText((String) selectedScout.getState("MemberID"));
-                dobField.setText((String) selectedScout.getState("DateOfBirth"));
+                dobField.setValue(LocalDate.parse((String)selectedScout.getState("DateOfBirth"),
+                        DateTimeFormatter.ISO_LOCAL_DATE));
                 phoneNumField.setText((String) selectedScout.getState("PhoneNumber"));
                 emailField.setText((String) selectedScout.getState("Email"));
-//                statusBox.setValue(selectedScout.getState("Status"));
             }
         }
     }

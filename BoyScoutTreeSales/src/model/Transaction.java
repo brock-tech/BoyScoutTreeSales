@@ -38,7 +38,7 @@ public abstract class Transaction extends Persistable implements IView, IModel {
     
     protected String transactionErrorMessage;
     
-    public Transaction() {
+    protected Transaction() {
         myStage = MainStageContainer.getInstance();
         myViews = new Hashtable<>();
         
