@@ -123,7 +123,7 @@ public class AddTreeTransactionView extends BaseView {
                 String barCode = barCodeField.getText();
                 p.setProperty("BarCode", barCode);
                 
-                p.setProperty("TreeType", (String)myModel.getState("TreeTypeId"));                
+                //p.setProperty("TreeType", (String)myModel.getState("TreeTypeId"));                
                 p.setProperty("Notes", notesField.getText());                
                 p.setProperty("Status", "Available");
                 LocalDateTime currentDate = LocalDateTime.now();
@@ -147,13 +147,14 @@ public class AddTreeTransactionView extends BaseView {
             barCodeField.requestFocus();
             return false;
         }
+        /*
         myModel.stateChangeRequest("TreeType", treeBar);
         if (myModel.getState("TreeTypeId") == null){
             displayErrorMessage(myResources.getProperty("errBarCodePrefix"));
             barCodeField.requestFocus();
             return false;
         }
-        
+        */
         String notes = notesField.getText();
         if ((notes == null) || "".equals(notes)) {
             notesField.setText("<empty>");

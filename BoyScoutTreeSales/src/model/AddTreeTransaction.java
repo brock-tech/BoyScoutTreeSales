@@ -106,22 +106,34 @@ public class AddTreeTransaction extends Transaction {
         updateStatusMessage = "";
         transactionErrorMessage = "";
         
+        String treeBarCode = p.getProperty("BarCode");
+        
         //existing Tree
         try {
-            String treeBarCode = p.getProperty("BarCode");
-            
             Tree oldTree = new Tree(treeBarCode);
             updateStatusMessage = String.format(myMessages.getString("multipleTFoundMsg"), 
                        p.getProperty("BarCode"));
             transactionErrorMessage = updateStatusMessage;
             
         } catch (InvalidPrimaryKeyException exc) { 
-            // Add new Tree
-            Tree tree = new Tree(p);
-            tree.insert();
-            updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 
-                       p.getProperty("BarCode"));
-            transactionErrorMessage = updateStatusMessage;
+            String bcPrefix = treeBarCode.substring(0, 2);
+            
+            try {
+                TreeType treeType = TreeType.barcodeInstantiate(bcPrefix);
+                String treeTypeId = (String)treeType.getState("ID");
+                
+                p.setProperty("TreeType", treeTypeId);
+                
+                Tree tree = new Tree(p);
+                tree.insert();
+                updateStatusMessage = String.format(myMessages.getString("insertSuccessMsg"), 
+                           p.getProperty("BarCode"));
+                transactionErrorMessage = updateStatusMessage;
+                
+            } catch (InvalidPrimaryKeyException exc1) { 
+                updateStatusMessage = exc1.getMessage();
+                transactionErrorMessage = updateStatusMessage;
+            }
         }
     }
 }
